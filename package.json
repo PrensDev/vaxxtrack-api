@@ -1,0 +1,31 @@
+{
+  "name": "c19ctavms-api",
+  "version": "1.0.0",
+  "description": "This is the API for C19CTAVMS Project.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PrensDev/c19ctavms-api.git"
+  },
+  "author": "PrensDev <jetsunprincetorres@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PrensDev/c19ctavms-api/issues"
+  },
+  "homepage": "https://github.com/PrensDev/c19ctavms-api#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
