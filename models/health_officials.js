@@ -3,34 +3,28 @@ const {
   Sequelize, Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Citizens extends Model {
+  class Health_Officials extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // this.hasOne(models.Citizens, {
-      //   foreignKey: 'user_account_ID',
-      // }),
-
-      // this.hasOne(models.Citizens, {
-      //   foreignKey: 'address_ID',
-      // }) 
-    } 
-  }; 
-  Citizens.init({
+      // define association here
+    }
+  };
+  Health_Officials.init({
 
     //Model attributes
 
-    citizen_ID: {
+    health_official_ID: {
       type          : DataTypes.UUID,
       defaultValue  : Sequelize.UUIDV4,
       primaryKey    : true,
       allowNull     : false,
       validate      : {
-        notNull:{
-          msg: 'Citizen ID cannot be null',
+        notNull     : {
+          msg: 'Health official ID cannot be null'
         }
       },
       comment       : 'This contains the unique identifiers for each record on this table'
@@ -66,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Must be only letters',
         }
       },
-      comment        : 'This contains the first name of the user (citizen)'
+      comment        : 'This contains the first name of the user (health_official)'
     },
 
     middle_name: {
@@ -78,7 +72,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Must be only letters',
         }
       },
-      comment        : 'This contains the middle name of the user (citizen)'
+      comment        : 'This contains the middle name of the user (health_official)'
     },
 
     last_name: {
@@ -93,78 +87,49 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Must be only letters',
         }
       },
-      comment        : 'This contains the last name of the user (citizen)'
+      comment        : 'This contains the last name of the user (health_official)'
     },
 
-    sex: {
+    LGU: {
       type          : DataTypes.STRING,
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'Sex cannot be null',
+          msg: 'LGU cannot be null',
         },
-        isIn: [[
-          'Biologically Male', 
-          'Biologically Female']]
       },
-      comment        : 'This indicates the sex of the user (citizen)'
-    },    
+      comment        : 'This contains the local government unit where the health official belongs to'
+    },
 
-    birth_date: {
-      type          : DataTypes.DATEONLY,
-      allowNull     : false,
-      validate      : {
-        notNull: {
-          msg: 'Birthdate cannot be null',
-        },
-        isDate : true,
-      },
-      comment        : 'This contains the birthdate of the user (citizen)'
-    },    
-
-    address_ID: {
+    added_by: {
       type          : DataTypes.UUID,
       unique        : true,
       allowNull     : false,
       validate      : {
         notNull     : {
-          msg: 'Address ID cannot be null'
+          msg: 'This field cannot be null'
         }
       },
       // references    : {
-      //   model  : {
-      //     tableName : 'addresses'
+      //   model   : {
+      //     tableName : 'super_admins'
       //   },
-      //   key         : 'address_ID'
+      //   key         : 'super_admin_ID'
       // },
-      comment       : 'This contains the current address where the user resides'
+      comment       : 'This links the super admin that indicates who added the health official'
     },
 
-    civil_status: {
-      type          : DataTypes.STRING,
-      allowNull     : false,
-      validate      : {
-        notNull: {
-          msg: 'Civil Status cannot be null',
-        },
-        isIn: {
-          args: [['Single', 'Married', 'Separated', 'Divorced', 'Widowed', 'Civil Partnership', 'Former Civil Partner']],
-          msg: 'Must be a valid civil status'
-        }
-      },
-      comment        : 'This indicates the civil status of the user (citizen)'
-    },    
-
   }, {
+
     // Model options
 
     sequelize,
     freezeTableName : true,
-    modelName       : 'Citizens',
+    modelName       : 'Health_Officials',
     timestamps      : true,
     createdAt       : 'created_datetime',
     updatedAt       : 'updated_datetime',
   });
 
-  return Citizens;
+  return Health_Officials;
 };
