@@ -10,15 +10,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // this.hasOne(models.Citizens, {
+      //   foreignKey: 'user_account_ID',
+      // }),
 
-    /*  this.hasOne(models.Citizens, {
-        foreignKey: 'user_account_ID',
-      }),
-
-      this.hasOne(models.Citizens, {
-        foreignKey: 'address_ID',
-      }) */
+      // this.hasOne(models.Citizens, {
+      //   foreignKey: 'address_ID',
+      // }) 
     } 
   }; 
   Citizens.init({
@@ -38,7 +36,6 @@ module.exports = (sequelize, DataTypes) => {
       comment       : 'This contains the unique identifiers for each record on this table'
     },
 
-
     user_account_ID: {
       type          : DataTypes.UUID,
       allowNull     : false,
@@ -47,12 +44,12 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'User account ID cannot be null'
         }
       },
-      references    : {
-        model   : {
-          tableName : 'user_contacts'
-        },
-        key         : 'user_account_ID'
-      },
+      // references    : {
+      //   model   : {
+      //     tableName : 'user_contacts'
+      //   },
+      //   key         : 'user_account_ID'
+      // },
       comment       : 'This links a user to indicate who owns the account per type'
     },
 
@@ -132,12 +129,12 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Address ID cannot be null'
         }
       },
-      references    : {
-        model  : {
-          tableName : 'addresses'
-        },
-        key         : 'address_ID'
-      },
+      // references    : {
+      //   model  : {
+      //     tableName : 'addresses'
+      //   },
+      //   key         : 'address_ID'
+      // },
       comment       : 'This contains the current address where the user resides'
     },
 
@@ -156,9 +153,7 @@ module.exports = (sequelize, DataTypes) => {
       comment        : 'This indicates the civil status of the user (citizen)'
     },    
 
-  }, 
-  
-  {
+  }, {
     // Model options
 
     sequelize,
@@ -168,5 +163,6 @@ module.exports = (sequelize, DataTypes) => {
     createdAt       : 'created_datetime',
     updatedAt       : 'updated_datetime',
   });
+
   return Citizens;
 };

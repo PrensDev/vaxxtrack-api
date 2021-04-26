@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       
       // 1:1 (case_information -> citizens)
-      this.hasOne(models.Citizens, {
-        foreignKey: 'citizen_ID',
-      }); 
+      // this.hasOne(models.Citizens, {
+      //   foreignKey: 'citizen_ID',
+      // }); 
     }
   };
   
@@ -71,12 +71,12 @@ module.exports = (sequelize, DataTypes) => {
           msg   : 'Lab report ID is required',
         },
       },
-      references: {
-        model   : {
-          tableName: 'lab_reports'
-        },
-        key     : 'lab_report_ID'
-      },
+      // references: {
+      //   model   : {
+      //     tableName: 'lab_reports'
+      //   },
+      //   key     : 'lab_report_ID'
+      // },
       comment        : 'This links to a lab report for each case'
     },
 

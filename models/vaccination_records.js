@@ -31,12 +31,12 @@ module.exports = (sequelize, DataTypes) => {
       validate      : {
         notNull:  'Citizen ID must not be null'
       },
-      references    : {
-        model:  {
-          tableName:  'citizens'
-        },
-      key: 'citizen_ID'
-      },
+      // references    : {
+      //   model:  {
+      //     tableName:  'citizens'
+      //   },
+      //   key: 'citizen_ID'
+      // },
       comment       : 'this contains the unique identifiers for each citizen record'
     },
 

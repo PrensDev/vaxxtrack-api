@@ -35,12 +35,12 @@ module.exports = (sequelize, DataTypes) => {
           msg       : 'Citizen_ID must not be null',
         }
       },
-      references    : {
-        model: {
-          tableName : 'citizens'
-        },
-        key: 'citizen_ID'
-      },
+      // references    : {
+      //   model: {
+      //     tableName : 'citizens'
+      //   },
+      //   key: 'citizen_ID'
+      // },
       comment       : 'This links a citizen to indicate who owns the visiting log record'
     },
 
