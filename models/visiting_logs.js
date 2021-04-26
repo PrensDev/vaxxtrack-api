@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull     : {
-          msg       : 'This field cannot be null',
+          msg       : 'Visiting log ID cannot be null',
         }
       },
       comment      : 'This contains the unique identifiers for each record on this table'
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull     : {
-          msg       : 'Citizen_ID must not be null',
+          msg       : 'Citizen ID must not be null',
         }
       },
       // references    : {
@@ -44,6 +44,51 @@ module.exports = (sequelize, DataTypes) => {
       comment       : 'This links a citizen to indicate who owns the visiting log record'
     },
 
+    establishment_ID: {
+      type          : DataTypes.UUID,
+      allowNull     : false,
+      validate      : {
+        notNull     : {
+          msg       : 'Establishment ID must not be null',
+        }
+      },
+      // references    : {
+      //   model: {
+      //     tableName : 'establishments'
+      //   },
+      //   key: 'establishment_ID'
+      // },
+      comment       : 'This links the establishments for the visiting logs'
+    },
+
+    health_status_log_ID: {
+      type          : DataTypes.UUID,
+      allowNull     : false,
+      validate      : {
+        notNull     : {
+          msg       : 'Health status log ID must not be null',
+        }
+      },
+      // references    : {
+      //   model: {
+      //     tableName : 'Health_Status_Logs'
+      //   },
+      //   key: 'health_status_log_ID'
+      // },
+      comment       : 'This links the health status log for the visiting logs'
+    },
+
+    purpose: {
+      type          : DataTypes.STRING,
+      allowNull     : false,
+      validate      : {
+        isIn: {
+          args  : [['Visiting', 'Customer', 'Employee', 'Meeting']],
+          msg   : 'The purpose is invalid'
+        }
+      },
+      comment       : 'This column will tell if the purpose of the log is either visiting, customer, employee, or meeting'
+    },
   }, {
     sequelize,
     freezeTableName  : true,
