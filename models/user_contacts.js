@@ -1,8 +1,8 @@
 'use strict';
-const { Sequelize, Model} = require('sequelize');
+const {Sequelize, Model} = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class User_Accounts extends Model {
+  class User_Contacts extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,56 +12,41 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  User_Accounts.init({
+  User_Contacts.init({
+    // Model Attributes
 
-    //model attributes
-
-    user_account_ID: {
+    user_contact_ID: {
       type            : DataTypes.UUID,
       aalowNull       : false,
       primaryKey      : true,
       defaultValue    : Sequelize.UUIDV4,
-      validations     :  {
-        notNull: {
-          msg         :'This user account cannot be null'
-        }
-
+      validations     :{
+        msg:  'User contacts cannot be null'
       },
-      comment         : 'This contains the unique identifiers for each record on this table'
+      comment     : 'This contains the unique identifiers for each record on this table' 
     },
 
-    password :{
+    type: {
       type            : DataTypes.STRING,
       allowNull       : false,
       validations     : {
         notNull:{
         msg:'Password cannot be null',
         },
-        isAlpha: {
-            args: true,
-            msg: 'Must be only letters',
-          }
+        isIn: {
+          args: [[
+            'Email',
+            'Contact Number',
+          ]]
+        },
       },
-      comment          : 'This contains the password that the user will set.',
-      
+      comment         : 'This contains the two different type of contact information a user can give (Email or Contact Number) ',
     },
-    
 
-    type  : {
-      type            : DataTypes.STRING,
-      allowNull       : false,
-      validations     : {
-        msg           :'User Type must be defined',
-      },
-      isIn: {
-        args: [[
-          'Citizen',
-          'Representative',
-          'Health Official',
-          'Super Admin',
-        ]]
-      },
-      comment            : 'This contains the different types of the user (Citizen, Representative, Health Official, or Super Admin) ',
+    verified: {
+      type           : DataTypes.BOOLEAN,
+      allowNull      : false,
+      comment        : 'This indicates if  the account is verified or not'
     },
 
     created_datetime: {
@@ -73,19 +58,15 @@ module.exports = (sequelize, DataTypes) => {
       type           : DataTypes.DATE,
       comment        : 'This indicate the date and time that a record has been updated',
     },
-    
 
-    
+      
   }, {
-
-  //Modle Options
     sequelize,
     freezeTableName  : true,
-    modelName        : 'User_Accounts',
+    modelName: 'User_Contacts',
     timestamps       : true,
     createdAt        : 'created_datetime',
     updatedAt        : 'updated_datetime',
   });
-
-  return User_Accounts;
+  return User_Contacts;
 };
