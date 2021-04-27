@@ -108,7 +108,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull      : true,
       validate: {
         isIn: {
-          args  : [['Recovered', 'Died']],
+          args  : [[
+            'Recovered', 
+            'Died'
+          ]],
           msg   : 'The removal type is invalid'
         }
       },
