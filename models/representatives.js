@@ -93,7 +93,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'position cannot be null',
         },
         isIn: {
-          args: [['Company', 'BusinessVillage/Household', 'LGU', 'Organizational' ]],
+          args: [['Manager', 'Organization leader', 'Owner']],
           msg: 'Must be a valid position'
         }
       },
