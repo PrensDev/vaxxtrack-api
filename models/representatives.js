@@ -51,7 +51,6 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'First Name cannot be null',
         },
         isAlpha: {
-          args: true,
           msg: 'Must be only letters',
         }
       },
