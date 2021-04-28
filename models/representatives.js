@@ -32,16 +32,73 @@ module.exports = (sequelize, DataTypes) => {
       comment       : 'This contains the unique identifiers for each record on this table'
     },
 
-    // user_account_ID : {
-    //   type          : DataTypes.UUID,
-    //   allowNull     : false,
-    //   validations   : {
-    //     notNull: {
-    //       msg: 'This user account ID cannot be null'
-    //     }
-    //   },
-    //   comment       : ''
-    // }, 
+    user_account_ID : {
+      type          : DataTypes.UUID,
+      allowNull     : false,
+      validations   : {
+        notNull: {
+          msg: 'This user account ID cannot be null'
+        }
+      },
+      comment       : 'This links a user to indicate who owns the account per type'
+    }, 
+
+    first_name: {
+      type          : DataTypes.STRING,
+      allowNull     : false,
+      validate      : {
+        notNull: {
+          msg: 'First Name cannot be null',
+        },
+        isAlpha: {
+          args: true,
+          msg: 'Must be only letters',
+        }
+      },
+      comment        : 'This contains the first name of the representative'
+    },
+
+    middle_name: {
+      type          : DataTypes.STRING,
+      allowNull     : true,
+      validate      : {
+        isAlpha: {
+          args: true,
+          msg: 'Must be only letters',
+        }
+      },
+      comment        : 'This contains the middle name of the representative'
+    },
+
+    last_name: {
+      type          : DataTypes.STRING,
+      allowNull     : false,
+      validate      : {
+        notNull: {
+          msg: 'Last Name cannot be null',
+        },
+        isAlpha: {
+          args: true,
+          msg: 'Must be only letters',
+        }
+      },
+      comment        : 'This contains the last name of the representative'
+    },
+
+    position: {
+      type          : DataTypes.STRING,
+      allowNull     : false,
+      validate      : {
+        notNull: {
+          msg: 'position cannot be null',
+        },
+        isIn: {
+          args: [['Company', 'BusinessVillage/Household', 'LGU', 'Organizational' ]],
+          msg: 'Must be a valid position'
+        }
+      },
+      comment        : 'This contains the position of the representative in the establishment'
+    }, 
     
     }, {
 
