@@ -24,11 +24,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue  : Sequelize.UUIDV4,
       primaryKey    : true,
       allowNull     : false,
-      validate      :{
-        notNull:  {
-          msg: 'this field cannot be null',
-        }
-      },
       comment       : 'This contains the unique identifiers for each record on this table'
     },
     
@@ -36,10 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       type          : DataTypes.UUID,
       allowNull     : false,
       validate      : {
-        notNull: {
-          msg: 'Citizen ID cannot be null'
+        notNull     : {
+          msg       : 'citizen ID must be a valid UUID value'
         }
-      },
+      },  
       // references    : {
       //   model:  {
       //     tableName:  'citizens'
@@ -49,10 +44,62 @@ module.exports = (sequelize, DataTypes) => {
       comment       : 'this contains the unique identifiers for each citizen record'
     },
 
-    vaccine_ID: {
-      type          :DataTypes.UUID,
+    vaccine_ID       : {
+      type          : DataTypes.UUID,
       allowNull     : false,
-    }
+      // references    : {
+      //   model       :  {
+      //     tableName : 'vaccines'
+      //     },
+      //     key       :  'vaccine_ID'
+      //   },
+      validate      : {
+        notNull     : {
+          msg       : 'vaccine ID must be a valid UUID value'
+        }
+      },
+      comment       : 'this contains the unique ID for vaccines'
+    },
+
+    vaccination_date  : {
+      type          : DataTypes.DATE,
+      allowNull     : false,
+      validate      :  {
+        notNull     : {
+        msg         :  'Date of vaccination is required'
+         }
+       },
+      comment       : 'this contains the vaccination date of the patient'
+    },
+
+    vaccinated_by     : {
+      type          : DataTypes.STRING,
+      allowNull     : false,
+      validate      : {
+        notNull     : {
+          msg       : 'vaccinator name is required'
+        }
+      },
+      comment       : 'this contains the information on who vaccinated the patient'
+    },
+
+    vaccinated_in     : {
+      type           : DataTypes.STRING,
+      allowNull      :  false,
+      validate       : {
+        notNull      : {
+          msg        : 'Place of vaccination is required'
+        }
+      },
+      comment        : 'this contains the location where the patients had been vaccinated'
+    },
+
+    remarks            : {
+      type           : DataTypes.TEXT,
+      allowNull      : true,
+      comment        : 'this contains the remarks for the vaccination record'
+    },
+
 
   }, {
 
