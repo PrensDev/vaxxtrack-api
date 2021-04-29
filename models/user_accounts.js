@@ -38,7 +38,6 @@ module.exports = (sequelize, DataTypes) => {
         msg:'Password cannot be null',
         },
         isAlpha: {
-            args: true,
             msg: 'Must be only letters',
           }
       },
