@@ -51,7 +51,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : true,
       validate      : {
         isAlpha: {
-          args: true,
           msg: 'Must be only letters',
         }
       },

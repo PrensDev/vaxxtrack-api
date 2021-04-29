@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
             'Email',
             'Contact Number',
           ]],
-          // TODO: Please include a message here
+          msg: 'Please provide valid Email or Contact Number'
         },
       },
       comment         : 'This contains the two different type of contact information a user can give (Email or Contact Number) ',
