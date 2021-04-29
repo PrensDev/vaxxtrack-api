@@ -91,12 +91,6 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           msg: 'position cannot be null',
         },
-        /**
-         * TODO: please remove isIn validation
-         * 
-         * pre-text dapat ang position dahil ibat-iba ang position ng
-         * mga representatives sa establishment
-         */
       },
       comment        : 'This contains the position of the representative in the establishment'
     }, 
