@@ -29,7 +29,11 @@ module.exports = (sequelize, DataTypes) => {
     case_ID: {
       type              : DataTypes.UUID,
       allowNull         : false,
-      // TODO: please include validation with message since unnullable
+      validations       : {
+        notNull: {
+          msg: 'This case ID cannot be null'
+        }
+      },
       comment           : 'This contains the case information to identify the user'
     },
 
