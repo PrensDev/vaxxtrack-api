@@ -1,8 +1,9 @@
 'use strict';
-const {
-  Sequelize, Model
-} = require('sequelize');
+
+const { Sequelize, Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
+
   class Citizens extends Model {
     /**
      * Helper method for defining associations.
@@ -19,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       // }) 
     } 
   }; 
+  
   Citizens.init({
 
     //Model attributes
@@ -28,11 +30,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue  : Sequelize.UUIDV4,
       primaryKey    : true,
       allowNull     : false,
-      validate      : {
-        notNull:{
-          msg: 'Citizen ID cannot be null',
-        }
-      },
       comment       : 'This contains the unique identifiers for each record on this table'
     },
 
@@ -40,8 +37,8 @@ module.exports = (sequelize, DataTypes) => {
       type          : DataTypes.UUID,
       unique        : true,
       allowNull     : false,
-      validate      : {
-        notNull     : {
+      validate: {
+        notNull: {
           msg: 'User account ID cannot be null'
         }
       },
@@ -57,12 +54,11 @@ module.exports = (sequelize, DataTypes) => {
     first_name: {
       type          : DataTypes.STRING,
       allowNull     : false,
-      validate      : {
+      validate: {
         notNull: {
           msg: 'First Name cannot be null',
         },
         isAlpha: {
-          args: true,
           msg: 'Must be only letters',
         }
       },
@@ -72,9 +68,8 @@ module.exports = (sequelize, DataTypes) => {
     middle_name: {
       type          : DataTypes.STRING,
       allowNull     : true,
-      validate      : {
+      validate: {
         isAlpha: {
-          args: true,
           msg: 'Must be only letters',
         }
       },
@@ -84,12 +79,11 @@ module.exports = (sequelize, DataTypes) => {
     last_name: {
       type          : DataTypes.STRING,
       allowNull     : false,
-      validate      : {
+      validate: {
         notNull: {
           msg: 'Last Name cannot be null',
         },
         isAlpha: {
-          args: true,
           msg: 'Must be only letters',
         }
       },
@@ -103,9 +97,13 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           msg: 'Sex cannot be null',
         },
-        isIn: [[
-          'Biologically Male', 
-          'Biologically Female']]
+        isIn: {
+          args: [[
+            'Biologically Male', 
+            'Biologically Female'
+          ]],
+          // TODO: please include message for this validation
+        }
       },
       comment        : 'This indicates the sex of the user (citizen)'
     },    
@@ -117,7 +115,9 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           msg: 'Birthdate cannot be null',
         },
-        isDate : true,
+        isDate : {
+          // TODO: please include message for this validation
+        },
       },
       comment        : 'This contains the birthdate of the user (citizen)'
     },    
@@ -126,8 +126,8 @@ module.exports = (sequelize, DataTypes) => {
       type          : DataTypes.UUID,
       unique        : true,
       allowNull     : false,
-      validate      : {
-        notNull     : {
+      validate: {
+        notNull: {
           msg: 'Address ID cannot be null'
         }
       },
@@ -148,7 +148,15 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Civil Status cannot be null',
         },
         isIn: {
-          args: [['Single', 'Married', 'Separated', 'Divorced', 'Widowed', 'Civil Partnership', 'Former Civil Partner']],
+          args: [[
+            'Single', 
+            'Married', 
+            'Separated', 
+            'Divorced', 
+            'Widowed', 
+            'Civil Partnership', 
+            'Former Civil Partner'
+          ]],
           msg: 'Must be a valid civil status'
         }
       },
@@ -156,6 +164,7 @@ module.exports = (sequelize, DataTypes) => {
     },    
 
   }, {
+
     // Model options
 
     sequelize,

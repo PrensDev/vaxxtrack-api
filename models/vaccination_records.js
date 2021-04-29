@@ -1,6 +1,9 @@
 'use strict';
+
 const { Sequelize, Model} = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
+
   class Vaccination_Records extends Model {
     /**
      * Helper method for defining associations.
@@ -11,7 +14,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
+
   Vaccination_Records.init({
+
+    // Model attributes
+
     vaccination_record__ID: {
       type          : DataTypes.UUID,
       defaultValue  : Sequelize.UUIDV4,
@@ -25,11 +32,13 @@ module.exports = (sequelize, DataTypes) => {
       comment       : 'This contains the unique identifiers for each record on this table'
     },
     
-    citizen_ID:   {
+    citizen_ID: {
       type          : DataTypes.UUID,
       allowNull     : false,
       validate      : {
-        notNull:  'Citizen ID must not be null'
+        notNull: {
+          msg: 'Citizen ID cannot be null'
+        }
       },
       // references    : {
       //   model:  {
@@ -40,21 +49,23 @@ module.exports = (sequelize, DataTypes) => {
       comment       : 'this contains the unique identifiers for each citizen record'
     },
 
-    vaccine_ID:   {
+    vaccine_ID: {
       type          :DataTypes.UUID,
       allowNull     : false,
-      
     }
 
-
   }, {
+
+    // Model Options
+
     sequelize,
     freezeTableName : true,
-    modelName : 'Vaccination_Records',
-    timestamp : true,
-    createdAt : 'created_datetime',
-    updatedAt : 'updated_datetime',
+    modelName       : 'Vaccination_Records',
+    timestamp       : true,
+    createdAt       : 'created_datetime',
+    updatedAt       : 'updated_datetime',
     
   });
+
   return Vaccination_Records;
 };

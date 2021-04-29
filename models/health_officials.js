@@ -1,8 +1,9 @@
 'use strict';
-const {
-  Sequelize, Model
-} = require('sequelize');
+
+const { Sequelize, Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
+  
   class Health_Officials extends Model {
     /**
      * Helper method for defining associations.
@@ -13,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
+
   Health_Officials.init({
 
     //Model attributes
@@ -22,11 +24,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue  : Sequelize.UUIDV4,
       primaryKey    : true,
       allowNull     : false,
-      validate      : {
-        notNull     : {
-          msg: 'Health official ID cannot be null'
-        }
-      },
       comment       : 'This contains the unique identifiers for each record on this table'
     },
 
@@ -56,7 +53,6 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'First Name cannot be null',
         },
         isAlpha: {
-          args: true,
           msg: 'Must be only letters',
         }
       },
@@ -68,7 +64,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : true,
       validate      : {
         isAlpha: {
-          args: true,
           msg: 'Must be only letters',
         }
       },
@@ -83,7 +78,6 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Last Name cannot be null',
         },
         isAlpha: {
-          args: true,
           msg: 'Must be only letters',
         }
       },
@@ -105,8 +99,8 @@ module.exports = (sequelize, DataTypes) => {
       type          : DataTypes.UUID,
       unique        : true,
       allowNull     : false,
-      validate      : {
-        notNull     : {
+      validate: {
+        notNull: {
           msg: 'This field cannot be null'
         }
       },

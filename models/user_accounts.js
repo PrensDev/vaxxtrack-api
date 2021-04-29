@@ -51,34 +51,33 @@ module.exports = (sequelize, DataTypes) => {
       type            : DataTypes.STRING,
       allowNull       : false,
       validations     : {
-        msg           :'User Type must be defined',
-      },
-      isIn: {
-        args: [[
-          'Citizen',
-          'Representative',
-          'Health Official',
-          'Super Admin',
-        ]]
+        isIn: {
+          args: [[
+            'Citizen',
+            'Representative',
+            'Health Official',
+            'Super Admin',
+          ]]
+        },
+        msg: 'User Type must be defined',
       },
       comment            : 'This contains the different types of the user (Citizen, Representative, Health Official, or Super Admin) ',
     },
 
-    created_datetime: {
-      type           : DataTypes.DATE,
-      comment        : 'This indicate the date and time that a record has been created',
-    },
+    // created_datetime: {
+    //   type           : DataTypes.DATE,
+    //   comment        : 'This indicate the date and time that a record has been created',
+    // },
 
-    updated_datetime: {
-      type           : DataTypes.DATE,
-      comment        : 'This indicate the date and time that a record has been updated',
-    },
-    
-
+    // updated_datetime: {
+    //   type           : DataTypes.DATE,
+    //   comment        : 'This indicate the date and time that a record has been updated',
+    // },
     
   }, {
 
-  //Modle Options
+    //Model options
+    
     sequelize,
     freezeTableName  : true,
     modelName        : 'User_Accounts',

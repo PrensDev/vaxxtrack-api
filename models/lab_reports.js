@@ -41,7 +41,8 @@ module.exports = (sequelize, DataTypes) => {
         inIn  : [[
           'RT-PCR Test',
           'Rapid Antibody Test',
-        ]]
+        ]],
+        msg: 'Invalid input value for requested exam'
       },
       comment       : 'This contains the type of exam that has been requested by the patient',
     },

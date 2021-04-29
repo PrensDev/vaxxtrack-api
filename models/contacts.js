@@ -18,51 +18,32 @@ module.exports = (sequelize, DataTypes) => {
 
     // Model attribute
 
-    contact_ID:
-    {
+    contact_ID: {
       type              : DataTypes.UUID,
       allowNull         : false,
-      primarykey        : true,
-      defualtvalue      : Sequelize.UUIDV4,
-      validation : {
-        notNull : {
-          msg: 'This Contact ID cannot be null'
-        }
-      },
+      primaryKey        : true,
+      defaultValue      : Sequelize.UUIDV4,
       comment           : 'This contains the unique identifiers for each record on this table'
     },
     
-    case_ID: 
-    {
+    case_ID: {
       type              : DataTypes.UUID,
       allowNull         : false,
+      // TODO: please include validation with message since unnullable
       comment           : 'This contains the case information to identify the user'
     },
 
-    created_datetime: 
-    {
-      type              : DataTypes.DATE,
-      allowNull         : false,
-      defaultvalue      : DataTypes.NOW,
-      comment           : 'This contains the date and time that a record had been created'
-    },
+  }, {
 
-    updated_datetime: 
-    {
-      type              : DataTypes.DATE,
-      allowNull         : true,
-      comment           : 'This contains the date and time that a record had been edited'
-    },
-    }, {
-
-    // Model Option
+    // Model Options
 
     sequelize,
-    FreezeTbaleName     : true,
-    modelName           : 'Contacts',
-    Timestamps          : true,
-    createdAt           : 'Created_datetime',
-    updatedAt           : 'updated_datetime',
+    freezeTableName  : true,
+    modelName        : 'Contacts',
+    timestamps       : true,
+    createdAt        : 'created_datetime',
+    updatedAt        : 'updated_datetime',
   });
+  
   return Contacts;
 };

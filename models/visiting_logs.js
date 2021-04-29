@@ -1,8 +1,9 @@
 'use strict';
-const {
-  Sequelize, Model
-} = require('sequelize');
+
+const { Sequelize, Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
+
   class Visiting_Logs extends Model {
     /**
      * Helper method for defining associations.
@@ -13,18 +14,17 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
+
   Visiting_Logs.init({
+    
+    // Model attirbutes
+  
     visiting_log_ID: {
       type          : DataTypes.UUID,
       defaultValue  : Sequelize.UUIDV4,
       primaryKey    : true,
       allowNull     : false,
-      validate      : {
-        notNull     : {
-          msg       : 'Visiting log ID cannot be null',
-        }
-      },
-      comment      : 'This contains the unique identifiers for each record on this table'
+      comment       : 'This contains the unique identifiers for each record on this table'
     },
 
     citizen_ID: {
@@ -83,13 +83,22 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         isIn: {
-          args  : [['Visiting', 'Customer', 'Employee', 'Meeting']],
-          msg   : 'The purpose is invalid'
+          args  : [[
+            'Visiting', 
+            'Customer', 
+            'Employee', 
+            'Meeting',
+          ]],
+          msg       : 'The purpose is invalid'
         }
       },
-      comment       : 'This column will tell if the purpose of the log is either visiting, customer, employee, or meeting'
+      comment       : 'This indicate the visiting purpose of visitor in an establishment'
     },
+
   }, {
+
+    // Model attributes
+
     sequelize,
     freezeTableName  : true,
     modelName        : 'Visiting_Logs',
@@ -97,5 +106,6 @@ module.exports = (sequelize, DataTypes) => {
     createdAt        : 'created_datetime',
     updatedAt        : 'updated_datetime',
   });
+  
   return Visiting_Logs;
 };

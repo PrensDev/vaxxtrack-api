@@ -57,5 +57,8 @@
 ## To create database
 > $ sequelize db:create
 
+## To drop database
+> $ sequelize db:drop
+
 ## To create model
 > $ sequelize model:generate --name Model_Name --attributes column:string

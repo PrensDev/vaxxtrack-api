@@ -143,15 +143,15 @@ module.exports = (sequelize, DataTypes) => {
       comment        : 'This indicates the current health status of a patient'
     },
 
-    created_datetime: {
-      type           : DataTypes.DATE,
-      comment        : 'This indicate the date and time that a record has been created',
-    },
+    // created_datetime: {
+    //   type           : DataTypes.DATE,
+    //   comment        : 'This indicate the date and time that a record has been created',
+    // },
 
-    updated_datetime: {
-      type           : DataTypes.DATE,
-      comment        : 'This indicate the date and time that a record has been updated',
-    },
+    // updated_datetime: {
+    //   type           : DataTypes.DATE,
+    //   comment        : 'This indicate the date and time that a record has been updated',
+    // },
   
   }, {
 
