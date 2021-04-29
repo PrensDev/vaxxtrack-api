@@ -56,10 +56,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate: {
         notNull: {
-          msg: 'First Name cannot be null',
+          msg: 'First Name cannot be null'
         },
         isAlpha: {
-          msg: 'Must be only letters',
+          msg: 'Must be only letters'
         }
       },
       comment        : 'This contains the first name of the user (citizen)'
@@ -70,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : true,
       validate: {
         isAlpha: {
-          msg: 'Must be only letters',
+          msg: 'Must be only letters'
         }
       },
       comment        : 'This contains the middle name of the user (citizen)'
@@ -81,10 +81,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate: {
         notNull: {
-          msg: 'Last Name cannot be null',
+          msg: 'Last Name cannot be null'
         },
         isAlpha: {
-          msg: 'Must be only letters',
+          msg: 'Must be only letters'
         }
       },
       comment        : 'This contains the last name of the user (citizen)'
@@ -95,14 +95,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'Sex cannot be null',
+          msg: 'Sex cannot be null'
         },
         isIn: {
           args: [[
             'Biologically Male', 
             'Biologically Female'
           ]],
-          // TODO: please include message for this validation
+          msg: 'Must be a valid sex'
         }
       },
       comment        : 'This indicates the sex of the user (citizen)'
@@ -113,10 +113,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'Birthdate cannot be null',
+          msg: 'Birthdate cannot be null'
         },
         isDate : {
-          // TODO: please include message for this validation
+          msg: 'Birthdate must be a valid date.'
         },
       },
       comment        : 'This contains the birthdate of the user (citizen)'
@@ -145,7 +145,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'Civil Status cannot be null',
+          msg: 'Civil Status cannot be null'
         },
         isIn: {
           args: [[
