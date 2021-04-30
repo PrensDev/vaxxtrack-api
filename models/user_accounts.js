@@ -30,37 +30,31 @@ module.exports = (sequelize, DataTypes) => {
       comment         : 'This contains the unique identifiers for each record on this table'
     },
 
-    password :{
+
+    type: {
       type            : DataTypes.STRING,
       allowNull       : false,
       validations     : {
         notNull:{
-        msg:'Password cannot be null',
+        msg:'User must provide a Contact',
         },
-        isAlpha: {
-            msg: 'Must be only letters',
-          }
-      },
-      comment          : 'This contains the password that the user will set.',
-      
-    },
-    
-
-    type  : {
-      type            : DataTypes.STRING,
-      allowNull       : false,
-      validations     : {
         isIn: {
           args: [[
-            'Citizen',
-            'Representative',
-            'Health Official',
-            'Super Admin',
-          ]]
+            'Email',
+            'Contact Number',
+          ]],
+          msg: 'Please provide valid Email or Contact Number'
         },
-        msg: 'User Type must be defined',
       },
-      comment            : 'This contains the different types of the user (Citizen, Representative, Health Official, or Super Admin) ',
+      comment         : 'This contains the two different type of contact information a user can give (Email or Contact Number) ',
+    },
+
+
+
+    verified: {
+      type           : DataTypes.BOOLEAN,
+      allowNull      : false,
+      comment        : 'This indicates if  the account is verified or not'
     },
 
     // created_datetime: {
