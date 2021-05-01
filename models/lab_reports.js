@@ -10,9 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-
     static associate(models) {
-      // define association here
+      
+      // 1:1 with [cases]
+      this.hasOne(models.Case_Information, {
+        foreignKey  : 'case_ID',
+        as          : 'case_information',
+        onDelete    : 'RESTRICT'
+      });
     }
   };
 
@@ -23,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     lab_report_ID: {
       type          : DataTypes.UUID,
       defaultValue  : Sequelize.UUIDV4,
-      primaryKey    : true,  
+      primaryKey    : true,
       allowNull     : false,
       comment       : 'This contains the unique identifiers for each record on this table',
     },
@@ -170,7 +175,13 @@ module.exports = (sequelize, DataTypes) => {
     modelName       : 'Lab_Reports',
     timestamps      : true,
     createdAt       : 'created_datetime',
-    updatedAt       : 'updated_datetime'
+    updatedAt       : 'updated_datetime',
+
+    hooks: {
+      afterCreate: () => {
+        console.log('A new record has been added to table [lab_reports]');
+      }
+    }
   });
   
   return Lab_Reports;

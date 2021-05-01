@@ -11,7 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      
+      // 1:M with [vaccination_appointments]
+      this.hasMany(models.Vaccination_Appointments, {
+        foreignKey  : 'preferred_vaccine',
+        as          : 'vaccination_appointment',
+        onDelete    : 'RESTRICT'
+      });
     }
   };
 
@@ -55,6 +61,12 @@ module.exports = (sequelize, DataTypes) => {
     timestamps      : true,
     createdAt       : 'created_datetime',
     updatedAt       : 'updated_datetime',
+
+    hook: {
+      afterCreate: () => {
+        console.log('A new record has been added to table [vaccines]');
+      }
+    }
   });
 
   return Vaccines;

@@ -11,7 +11,20 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      
+      // M:1 with [vaccines]
+      this.belongsTo(models.Vaccines, {
+        foreignKey  : 'vaccine_ID',
+        as          : 'vaccinez',
+        onDelete    : 'RESTRICT'
+      });
+
+      // M:1 with [users]
+      this.belongsTo(models.Users, {
+        foreignKey  : 'citizen_ID',
+        as          : 'citizen',
+        onDelete    : 'RESTRICT'
+      });
     }
   };
 
@@ -30,32 +43,20 @@ module.exports = (sequelize, DataTypes) => {
     citizen_ID: {
       type          : DataTypes.UUID,
       allowNull     : false,
-      validate      : {
-        notNull     : {
-          msg       : 'citizen ID must be a valid UUID value'
+      validate: {
+        notNull: {
+          msg: 'citizen ID must be a valid UUID value'
         }
-      },  
-      // references    : {
-      //   model:  {
-      //     tableName:  'citizens'
-      //   },
-      //   key: 'citizen_ID'
-      // },
+      },
       comment       : 'this contains the unique identifiers for each citizen record'
     },
 
     vaccine_ID       : {
       type          : DataTypes.UUID,
-      allowNull     : false,
-      // references    : {
-      //   model       :  {
-      //     tableName : 'vaccines'
-      //     },
-      //     key       :  'vaccine_ID'
-      //   },
-      validate      : {
-        notNull     : {
-          msg       : 'vaccine ID must be a valid UUID value'
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'vaccine ID must be a valid UUID value'
         }
       },
       comment       : 'this contains the unique ID for vaccines'
@@ -112,6 +113,11 @@ module.exports = (sequelize, DataTypes) => {
     createdAt       : 'created_datetime',
     updatedAt       : 'updated_datetime',
     
+    hooks: {
+      afterCreate: () => {
+        console.log('A new record has been added to table [vaccination_records]');
+      }
+    }
   });
 
   return Vaccination_Records;

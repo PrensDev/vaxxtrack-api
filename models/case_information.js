@@ -13,10 +13,26 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       
-      // 1:1 (case_information -> citizens)
-      // this.hasOne(models.Citizens, {
-      //   foreignKey: 'citizen_ID',
-      // }); 
+      // M:1 with [users]
+      this.belongsTo(models.Users, {
+        foreignKey  : 'citizen_ID',
+        as          : 'citizen',
+        onDelete    : 'RESTRICT'
+      }); 
+
+      // 1:1 with [case_information]
+      this.belongsTo(models.Lab_Reports, {
+        foreignKey  : 'case_ID',
+        as          : 'lab_report',
+        onDelete    : 'RESTRICT'
+      })
+
+      // 1:M with [contacts]
+      this.hasMany(models.Contacts, {
+        foreignKey  : 'case_ID',
+        as          : 'contacts',
+        onDelete    : 'RESTRICT'
+      });
     }
   };
   
@@ -48,12 +64,10 @@ module.exports = (sequelize, DataTypes) => {
       type          : DataTypes.UUID,
       allowNull     : false,
       validate      : {
-        isUUID  : {
-          msg: 'The citizen ID must be a valid UUID value'
-        },
         notNull  : {
           msg: 'The citizen ID is required'
-        }
+        },
+        isUUID  : 4,
       },
       comment       : 'This links a citizen to indicate who owns a case record'
     },
@@ -63,20 +77,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       unique        : true,
       validate      : {
-        isUUID: {
-          args  : 4,
-          msg   : 'Lab report ID must be a valid UUID value',
-        },
         notNull: {
           msg   : 'Lab report ID is required',
         },
+        isUUID  : 4,
       },
-      // references: {
-      //   model   : {
-      //     tableName: 'lab_reports'
-      //   },
-      //   key     : 'lab_report_ID'
-      // },
       comment        : 'This links to a lab report for each case'
     },
 
@@ -100,6 +105,7 @@ module.exports = (sequelize, DataTypes) => {
     is_pregnant: {
       type           : DataTypes.BOOLEAN,
       allowNull      : false,
+      defaultValue   : 0,
       comment        : 'This indicates that a confirmed positive patient is currently pregnant'
     },
 
@@ -128,7 +134,7 @@ module.exports = (sequelize, DataTypes) => {
       type           : DataTypes.STRING,
       allowNull      : false,
       validate       : {
-        inIn: {
+        isIn: {
           args: [[
             'Asymptomatic',
             'Mild',
@@ -138,20 +144,13 @@ module.exports = (sequelize, DataTypes) => {
             'Recovered'
           ]],
           msg: 'Invalid input for current health status'
+        },
+        notNull: {
+          msg: 'Current health status cannot be null'
         }
       },
       comment        : 'This indicates the current health status of a patient'
     },
-
-    // created_datetime: {
-    //   type           : DataTypes.DATE,
-    //   comment        : 'This indicate the date and time that a record has been created',
-    // },
-
-    // updated_datetime: {
-    //   type           : DataTypes.DATE,
-    //   comment        : 'This indicate the date and time that a record has been updated',
-    // },
   
   }, {
 
@@ -163,6 +162,12 @@ module.exports = (sequelize, DataTypes) => {
     timestamp       : true,
     createdAt       : 'created_datetime',
     updatedAt       : 'updated_datetime',
+  
+    hooks: {
+      afterCreate: () => {
+        console.log('A new record has been added to table [addresses]');
+      }
+    }
   });
 
   return Case_Information;

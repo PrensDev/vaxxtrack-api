@@ -4,8 +4,8 @@
   "description": "This is the API for C19CTAVMS Project.",
   "main": "app.js",
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index"
+    "start" : "node index",
+    "dev"   : "nodemon index"
   },
   "repository": {
     "type": "git",

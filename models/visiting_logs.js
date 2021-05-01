@@ -11,7 +11,27 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      
+      // M:1 with [users]
+      this.belongsTo(models.Users, {
+        foreignKey  : 'citizen_ID',
+        as          : 'citizen',
+        onDelete    : 'RESTRICT'
+      });
+
+      // M:1 with [establishments]
+      this.belongsTo(models.Establishments, {
+        foreignKey  : 'establishment_ID',
+        as          : 'establishments',
+        onDelete    : 'RESTRICT'
+      })
+
+      // M:1 with [health_status_logs]
+      this.belongsTo(models.Health_Status_Logs, {
+        foreignKey  : 'health_status_log_ID',
+        as          : 'health_status_logs',
+        onDelete    : 'RESTRICT'
+      });
     }
   };
 
@@ -31,16 +51,10 @@ module.exports = (sequelize, DataTypes) => {
       type          : DataTypes.UUID,
       allowNull     : false,
       validate      : {
-        notNull     : {
-          msg       : 'Citizen ID must not be null',
+        notNull: {
+          msg: 'Citizen ID must not be null',
         }
       },
-      // references    : {
-      //   model: {
-      //     tableName : 'citizens'
-      //   },
-      //   key: 'citizen_ID'
-      // },
       comment       : 'This links a citizen to indicate who owns the visiting log record'
     },
 
@@ -48,33 +62,21 @@ module.exports = (sequelize, DataTypes) => {
       type          : DataTypes.UUID,
       allowNull     : false,
       validate      : {
-        notNull     : {
-          msg       : 'Establishment ID must not be null',
+        notNull: {
+          msg: 'Establishment ID must not be null',
         }
       },
-      // references    : {
-      //   model: {
-      //     tableName : 'establishments'
-      //   },
-      //   key: 'establishment_ID'
-      // },
       comment       : 'This links the establishments for the visiting logs'
     },
 
     health_status_log_ID: {
       type          : DataTypes.UUID,
       allowNull     : false,
-      validate      : {
-        notNull     : {
-          msg       : 'Health status log ID must not be null',
+      validate: {
+        notNull: {
+          msg: 'Health status log ID must not be null',
         }
       },
-      // references    : {
-      //   model: {
-      //     tableName : 'Health_Status_Logs'
-      //   },
-      //   key: 'health_status_log_ID'
-      // },
       comment       : 'This links the health status log for the visiting logs'
     },
 
@@ -105,6 +107,12 @@ module.exports = (sequelize, DataTypes) => {
     timestamp        : true,
     createdAt        : 'created_datetime',
     updatedAt        : 'updated_datetime',
+
+    hooks: {
+      afterCreate: () => {
+        console.log('A new record has been addded to table [visiting_logs]');
+      }
+    }
   });
   
   return Visiting_Logs;

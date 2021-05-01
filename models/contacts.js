@@ -10,13 +10,26 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      
+      // M:1 with [case_information]
+      this.belongsTo(models.Case_Information, {
+        foreignKey  : 'case_ID',
+        as          : 'case_information',
+        onDelete    : 'RESTRICT'
+      });
+
+      // 1:1 with [quarantine_information]
+      this.hasOne(models.Quarantine_Information, {
+        foreignKey  : 'contact_ID',
+        as          : 'quarantine_information',
+        onDelete    : 'RESTRICT'
+      });
     }
   };
 
   Contacts.init({
 
-    // Model attribute
+    // Model attributes
 
     contact_ID: {
       type              : DataTypes.UUID,

@@ -11,14 +11,26 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      
+      // M:1 with [vaccines]
+      this.belongsTo(models.Vaccines, {
+        foreignKey  : 'preferred_vaccine',
+        as          : 'vaccine',
+        onDelete    : 'RESTRICT'
+      });
+
+      // M:1 with [users]
+      this.belongsTo(models.Users, {
+        foreignKey  : 'citizen_ID',
+        as          : 'citizen',
+        onDelete    : 'RESTRICT'
+      });
     }
   };
 
   Vaccination_Appointments.init({
 
     // Model attributes
-
 
     vaccination_appointment_ID: {
       type                  : DataTypes.UUID,
@@ -28,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       comment               : 'This contains the unique identifiers for each record on this table'
     },
     
-    preferred_vaccine        : {
+    preferred_vaccine: {
       type                  : DataTypes.UUID,
       allowNull             : false,
       validate              : {
@@ -36,82 +48,62 @@ module.exports = (sequelize, DataTypes) => {
           msg               : 'vaccine_ID must be a valid UUID value'
         }
       },
-      // references            : {
-      //   model               : {
-      //     tableName         : 'vaccines'
-      //   },
-      //   key                 : 'vaccine_ID'
-      // },
       comment               : 'this contains what type of vaccine the patient chose'
     },
 
-    preferred_date      : {
+    preferred_date: {
       type             : DataTypes.DATE,
       allowNull        : false,
       validate         : {
-        notNull        : {
-          msg          : 'Date of vaccination is required'
+        notNull: {
+          msg: 'Date of Vaccination cannot be null'
         }
       },
-      comment          : 'this contains the patients preffered date to be vaccinated'
+      comment          : 'This contains the preferred date of patient when to vaccinate'
     },
 
-    citizen_ID          : {
+    citizen_ID: {
       type             : DataTypes.UUID,
       allowNull        : false,
       validate         : {
-        isUUID         : {
-          msg          : 'citizen_ID must be a valid UUID value'
+        notNull: {
+          msg: 'Citizen ID cannot be null'
         }
       },
-      //references       : {
-      // model          : {
-      //    tableName    : 'citizens'
-      //  },
-      //  key            : 'citizen_ID'
-      //},
       comment          : 'this contains the unique identifiers for each citizen record'
     },
 
-    status_approval       : {
+    status_approval: {
       type               : DataTypes.STRING,
       allowNull          : false,
-      validate           : {
-        isIn             : {
+      validate: {
+        isIn: {
           args: [[
             'pending',
             'approved',
             'rejected',
           ]],
-          msg             : 'the status approval is invalid'
+          msg             : 'The status approval has invalid value'
         }
       },
-      comment            : 'this indicates whether the patients appointment is pending, approved or rejected'
+      comment            : 'This indicates whether the patients appointment is pending, approved or rejected'
     },
-
     
-    approved_by           : {
+    approved_by: {
       type               : DataTypes.STRING,
       allowNull          : true,
-      // references         : {
-      //   model            : {
-      //     tableName      : 'health_official'
-      //   },
-      //   key              : 'health_official_ID'
-      // },
       comment            : 'this contains the information on who approved the vaccination date for the patient'
     },
 
-    approved_datetime     : {
+    approved_datetime: {
       type               : DataTypes.DATE,
       allowNull          : true,
       comment            : 'this contains the information about the patients approved date of vaccination'
     },
 
-
   }, {
 
-    // model options 
+    // Model Options 
 
     sequelize,
     freezeTableName : true,
@@ -119,7 +111,14 @@ module.exports = (sequelize, DataTypes) => {
     timestamp       : true,
     createdAt       : 'created_datetime',
     updatedAt       : 'updated_datetime',
+
+    hooks: {
+      afterCreate: () => {
+        console.log('A new record has been added to [vaccination_appointments]')
+      }
+    }
     
   });
+  
   return Vaccination_Appointments;
 };

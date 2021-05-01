@@ -2,6 +2,9 @@
 
 const { Sequelize, Model } = require('sequelize');
 
+// Bcrypt lib for encrypting password
+var bcrypt = require('bcrypt');
+
 module.exports = (sequelize, DataTypes) => {
 
   class Users extends Model {
@@ -11,7 +14,41 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+
+      // 1:M with [user_accounts]
+      this.hasMany(models.User_Accounts, {
+        foreignKey  : 'user_ID',
+        as          : 'user_accounts',
+        onDelete    : 'RESTRICT',
+      });
+
+      // 1:M with [case_information]
+      this.hasOne(models.Case_Information, {
+        foreignKey  : 'citizen_ID',
+        as          : 'case',
+        onDelete    : 'RESTRICT'
+      });
+
+      // 1:M with [health_status_logs]
+      this.hasMany(models.Health_Status_Logs, {
+        foreignKey  : 'citizen_ID',
+        as          : 'health_status_logs',
+        onDelete    : 'RESTRICT'
+      });
+
+      // 1:M with [vaccination_appointments]
+      this.hasMany(models.Vaccination_Appointments, {
+        foreignKey  : 'citizen_ID',
+        as          : 'vaccination_appointments',
+        onDelete    : 'RESTRICT'
+      });
+
+      // 1:M with [vaccination_records]
+      this.hasMany(models.Vaccination_Records, {
+        foreignKey  : 'citizen_ID',
+        as          : 'vaccination_records',
+        onDelete    : 'RESTRICT'
+      });
     }
   };
 
@@ -34,9 +71,6 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           msg: 'First Name cannot be null'
         },
-        isAlpha: {
-          msg: 'Must be only letters'
-        }
       },
       comment        : 'This contains the first name of the user'
     },
@@ -44,11 +78,6 @@ module.exports = (sequelize, DataTypes) => {
     middle_name: {
       type          : DataTypes.STRING,
       allowNull     : true,
-      validate: {
-        isAlpha: {
-          msg: 'Must be only letters'
-        }
-      },
       comment        : 'This contains the middle name of the user'
     },
 
@@ -59,9 +88,6 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           msg: 'Last Name cannot be null'
         },
-        isAlpha: {
-          msg: 'Must be only letters'
-        }
       },
       comment        : 'This contains the last name of the user'
     },
@@ -76,7 +102,7 @@ module.exports = (sequelize, DataTypes) => {
             'Biologically Female'
           ]],
           msg: 'Must be a valid sex'
-        }
+        },
       },
       comment        : 'This indicates the sex of the user'
     },    
@@ -149,7 +175,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate: {
         notNull: {
-          msg: 'Last Name cannot be null'
+          msg: 'Last name cannot be null'
         },
         isIn: {
           args: [[
@@ -158,7 +184,7 @@ module.exports = (sequelize, DataTypes) => {
             'Health Official', 
             'Super Admin'
           ]],
-          msg: 'Must be a valid user type'
+          msg: 'User type must have a valid value'
         }
       },
       comment        : 'This contains the identification of a user. '
@@ -169,17 +195,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate: {
         notNull: {
-          msg: 'Password cannot be null'
+          msg: 'Password field cannot be null'
         },
-        isAlpha: {
-          msg: 'Must be only letters'
-        }
       },
       comment        : 'This contains the encrypted password for authorization'
     },
 
   }, {
-
 
     // Model options
 
@@ -189,6 +211,17 @@ module.exports = (sequelize, DataTypes) => {
     timestamps      : true,
     createdAt       : 'created_datetime',
     updatedAt       : 'updated_datetime',
+
+    hooks: {
+      
+      beforeCreate: (users, options) => {
+        users.password = bcrypt.hashSync(users.password, 10);
+      },
+      
+      afterCreate: () => {
+        console.log('A new record has been added to table [users]');
+      }
+    }
   });
 
   return Users;

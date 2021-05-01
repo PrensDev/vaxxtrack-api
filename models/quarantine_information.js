@@ -10,7 +10,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      
+      // 1:1 with [contacts]
+      this.belongsTo(models.Contacts, {
+        foreignKey  : 'contact_ID',
+        as          : 'contact',
+        onDelete    : 'RESTRICT'
+      })
     }
   };
 
@@ -30,9 +36,10 @@ module.exports = (sequelize, DataTypes) => {
       type              : DataTypes.UUID,
       allowNull         : false,
       validations       : {
-        notNull: {
+        notNull : {
           msg: 'This conact ID cannot be null'
-        }
+        },
+        isUUID  : 4,
       },
       comment           : 'This links contacts to attach the contact information of the patient'
     },
@@ -41,8 +48,11 @@ module.exports = (sequelize, DataTypes) => {
       type              : DataTypes.DATE,
       allowNull         : false,
       validations       : {
-        isDate: {
-          msg: 'the patient is admitted'
+        isDate  : {
+          msg: 'Start date must have a valid value'
+        },
+        notNull : {
+          msg: 'Start date cannot be null'
         }
       },
       comment           : 'This contains the date and time of the start of the quarantine'
@@ -52,8 +62,11 @@ module.exports = (sequelize, DataTypes) => {
       type              : DataTypes.DATE,
       allowNull         : false,
       validations       : {
-        isDate: {
-          msg: 'the patient is discharged'
+        isDate  : {
+          msg: 'End date must have a valid value'
+        },
+        notNull : {
+          msg: 'End date cannot be null'
         }
       },
       comment           : 'This contains the date and time of the start of the quarantine'
@@ -69,7 +82,10 @@ module.exports = (sequelize, DataTypes) => {
             'out-patient',
           ]],
 	        msg: 'Invalid input is detected for the result'
-	      }
+	      },
+        notNull: {
+          msg: 'Quarantine type cannot be null'
+        }
       },
       comment           : 'this indicates the patients quaratine status'
     }, 
@@ -80,10 +96,16 @@ module.exports = (sequelize, DataTypes) => {
 
     sequelize,
     freezeTableName  : true,
-    modelName        : 'Quarantine_Inforamtion',
+    modelName        : 'Quarantine_Information',
     timestamps       : true,
     createdAt        : 'created_datetime',
     updatedAt        : 'updated_datetime',
+
+    hooks: {
+      afterCreate: () => {
+        console.log('A new record has been added to table [quarantine_information]');
+      }
+    }
   });
   
   return Quarantine_Information;

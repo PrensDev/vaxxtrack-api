@@ -1,7 +1,9 @@
 'use strict';
-const { Sequelize, Model} = require('sequelize');
+
+const { Sequelize, Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
+  
   class User_Accounts extends Model {
     /**
      * Helper method for defining associations.
@@ -9,67 +11,79 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      
+      // M:1 with [users]
+      this.belongsTo(models.Users, {
+        foreignKey  : 'user_ID',
+        as          : 'user',
+        onDelete    : 'RESTRICT',
+      });
     }
   };
+
   User_Accounts.init({
 
-    //model attributes
+    // Model Attributes
 
     user_account_ID: {
       type            : DataTypes.UUID,
-      aalowNull       : false,
+      allowNull       : false,
       primaryKey      : true,
       defaultValue    : Sequelize.UUIDV4,
-      validations     :  {
-        notNull: {
-          msg         :'This user account cannot be null'
-        }
-
-      },
       comment         : 'This contains the unique identifiers for each record on this table'
     },
 
+    user_ID: {
+      type            : DataTypes.UUID,
+      allowNull       : false,
+      validate        : {
+        notNull: {
+          msg: 'User ID cannot be null'
+        },
+        isUUID: 4,
+      },
+      comment         : 'This contains the user IDs to indicate the owner of an account'
+    },
+
+    details: {
+      type            : DataTypes.STRING,
+      allowNull       : false,
+      validate        : {
+        notNull: {
+          msg: 'User account details is required'
+        }
+      },
+      comment         : 'This contains the user account details of the users'
+    },
 
     type: {
       type            : DataTypes.STRING,
       allowNull       : false,
       validations     : {
-        notNull:{
-        msg:'User must provide a Contact',
+        notNull : {
+          msg:'User must provide a Contact',
         },
-        isIn: {
-          args: [[
+        isIn    : {
+          args    : [[
             'Email',
             'Contact Number',
           ]],
-          msg: 'Please provide valid Email or Contact Number'
+          msg     : 'Please provide valid Email or Contact Number'
         },
       },
       comment         : 'This contains the two different type of contact information a user can give (Email or Contact Number) ',
     },
 
-
-
     verified: {
       type           : DataTypes.BOOLEAN,
-      allowNull      : false,
-      comment        : 'This indicates if  the account is verified or not'
+      allowNull      : true,
+      defaultValue   : 0,
+      comment        : 'This indicates if the account of a user is verified or not'
     },
-
-    // created_datetime: {
-    //   type           : DataTypes.DATE,
-    //   comment        : 'This indicate the date and time that a record has been created',
-    // },
-
-    // updated_datetime: {
-    //   type           : DataTypes.DATE,
-    //   comment        : 'This indicate the date and time that a record has been updated',
-    // },
     
   }, {
 
-    //Model options
+    // Model Options
     
     sequelize,
     freezeTableName  : true,
@@ -77,6 +91,12 @@ module.exports = (sequelize, DataTypes) => {
     timestamps       : true,
     createdAt        : 'created_datetime',
     updatedAt        : 'updated_datetime',
+
+    hooks: {
+      afterCreate: () => {
+        console.log('A new record has been added to table [user_accounts]');
+      }
+    }
   });
 
   return User_Accounts;

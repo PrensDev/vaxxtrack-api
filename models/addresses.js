@@ -4,18 +4,31 @@ const { Sequelize, Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
 
-  class Adresses extends Model {
+  class Addresses extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      
+      // 1:1 with [users]
+      this.hasOne(models.Users, {
+        foreignKey  : 'address_ID',
+        as          : 'user',
+        onDelete    : 'RESTRICT',
+      });
+
+      // 1:1 with [establishments]
+      this.hasOne(models.Establishments, {
+        foreignKey  : 'address_ID',
+        as          : 'establishment',
+        onDelete    : 'RESTRICT',
+      });
     }
   };
   
-  Adresses.init({
+  Addresses.init({
     
     // Model attributes
     
@@ -94,7 +107,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     
     zip_code: {
-      type          : DataTypes.STRING,
+      type          : DataTypes.INTEGER,
       allowNull     : false,
       validate      : {
         notNull: {
@@ -105,7 +118,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     
     latitude: {
-      type          : DataTypes.STRING,
+      type          : DataTypes.FLOAT,
       allowNull     : false,
       validate      : {
         notNull: {
@@ -116,7 +129,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     
     longitude: {
-      type          : DataTypes.STRING,
+      type          : DataTypes.FLOAT,
       allowNull     : false,
       validate      : {
         notNull: {
@@ -132,10 +145,16 @@ module.exports = (sequelize, DataTypes) => {
 
     sequelize,
     freezeTableName  : true,
-    modelName        : 'Adresses',
+    modelName        : 'Addresses',
     timestamp        : true,
     createdAt        : 'created_datetime',
     updatedAt        : 'updated_datetime',
+
+    hooks: {
+      afterCreate: () => {
+        console.log('A new record has been created in table [addresses]');
+      }
+    }
   });
-  return Adresses;
+  return Addresses;
 };
