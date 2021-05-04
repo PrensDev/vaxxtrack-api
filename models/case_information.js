@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Users, {
         foreignKey  : 'citizen_ID',
         as          : 'citizen',
+        scope       : { user_type: 'Citizen' },
         onDelete    : 'RESTRICT'
       }); 
 
@@ -65,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull  : {
-          msg: 'The citizen ID is required'
+          msg: '[case_information].[citizen_ID] cannot be null'
         },
         isUUID  : 4,
       },
@@ -78,7 +79,7 @@ module.exports = (sequelize, DataTypes) => {
       unique        : true,
       validate      : {
         notNull: {
-          msg   : 'Lab report ID is required',
+          msg   : '[case_information].[lab_report_ID] cannot be null',
         },
         isUUID  : 4,
       },
@@ -90,7 +91,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull      : false,
       validate       : {
         isDate: {
-          msg:  'Confirmed date must be a valid date'
+          msg:  '[case_information].[confirmed_date] must be a valid date'
         }
       },
       comment        : 'This contains the date when a case is declared publicly as confirmed'
@@ -99,6 +100,7 @@ module.exports = (sequelize, DataTypes) => {
     admitted: {
       type           : DataTypes.BOOLEAN,
       allowNull      : false,
+      defaultValue   : 0,
       comment        : 'This indicates if a patient had been admitted to any healthcare establishments'
     },
 
@@ -118,7 +120,7 @@ module.exports = (sequelize, DataTypes) => {
             'Recovered', 
             'Died'
           ]],
-          msg   : 'The removal type is invalid'
+          msg   : '[case_information].[removal_type] only accepts one of the defined values'
         }
       },
       comment        : 'This indicates if the patient is recovered or died'
@@ -143,7 +145,7 @@ module.exports = (sequelize, DataTypes) => {
             'Died',
             'Recovered'
           ]],
-          msg: 'Invalid input for current health status'
+          msg: '[case_information].[current_health_status] only accepts one of the defined values'
         },
         notNull: {
           msg: 'Current health status cannot be null'

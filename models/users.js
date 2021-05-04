@@ -49,6 +49,29 @@ module.exports = (sequelize, DataTypes) => {
         as          : 'vaccination_records',
         onDelete    : 'RESTRICT'
       });
+
+      // 1:M with [users]
+      // Health officials added by Super Admins
+      this.hasMany(models.Users, {
+        foreignKey  : 'added_by',
+        as          : 'health_officials',
+        onDelete    : 'RESTRICT'
+      });
+
+      // 1:M with [users]
+      // Super Admin adding Health Officials
+      this.belongsTo(models.Users, {
+        foreignKey  : 'added_by',
+        as          : 'super_admin',
+        onDelete    : 'RESTRICT'
+      });
+
+      // M:M with [establishments] through [roles]
+      this.belongsToMany(models.Establishments, {
+        through     : models.Roles,
+        as          : 'establishment_role',
+        onDelete    : 'RESTRICT',
+      });
     }
   };
 
@@ -69,7 +92,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate: {
         notNull: {
-          msg: 'First Name cannot be null'
+          msg: '[users].[first_name] cannot be null'
         },
       },
       comment        : 'This contains the first name of the user'
@@ -86,7 +109,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate: {
         notNull: {
-          msg: 'Last Name cannot be null'
+          msg: '[users].[last_name] cannot be null'
         },
       },
       comment        : 'This contains the last name of the user'
@@ -142,31 +165,13 @@ module.exports = (sequelize, DataTypes) => {
       type          : DataTypes.UUID,
       unique        : true,
       allowNull     : true,
-      // references    : {
-      //   model  : {
-      //     tableName : 'addresses'
-      //   },
-      //   key         : 'address_ID'
-      // },
       comment       : 'This contains the current address where the user resides'
-    },
-
-    position: {
-      type          : DataTypes.STRING,
-      allowNull     : true,
-      comment        : 'This column is specifically for representatives which identifies his/her position in an establishment'
     },
 
     added_by: {
       type          : DataTypes.UUID,
       unique        : true,
       allowNull     : true,
-      // references    : {
-      //   model  : {
-      //     tableName : 'users'
-      //   },
-      //   key         : 'users_ID'
-      // },
       comment       : 'This column is specifically for health officials to identify whose user, specifically super admin, added him/her.'
     },
 
@@ -175,7 +180,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate: {
         notNull: {
-          msg: 'Last name cannot be null'
+          msg: '[users].[user_type] cannot be null'
         },
         isIn: {
           args: [[
@@ -195,7 +200,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate: {
         notNull: {
-          msg: 'Password field cannot be null'
+          msg: '[users].[password] field cannot be null'
         },
       },
       comment        : 'This contains the encrypted password for authorization'

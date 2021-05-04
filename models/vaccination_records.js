@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       // M:1 with [vaccines]
       this.belongsTo(models.Vaccines, {
         foreignKey  : 'vaccine_ID',
-        as          : 'vaccinez',
+        as          : 'vaccines',
         onDelete    : 'RESTRICT'
       });
 
@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Users, {
         foreignKey  : 'citizen_ID',
         as          : 'citizen',
+        scope       : { user_type: 'Citizen' },
         onDelete    : 'RESTRICT'
       });
     }

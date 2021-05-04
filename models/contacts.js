@@ -60,6 +60,12 @@ module.exports = (sequelize, DataTypes) => {
     timestamps       : true,
     createdAt        : 'created_datetime',
     updatedAt        : 'updated_datetime',
+
+    hooks: {
+      afterCreate: () => {
+        console.log('A new record has been added to ')
+      }
+    }
   });
   
   return Contacts;

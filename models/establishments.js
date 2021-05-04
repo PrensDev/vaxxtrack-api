@@ -11,13 +11,6 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      
-      // M:1 with [users]
-      this.belongsTo(models.Users, {
-        foreignKey  : 'representative_ID',
-        as          : 'representative',
-        onDelete    : 'RESTRICT',
-      });
 
       // 1:1 with [addresses]
       this.belongsTo(models.Addresses, {
@@ -31,9 +24,19 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey  : 'establishment_ID',
         as          : 'visiting_logs',
         onDelete    : 'RESTRICT'
+      });
+
+      // M:M with [users] through [roles]
+      this.belongsToMany(models.Users, {
+        through     : models.Roles,
+        scope       : { user_type: 'Representative' },
+        as          : 'representative_role',
+        onDelete    : 'RESTRICT',
       })
     }
   };
+
+
   Establishments.init({
 
     // Model attributes
@@ -50,17 +53,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       comment       : 'This contains the unique identifiers for each record on this table'
     },
-
-    representative_ID : {
-      type          : DataTypes.UUID,
-      allowNull     : false,
-      validations   : {
-        notNull: {
-          msg: 'This representative ID cannot be null'
-        }
-      },
-      comment       : 'This links the representative on the establishment'
-    }, 
 
     name: {
       type          : DataTypes.STRING,

@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Users, {
         foreignKey  : 'citizen_ID',
         as          : 'citizen',
+        scope       : { user_type: 'Citizen' },
         onDelete    : 'RESTRICT'
       });
 

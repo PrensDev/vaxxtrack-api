@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'Region cannot be null',
+          msg: '[addresses].[region] cannot be null',
         }
       },
       comment      : 'This contains the region of the user'
@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'Province cannot be null',
+          msg: '[addresses].[province] cannot be null',
         }
       },
       comment      : 'This contains the province of the user'
@@ -67,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'City/municipality cannot be null',
+          msg: '[addresses].[city_municipality] cannot be null',
         }
       },
       comment      : 'This contains the city/municipality of the user'
@@ -78,7 +78,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'Baranggay/district cannot be null',
+          msg: '[addresses].[baranggay_district] cannot be null',
         }
       },
       comment      : 'This contains the baranggay/district of the user'
@@ -89,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'Street cannot be null',
+          msg: '[addresses].[street] cannot be null',
         }
       },
       comment      : 'This contains the street of the user'
@@ -100,7 +100,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'Specific location cannot be null',
+          msg: '[addresses].[specific_location] cannot be null',
         }
       },
       comment      : 'This contains the specific location of the user'
@@ -111,7 +111,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'Zip code cannot be null',
+          msg: '[addresses].[zip_code] cannot be null',
         }
       },
       comment      : 'This contains the zip code of the user'
@@ -122,7 +122,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'Latitude cannot be null',
+          msg: '[addresses].[latitude] cannot be null',
         }
       },
       comment      : 'This contains the latitude of the user'
@@ -133,7 +133,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull     : false,
       validate      : {
         notNull: {
-          msg: 'Longitude cannot be null',
+          msg: '[addresses].[longitude] cannot be null',
         }
       },
       comment      : 'This contains the longitude of the user'
@@ -156,5 +156,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+  
   return Addresses;
 };

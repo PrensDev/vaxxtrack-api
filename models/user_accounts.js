@@ -18,6 +18,42 @@ module.exports = (sequelize, DataTypes) => {
         as          : 'user',
         onDelete    : 'RESTRICT',
       });
+
+      // M:1 with [users]
+      // Representatives only 
+      this.belongsTo(models.Users, {
+        foreignKey  : 'user_ID',
+        as          : 'representative',
+        scope       : { user_type   : 'Representative' },
+        onDelete    : 'RESTRICT',
+      });
+
+      // M:1 with [users]
+      // Citizen only 
+      this.belongsTo(models.Users, {
+        foreignKey  : 'user_ID',
+        as          : 'citizen',
+        scope       : { user_type   : 'Citizen' },
+        onDelete    : 'RESTRICT',
+      });
+
+      // M:1 with [users]
+      // Health Officials only 
+      this.belongsTo(models.Users, {
+        foreignKey  : 'user_ID',
+        as          : 'health_official',
+        scope       : { user_type   : 'Health Official' },
+        onDelete    : 'RESTRICT',
+      });
+
+      // M:1 with [users]
+      // Super Admins only 
+      this.belongsTo(models.Users, {
+        foreignKey  : 'user_ID',
+        as          : 'super_admin',
+        scope       : { user_type   : 'Super Admin' },
+        onDelete    : 'RESTRICT',
+      });
     }
   };
 
