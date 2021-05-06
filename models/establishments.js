@@ -26,13 +26,12 @@ module.exports = (sequelize, DataTypes) => {
         onDelete    : 'RESTRICT'
       });
 
-      // M:M with [users] through [roles]
-      this.belongsToMany(models.Users, {
-        through     : models.Roles,
-        scope       : { user_type: 'Representative' },
-        as          : 'representative_role',
+      // 1:M with [users] through [roles]
+      this.hasMany(models.Roles, {
+        foreignKey  : 'establishment_ID',
+        as          : 'role_to_establishment',
         onDelete    : 'RESTRICT',
-      })
+      });
     }
   };
 

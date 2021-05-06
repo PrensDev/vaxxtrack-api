@@ -66,10 +66,10 @@ module.exports = (sequelize, DataTypes) => {
         onDelete    : 'RESTRICT'
       });
 
-      // M:M with [establishments] through [roles]
-      this.belongsToMany(models.Establishments, {
-        through     : models.Roles,
-        as          : 'establishment_role',
+      // 1:M with [users] through [roles]
+      this.hasMany(models.Roles, {
+        foreignKey  : 'representative_ID',
+        as          : 'role_as_representative',
         onDelete    : 'RESTRICT',
       });
     }
