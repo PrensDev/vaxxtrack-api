@@ -5,9 +5,6 @@ const db = require("../../models");
 exports.findAll = (req, res, next) => {
     db.Establishments
         .findAll({
-            where: {
-                type: 'Industrial'
-            },
             include: {
                 model   : db.Addresses,
                 as      : 'address'
@@ -57,3 +54,6 @@ exports.find = (req, res, next) => {
             });
         })
 }
+
+
+// Update an establishment

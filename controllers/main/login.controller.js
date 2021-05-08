@@ -3,16 +3,15 @@ const jwt       = require('jsonwebtoken');
 const db        = require("../../models");
 
 
-// Secret token (for testing purposes)
-secret_token = "f4b00bca46123d5ec0ab4e8221b8a403d6e2e46a4710821b7290abd931376aa92a148dec25109c627379414a1d257bd45ef8d66e76b3637368b0859415a5b0a4"
+// Dotenv Configuration
+require('dotenv').config();
 
 
 // Generate token
-const generateToken = (data) => {
-    return jwt.sign(data, secret_token, {
-        expiresIn: '4800s'
-    });
+const generateToken = (data) => { 
+    return jwt.sign(data, process.env.TOKEN_SECRET, { expiresIn: '4800s' }); 
 }
+
 
 // Login Controller
 exports.login = (req, res) => {
@@ -33,12 +32,12 @@ exports.login = (req, res) => {
                 },
                 include: {
                     model   : db.Users,
-                    as      : 'representative'
+                    as      : 'user'
                 },
             })
             .then((data) => {
                 if (data) {
-                    bcrypt.compare(req.body.password, data.representative.password, (err, result) => {
+                    bcrypt.compare(req.body.password, data.user.password, (err, result) => {
                         if (result) {
                             res.send({
                                 error   : false,
@@ -46,9 +45,10 @@ exports.login = (req, res) => {
                                 token   : generateToken({ 
                                     user_account_ID : data.user_account_ID,
                                     user_ID         : data.user_ID, 
+                                    user_type       : data.user_type, 
                                     account_details : data.accountDetails
                                 }),
-                                message : ["A representative is successfully identified"],
+                                message : ["A user is successfully identified"],
                             });
                         } else {
                             res.status(500).send({

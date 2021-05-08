@@ -1,0 +1,57 @@
+GET http://localhost:3000/
+
+###
+
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "authDetails": "mariamercedez@gmail.com",
+    "password": "$P@ssw0rd;"
+}
+
+###
+
+GET http://localhost:3000/representative
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2FjY291bnRfSUQiOiI5NTQ5ZGYwNS00YWZlLTRmZjgtYjBlZi1lZjMyMmE0MGRmYzMiLCJ1c2VyX0lEIjoiZjQ4NjU4MDYtM2NmZC00NWE5LTk2NDktZjgwMDYyMTY1ZmY2IiwiaWF0IjoxNjIwNDQ2MDIzLCJleHAiOjE2MjA0NTA4MjN9.HGxeSlcqi1R9dBGtBk04T8XvaE-vR2mJOhZwgHTZZpc
+
+###
+
+POST http://localhost:3000/register/representative
+Content-Type: application/json
+
+{
+    "first_name": "Jose",
+    "middle_name": "",
+    "last_name": "Alonzo",
+    "user_type": "Representative",
+    "password":  "$P@ssw0rd;",
+    "user_accounts": {
+        "details": "mariamercedez@gmail.com",
+        "type": "Email",
+        "verified": true
+    },
+    "establishments_with_roles": {
+        "name": "Polytechnic University of the Philippines",
+        "type": "Organizational",
+        "address": {
+            "region": "NCR",
+            "province": "Metro Manila",
+            "city_municipality": "Quezon City",
+            "baranggay_district": "Commonwealth",
+            "street": "Don Fabian",
+            "specific_location": "456",
+            "zip_code": "1111",
+            "latitude": "200",
+            "longitude": "400"
+        },
+        "Roles": {
+            "role": "Dean",
+            "isAdmin": true
+        }
+    }
+}
+
+###
+
+GET http://localhost:3000/test/users

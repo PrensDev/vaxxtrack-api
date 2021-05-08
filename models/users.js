@@ -1,6 +1,7 @@
 'use strict';
 
 const { Sequelize, Model } = require('sequelize');
+require('dotenv').config();
 
 // Bcrypt lib for encrypting password
 var bcrypt = require('bcrypt');
@@ -15,42 +16,42 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
 
-      // 1:M with [user_accounts]
+      // 1:M [users]"[user_accounts]
       this.hasMany(models.User_Accounts, {
         foreignKey  : 'user_ID',
         as          : 'user_accounts',
         onDelete    : 'RESTRICT',
       });
 
-      // 1:M with [case_information]
+      // 1:M [users]:[case_information]
       this.hasOne(models.Case_Information, {
         foreignKey  : 'citizen_ID',
         as          : 'case',
         onDelete    : 'RESTRICT'
       });
 
-      // 1:M with [health_status_logs]
+      // 1:M [users]:[health_status_logs]
       this.hasMany(models.Health_Status_Logs, {
         foreignKey  : 'citizen_ID',
         as          : 'health_status_logs',
         onDelete    : 'RESTRICT'
       });
 
-      // 1:M with [vaccination_appointments]
+      // 1:M [users]:[vaccination_appointments]
       this.hasMany(models.Vaccination_Appointments, {
         foreignKey  : 'citizen_ID',
         as          : 'vaccination_appointments',
         onDelete    : 'RESTRICT'
       });
 
-      // 1:M with [vaccination_records]
+      // 1:M [users]:[vaccination_records]
       this.hasMany(models.Vaccination_Records, {
         foreignKey  : 'citizen_ID',
         as          : 'vaccination_records',
         onDelete    : 'RESTRICT'
       });
 
-      // 1:M with [users]
+      // 1:M [users]:[users]
       // Health officials added by Super Admins
       this.hasMany(models.Users, {
         foreignKey  : 'added_by',
@@ -58,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete    : 'RESTRICT'
       });
 
-      // 1:M with [users]
+      // M:1 [users]:[users]
       // Super Admin adding Health Officials
       this.belongsTo(models.Users, {
         foreignKey  : 'added_by',
@@ -66,11 +67,20 @@ module.exports = (sequelize, DataTypes) => {
         onDelete    : 'RESTRICT'
       });
 
-      // 1:M with [users] through [roles]
-      this.hasMany(models.Roles, {
+      // M:M [users]:[establishments] through [roles]
+      this.belongsToMany(models.Establishments, {
+        through     : 'Roles',
+        as          : 'establishments_with_roles',
         foreignKey  : 'representative_ID',
-        as          : 'role_as_representative',
-        onDelete    : 'RESTRICT',
+        otherKey    : 'establishment_ID'
+      });
+
+      // M:M [users]:[establishments] through [visiting_logs]
+      this.belongsToMany(models.Establishments, {
+        through     : 'Visiting_Logs',
+        as          : 'establishments_with_vlogs',
+        foreignKey  : 'citizen_ID',
+        otherKey    : 'establishment_ID'
       });
     }
   };
@@ -224,7 +234,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       
       afterCreate: () => {
-        console.log('A new record has been added to table [users]');
+        if(process.env.ENABLE_MODEL_LOGS) {
+          console.log('A new record has been added to table [users]');
+        }
       }
     }
   });

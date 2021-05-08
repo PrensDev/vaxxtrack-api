@@ -26,11 +26,20 @@ module.exports = (sequelize, DataTypes) => {
         onDelete    : 'RESTRICT'
       });
 
-      // 1:M with [users] through [roles]
-      this.hasMany(models.Roles, {
+      // M:M [users]:[establishments] through [roles]
+      this.belongsToMany(models.Users, {
+        through     : 'Roles',
+        as          : 'representatives_and_roles',
         foreignKey  : 'establishment_ID',
-        as          : 'role_to_establishment',
-        onDelete    : 'RESTRICT',
+        otherKey    : 'representative_ID',
+      });
+
+      // M:M [users]:[establishments] through [visiting_logs]
+      this.belongsToMany(models.Users, {
+        through     : 'Visiting_Logs',
+        as          : 'citizens_with_vlogs',
+        foreignKey  : 'establishment_ID',
+        otherKey    : 'citizen_ID',
       });
     }
   };
@@ -110,7 +119,9 @@ module.exports = (sequelize, DataTypes) => {
 
     hooks: {
       afterCreate: () => {
-        console.log('A new record has been added to table [establishments]');
+        if(process.env.ENABLE_MODEL_LOGS || false) {
+          console.log('A new record has been added to table [establishments]');
+        }
       }
     }
   });

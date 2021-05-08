@@ -1,18 +1,12 @@
-/* Citizen Controller */
+var router = require('express').Router();
 
-// Import required modules/packages]
-var express = require('express');
-var router = express.Router();
+
+/* Citizen Controller */
 
 
 // Index Controller
 var indexController = require('../controllers/citizen/index.controller');
 router.get('/', indexController.render);
-
-
-// Login Controller
-var loginController = require('../controllers/citizen/login.controller');
-router.get('/login', loginController.login);
 
 
 // Register Controller

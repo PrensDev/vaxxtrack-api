@@ -52,6 +52,12 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Citizen ID cannot be null'
         }
       },
+      references    : {
+        model: {
+          tableName: 'users'
+        },
+        key: 'user_ID'
+      },
       comment       : 'This contains the representatives of an establishment'
     },
 
@@ -62,6 +68,12 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           msg: 'Establishment ID cannot be null'
         }
+      },
+      references    : {
+        model: {
+          tableName: 'establishments'
+        },
+        key: 'establishment_ID'
       },
       comment       : 'This indicate the establishment where a user is representing'
     },

@@ -152,7 +152,9 @@ module.exports = (sequelize, DataTypes) => {
 
     hooks: {
       afterCreate: () => {
-        console.log('A new record has been created in table [addresses]');
+        if(process.env.ENABLE_MODEL_LOGS || false) {
+          console.log('A new record has been created in table [addresses]');
+        }
       }
     }
   });

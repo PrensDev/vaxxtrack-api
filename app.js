@@ -1,8 +1,6 @@
 // Import modules or packages
 const express = require('express');
-const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
-
 
 // Reference to database
 const db = require('./models');
@@ -12,18 +10,16 @@ const db = require('./models');
 const app = express();
 
 
+// Initialize dotenv config
+require('dotenv').config();
+
+
 // Configurations
 const port = process.env.PORT || 3333;
 
 
-// Initialize dotenv config
-dotenv.config();
-
-
 // Setups
-app.use(express.urlencoded({
-    extended: true
-}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
@@ -36,39 +32,32 @@ app.use((req, res, next) => {
 
 // Generate Secret Token (testing purposes)
 // secret_token = require('crypto').randomBytes(64).toString("hex");
-secret_token = 'f4b00bca46123d5ec0ab4e8221b8a403d6e2e46a4710821b7290abd931376aa92a148dec25109c627379414a1d257bd45ef8d66e76b3637368b0859415a5b0a4';
 
 
 // Authenticate token
-const authToken = (req, res, next) => {
+const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(" ")[1];
 
-    if (token == null) {
-        return res.sendStatus(401);
-    } else {
-        // Verify the token
-        jwt.verify(token, secret_token, (err, user) => {
-            console.log(user, err);
-            if (err) {
-                return res.sendStatus(403);
-            } else {
-                next();
-            }
-        });
-    }
+    // Check if token is null then unauthorized
+    if (token == null) return res.sendStatus(401);
+    
+    // Verify the token, if not verified then forbidden
+    jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    });
 }
 
 
-// Routes
-const indexRouter = require('./routes/index.route');
-app.use('/', indexRouter);
+// Main Routes
+app.use('/', require('./routes/main.route'));
 
-const citizenRouter = require('./routes/citizen.route');
-app.use('/citizen', citizenRouter);
-
-const representativeRouter = require('./routes/representative.route');
-app.use('/representative', representativeRouter);
+// Authenticated Routes
+app.use('/citizen', require('./routes/citizen.route'));
+app.use('/representative', authenticateToken, require('./routes/representative.route'));
+app.use('/test', require('./routes/test.route'));
 
 
 // Database Connection Messages
@@ -108,7 +97,6 @@ const syncSuccessMsg = `
 =========================================================================
 Execution is successful!
 Listening on http://localhost:${ port }
-Secret Token: ${ secret_token }
 =========================================================================
 `
 
@@ -125,8 +113,8 @@ const syncFailedMsgFooter = `
 // Save changes to the database
 db.sequelize
     .sync({
-        force: process.env.ALLOW_FORCE || true,
-        sync: process.env.ALLOW_SYNC || false,
+        force: process.env.SEQUELIZE_FORCE_SYNC || true,
+        sync: process.env.SEQUELIZE_ALLOW_SYNC || false,
     })
     .then(() => {
 
@@ -190,7 +178,7 @@ db.sequelize
                 user_type: 'Citizen',
                 password: '$P@ssw0rd;',
                 user_accounts: [{
-                    details: 'juandealcruz@gmail.com',
+                    details: 'juandelacruz@gmail.com',
                     type: 'Email',
                     verified: 1,
                 }, {
@@ -211,6 +199,56 @@ db.sequelize
         }).then(() => {
             console.log('\n==> A citizen has been registered.\n');
         }).catch((err) => {
+            console.log(err);
+        });
+
+        // Register Representative
+        db.Users.create({
+            first_name: "Maria",
+            last_name: "Mercedez",
+            user_type: "Representative",
+            password:  "$P@ssw0rd;",
+            user_accounts: [{
+                "details": "mariamercedez@gmail.com",
+                "type": "Email",
+                "verified": true
+            }],
+            establishments_with_roles: [{
+                name: "San Crest Corporation",
+                type: "Industrial",
+                address: {
+                    region: "NCR",
+                    province: "Metro Manila",
+                    city_municipality: "Caloocan City",
+                    baranggay_district: "Deparo",
+                    street: "Kabatuhan",
+                    specific_location: "123",
+                    zip_code: "1234",
+                    latitude: "100",
+                    longitude: "200",
+                },
+                Roles: [{
+                    role: 'Manager',
+                    isAdmin: true
+                }]
+            }]
+        }, {
+            include: [{
+                model: db.User_Accounts,
+                as: 'user_accounts'
+            }, {
+                model: db.Establishments,
+                as: 'establishments_with_roles',
+                include: [{
+                    model: db.Addresses,
+                    as: 'address'
+                }]
+            }]
+        })
+        .then(() => {
+            console.log('\n==> A representative has been registered.\n');
+        })
+        .catch((err) => {
             console.log(err);
         });
 
