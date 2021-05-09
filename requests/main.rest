@@ -12,11 +12,6 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/representative
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2FjY291bnRfSUQiOiI5NTQ5ZGYwNS00YWZlLTRmZjgtYjBlZi1lZjMyMmE0MGRmYzMiLCJ1c2VyX0lEIjoiZjQ4NjU4MDYtM2NmZC00NWE5LTk2NDktZjgwMDYyMTY1ZmY2IiwiaWF0IjoxNjIwNDQ2MDIzLCJleHAiOjE2MjA0NTA4MjN9.HGxeSlcqi1R9dBGtBk04T8XvaE-vR2mJOhZwgHTZZpc
-
-###
-
 POST http://localhost:3000/register/representative
 Content-Type: application/json
 
@@ -27,7 +22,7 @@ Content-Type: application/json
     "user_type": "Representative",
     "password":  "$P@ssw0rd;",
     "user_accounts": {
-        "details": "mariamercedez@gmail.com",
+        "details": "josealonzo@gmail.com",
         "type": "Email",
         "verified": true
     },
@@ -53,5 +48,3 @@ Content-Type: application/json
 }
 
 ###
-
-GET http://localhost:3000/test/users

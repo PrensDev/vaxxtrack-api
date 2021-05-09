@@ -2,7 +2,7 @@
 const { Sequelize, Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  
+
   class Contacts extends Model {
     /**
      * Helper method for defining associations.
@@ -10,19 +10,19 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      
+
       // M:1 with [case_information]
       this.belongsTo(models.Case_Information, {
-        foreignKey  : 'case_ID',
-        as          : 'case_information',
-        onDelete    : 'RESTRICT'
+        foreignKey: 'case_ID',
+        as: 'case_information',
+        onDelete: 'RESTRICT'
       });
 
       // 1:1 with [quarantine_information]
       this.hasOne(models.Quarantine_Information, {
-        foreignKey  : 'contact_ID',
-        as          : 'quarantine_information',
-        onDelete    : 'RESTRICT'
+        foreignKey: 'contact_ID',
+        as: 'quarantine_information',
+        onDelete: 'RESTRICT'
       });
     }
   };
@@ -32,22 +32,22 @@ module.exports = (sequelize, DataTypes) => {
     // Model attributes
 
     contact_ID: {
-      type              : DataTypes.UUID,
-      allowNull         : false,
-      primaryKey        : true,
-      defaultValue      : Sequelize.UUIDV4,
-      comment           : 'This contains the unique identifiers for each record on this table'
+      type: DataTypes.UUID,
+      allowNull: false,
+      primaryKey: true,
+      defaultValue: Sequelize.UUIDV4,
+      comment: 'This contains the unique identifiers for each record on this table'
     },
-    
+
     case_ID: {
-      type              : DataTypes.UUID,
-      allowNull         : false,
-      validations       : {
+      type: DataTypes.UUID,
+      allowNull: false,
+      validations: {
         notNull: {
           msg: 'This case ID cannot be null'
         }
       },
-      comment           : 'This contains the case information to identify the user'
+      comment: 'This contains the case information to identify the user'
     },
 
   }, {
@@ -55,18 +55,20 @@ module.exports = (sequelize, DataTypes) => {
     // Model Options
 
     sequelize,
-    freezeTableName  : true,
-    modelName        : 'Contacts',
-    timestamps       : true,
-    createdAt        : 'created_datetime',
-    updatedAt        : 'updated_datetime',
+    freezeTableName: true,
+    modelName: 'Contacts',
+    timestamps: true,
+    createdAt: 'created_datetime',
+    updatedAt: 'updated_datetime',
 
     hooks: {
       afterCreate: () => {
-        console.log('A new record has been added to ')
+        if (process.env.ENABLE_MODEL_LOGS === 'true') {
+          console.log('A new record has been added to table [contacts]')
+        }
       }
     }
   });
-  
+
   return Contacts;
 };

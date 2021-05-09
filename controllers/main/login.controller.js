@@ -32,8 +32,8 @@ exports.login = (req, res) => {
                 },
                 include: {
                     model   : db.Users,
-                    as      : 'user'
-                },
+                    as      : 'user',
+                },              
             })
             .then((data) => {
                 if (data) {
@@ -44,9 +44,9 @@ exports.login = (req, res) => {
                                 data    : data,
                                 token   : generateToken({ 
                                     user_account_ID : data.user_account_ID,
-                                    user_ID         : data.user_ID, 
-                                    user_type       : data.user_type, 
-                                    account_details : data.accountDetails
+                                    user_ID         : data.user.user_ID, 
+                                    user_type       : data.user.user_type, 
+                                    account_details : data.details
                                 }),
                                 message : ["A user is successfully identified"],
                             });

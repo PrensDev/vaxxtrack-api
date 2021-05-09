@@ -43,7 +43,7 @@ const authenticateToken = (req, res, next) => {
     if (token == null) return res.sendStatus(401);
     
     // Verify the token, if not verified then forbidden
-    jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) return res.sendStatus(403);
         req.user = user;
         next();
@@ -55,9 +55,8 @@ const authenticateToken = (req, res, next) => {
 app.use('/', require('./routes/main.route'));
 
 // Authenticated Routes
-app.use('/citizen', require('./routes/citizen.route'));
+app.use('/citizen', authenticateToken, require('./routes/citizen.route'));
 app.use('/representative', authenticateToken, require('./routes/representative.route'));
-app.use('/test', require('./routes/test.route'));
 
 
 // Database Connection Messages
@@ -113,8 +112,9 @@ const syncFailedMsgFooter = `
 // Save changes to the database
 db.sequelize
     .sync({
-        force: process.env.SEQUELIZE_FORCE_SYNC || true,
-        sync: process.env.SEQUELIZE_ALLOW_SYNC || false,
+        force: process.env.SEQUELIZE_FORCE_SYNC === 'true' || false,
+        alter: process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
+        sync: process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
     })
     .then(() => {
 
@@ -155,7 +155,7 @@ db.sequelize
                 }]
             }]
         }).then(() => {
-            console.log('\n==> A Super Admin has been registered.\n');
+            console.log('==> A Super Admin has been registered.\n');
         });
 
         // Register Citizen
@@ -197,7 +197,7 @@ db.sequelize
                 }]
             }]
         }).then(() => {
-            console.log('\n==> A citizen has been registered.\n');
+            console.log('==> A citizen has been registered.\n');
         }).catch((err) => {
             console.log(err);
         });
@@ -246,7 +246,7 @@ db.sequelize
             }]
         })
         .then(() => {
-            console.log('\n==> A representative has been registered.\n');
+            console.log('==> A representative has been registered.\n');
         })
         .catch((err) => {
             console.log(err);

@@ -10,12 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      
+
       // 1:1 with [contacts]
       this.belongsTo(models.Contacts, {
-        foreignKey  : 'contact_ID',
-        as          : 'contact',
-        onDelete    : 'RESTRICT'
+        foreignKey: 'contact_ID',
+        as: 'contact',
+        onDelete: 'RESTRICT'
       })
     }
   };
@@ -25,81 +25,83 @@ module.exports = (sequelize, DataTypes) => {
     // Model attribute
 
     quarantine_ID: {
-      type              : DataTypes.UUID,
-      allowNull         : false,
-      primaryKey        : true,
-      defaultValue      : Sequelize.UUIDV4,
-      comment           : 'This contains the unique identifiers for each record on this table'
+      type: DataTypes.UUID,
+      allowNull: false,
+      primaryKey: true,
+      defaultValue: Sequelize.UUIDV4,
+      comment: 'This contains the unique identifiers for each record on this table'
     },
-    
+
     contact_ID: {
-      type              : DataTypes.UUID,
-      allowNull         : false,
-      validations       : {
-        notNull : {
+      type: DataTypes.UUID,
+      allowNull: false,
+      validations: {
+        notNull: {
           msg: 'This conact ID cannot be null'
         },
-        isUUID  : 4,
+        isUUID: 4,
       },
-      comment           : 'This links contacts to attach the contact information of the patient'
+      comment: 'This links contacts to attach the contact information of the patient'
     },
 
     start_date: {
-      type              : DataTypes.DATE,
-      allowNull         : false,
-      validations       : {
-        isDate  : {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validations: {
+        isDate: {
           msg: 'Start date must have a valid value'
         },
-        notNull : {
+        notNull: {
           msg: 'Start date cannot be null'
         }
       },
-      comment           : 'This contains the date and time of the start of the quarantine'
+      comment: 'This contains the date and time of the start of the quarantine'
     },
 
     end_date: {
-      type              : DataTypes.DATE,
-      allowNull         : false,
-      validations       : {
-        isDate  : {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validations: {
+        isDate: {
           msg: 'End date must have a valid value'
         },
-        notNull : {
+        notNull: {
           msg: 'End date cannot be null'
         }
       },
-      comment           : 'This contains the date and time of the start of the quarantine'
+      comment: 'This contains the date and time of the start of the quarantine'
     },
 
     quarantine_type: {
-      type              : DataTypes.STRING,
-      allowNull         : false,
-      validation        : {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validation: {
         isIn: {
-          args: [[
-            'In-patients',
-            'out-patient',
-          ]],
-	        msg: 'Invalid input is detected for the result'
-	      },
+          args: [
+            [
+              'In-patients',
+              'out-patient',
+            ]
+          ],
+          msg: 'Invalid input is detected for the result'
+        },
         notNull: {
           msg: 'Quarantine type cannot be null'
         }
       },
-      comment           : 'this indicates the patients quaratine status'
-    }, 
+      comment: 'this indicates the patients quaratine status'
+    },
 
   }, {
 
     // Model Options
 
     sequelize,
-    freezeTableName  : true,
-    modelName        : 'Quarantine_Information',
-    timestamps       : true,
-    createdAt        : 'created_datetime',
-    updatedAt        : 'updated_datetime',
+    freezeTableName: true,
+    modelName: 'Quarantine_Information',
+    timestamps: true,
+    createdAt: 'created_datetime',
+    updatedAt: 'updated_datetime',
 
     hooks: {
       afterCreate: () => {
@@ -107,6 +109,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
-  
+
   return Quarantine_Information;
 };

@@ -1,7 +1,6 @@
 'use strict';
 const { Sequelize, Model } = require('sequelize');
 
-
 module.exports = (sequelize, DataTypes) => {
   
   class Establishments extends Model {
@@ -119,7 +118,7 @@ module.exports = (sequelize, DataTypes) => {
 
     hooks: {
       afterCreate: () => {
-        if(process.env.ENABLE_MODEL_LOGS || false) {
+        if(process.env.ENABLE_MODEL_LOGS === 'true' || false) {
           console.log('A new record has been added to table [establishments]');
         }
       }

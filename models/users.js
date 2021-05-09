@@ -1,10 +1,12 @@
 'use strict';
 
 const { Sequelize, Model } = require('sequelize');
-require('dotenv').config();
 
 // Bcrypt lib for encrypting password
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
+
+// Include all protected attributes
+const PROTECTED_ATTRIBUTES = ['password'];
 
 module.exports = (sequelize, DataTypes) => {
 
@@ -82,6 +84,15 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey  : 'citizen_ID',
         otherKey    : 'establishment_ID'
       });
+    }
+    
+    //  For protected attributes
+    toJSON() {
+      const attributes = {...this.get()}
+      for (const a of PROTECTED_ATTRIBUTES) {
+        delete attributes[a];
+      }
+      return attributes;
     }
   };
 
@@ -234,7 +245,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       
       afterCreate: () => {
-        if(process.env.ENABLE_MODEL_LOGS) {
+        if(process.env.ENABLE_MODEL_LOGS === 'true') {
           console.log('A new record has been added to table [users]');
         }
       }
