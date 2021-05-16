@@ -1,6 +1,7 @@
 // Import modules or packages
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 // Reference to database
 const db = require('./models');
@@ -23,7 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
-// Middleware
+// Middlewares
+app.use(cors());
 app.use((req, res, next) => {
     console.log(`Request has been sent to ${ req.url }`);
     next();
@@ -51,13 +53,21 @@ const authenticateToken = (req, res, next) => {
 }
 
 
+/*
+|================================================================
+| ROUTES
+|================================================================
+*/
+
 // Main Routes
 app.use('/', require('./routes/main.route'));
+
+// Test Route
+app.use('/test', require('./routes/test.route'));
 
 // Authenticated Routes
 app.use('/citizen', authenticateToken, require('./routes/citizen.route'));
 app.use('/representative', authenticateToken, require('./routes/representative.route'));
-
 
 // Database Connection Messages
 const connSuccessMsg = `

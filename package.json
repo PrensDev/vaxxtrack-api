@@ -4,8 +4,8 @@
   "description": "This is the API for C19CTAVMS Project.",
   "main": "app.js",
   "scripts": {
-    "start" : "node index",
-    "dev"   : "nodemon index"
+    "start": "node index",
+    "dev": "nodemon index"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/PrensDev/c19ctavms-api#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
