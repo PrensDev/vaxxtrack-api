@@ -66,6 +66,16 @@ module.exports = (sequelize, DataTypes) => {
       comment: 'This links the establishments for the visiting logs'
     },
 
+    temperature: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Temperature must not be null'
+        }
+      }
+    },
+
     health_status_log_ID: {
       type: DataTypes.UUID,
       allowNull: false,

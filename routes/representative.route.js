@@ -11,8 +11,9 @@ router.get('/', indexController.render);
 
 // Establishment Controller
 var establishmentController = require('../controllers/representative/establishment.controller');
-router.get('/establishment'     , establishmentController.findAll);
-router.get('/establishment/:id' , establishmentController.find);
+router.get('/establishment'             , establishmentController.findAll);
+router.get('/establishment/:id'         , establishmentController.find);
+router.put('/update-establishment/:id'  , establishmentController.update);
 
 
 // Export module

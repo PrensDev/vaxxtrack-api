@@ -1,1 +1,2 @@
-# THIS IS A TEST
+# Populate Data
+GET http://localhost:3000/test/populate
