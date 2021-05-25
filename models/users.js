@@ -18,11 +18,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
 
-      // 1:M [users]"[user_accounts]
+      // 1:M [users]:[user_accounts]
       this.hasMany(models.User_Accounts, {
         foreignKey  : 'user_ID',
         as          : 'user_accounts',
         onDelete    : 'RESTRICT',
+      });
+
+      // 1:1 [users]:[addresses]
+      this.belongsTo(models.Addresses, {
+        foreignKey  : 'address_ID',
+        as          : 'address',
+        onDelete    : 'RESTRICT'
       });
 
       // 1:M [users]:[case_information]
@@ -136,14 +143,20 @@ module.exports = (sequelize, DataTypes) => {
       comment        : 'This contains the last name of the user'
     },
 
+    suffix_name: {
+      type          : DataTypes.STRING,
+      allowNull     : true,
+      comment       : 'This contains the last name of the user'
+    },
+
     sex: {
       type          : DataTypes.STRING,
       allowNull     : true,
       validate      : {
         isIn: {
           args: [[
-            'Biologically Male', 
-            'Biologically Female'
+            'Male', 
+            'Female'
           ]],
           msg: 'Must be a valid sex'
         },
@@ -191,7 +204,6 @@ module.exports = (sequelize, DataTypes) => {
 
     added_by: {
       type          : DataTypes.UUID,
-      unique        : true,
       allowNull     : true,
       comment       : 'This column is specifically for health officials to identify whose user, specifically super admin, added him/her.'
     },

@@ -16,5 +16,20 @@ router.get('/establishment/:id'         , establishmentController.find);
 router.put('/update-establishment/:id'  , establishmentController.update);
 
 
+// Visiting Log Controller
+var visitingLogController = require('../controllers/representative/visiting_log.controller');
+// Todo: include the properties and paths here
+
+
+// Use Information Controller
+var infoController = require('../controllers/representative/info.controller');
+// Todo: include the properties and paths here
+
+
+// Account Controller
+var accountController = require('../controllers/representative/account.controller');
+// Todo: include the properties and paths here
+
+
 // Export module
 module.exports = router;

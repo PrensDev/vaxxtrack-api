@@ -1,3 +1,9 @@
+/**
+ * REGISTER CONTROLLER
+ * 
+ * This controller is for user registration
+ */
+
 const db = require("../../models");
 
 // Register a representative including its establishment

@@ -73,7 +73,8 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           msg: 'Temperature must not be null'
         }
-      }
+      },
+      comment: 'This indicate the temperature of citizen before entering into an establishment'
     },
 
     health_status_log_ID: {

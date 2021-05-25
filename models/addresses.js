@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       // 1:1 with [users]
       this.hasOne(models.Users, {
         foreignKey: 'address_ID',
-        as: 'user',
+        as: 'citizen',
         onDelete: 'RESTRICT',
       });
 
@@ -72,15 +72,15 @@ module.exports = (sequelize, DataTypes) => {
       comment: 'This contains the city/municipality of the user'
     },
 
-    baranggay_district: {
+    barangay_district: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
-          msg: '[addresses].[baranggay_district] cannot be null',
+          msg: '[addresses].[barangay_district] cannot be null',
         }
       },
-      comment: 'This contains the baranggay/district of the user'
+      comment: 'This contains the barangay/district of the user'
     },
 
     street: {

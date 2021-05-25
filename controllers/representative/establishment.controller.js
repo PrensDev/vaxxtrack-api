@@ -1,3 +1,9 @@
+/**
+ * ESTABLISHMENT CONTROLLER
+ * 
+ * This controller is for establishment management of representatives
+ */
+
 const db = require("../../models");
 
 

@@ -10,302 +10,407 @@ exports.test = (req, res, next) => {
         })
 }
 
-exports.populate = (req, res, next) => {
+exports.populate = () => {
     
-    // Register Super Admin
-    db.Users.create({
-        user_ID: 'e2348fa2-420f-461d-b580-cd94be442dc9',
-        first_name: 'Jetsun Prince',
-        middle_name: 'Padrogane',
-        last_name: 'Torres',
-        user_type: 'Super Admin',
-        password: '$P@ssw0rd_ADMIN;',
-        user_accounts: [{
-            details: 'jetsunprincetorres@gmail.com',
-            type: 'Email',
-            verified: 1
-        }],
-        health_officials: [{
-            user_ID: 'bff36b50-3559-45e0-b418-d7018cfaea19',
-            first_name: 'Anne',
-            middle_name: '',
-            last_name: 'Yang',
-            user_type: 'Health Official',
-            password: '$P@ssw0rd;',
+    // Add Super Admin
+    db.Users
+        .create({
+            user_ID: '0971a50a-de92-4603-89b2-fd03d777a893',
+            first_name: 'Jetsun Prince',
+            middle_name: 'Padrogane',
+            last_name: 'Torres',
+            user_type: 'Super Admin',
+            password: '$P@ssw0rd_ADMIN;',
             user_accounts: [{
-                details: 'anneyang@gmail.com',
+                user_account_ID: 'b192cc39-c6ad-448c-8033-19d4cc763fc9',
+                details: 'jetsunprincetorres@gmail.com',
                 type: 'Email',
-                verified: 1
+                verified: true
             }]
-        }]
-    }, {
-        include: [{
-            model: db.User_Accounts,
-            as: 'user_accounts',
         }, {
-            model: db.Users,
-            as: 'health_officials',
             include: [{
                 model: db.User_Accounts,
-                as: 'user_accounts',
+                as: 'user_accounts'
             }]
-        }]
-    }).then(() => {
-        console.log('==> A Super Admin has been registered.\n');
-    });
-
-    // Register Citizen
-    db.Addresses.create({
-        address_ID: '7003cc64-1c01-4314-b8a5-ebd77db6867b',
-        region: 'NATIONAL CAPITAL REGION',
-        province: 'Metro Manila',
-        city_municipality: 'Valenzuela City',
-        baranggay_district: 'Bignay',
-        street: 'Hulo',
-        specific_location: 'Block 1, Lot 1, Camella Village,',
-        zip_code: 1440,
-        latitude: 100,
-        longitude: 100,
-        user: [{
-            user_ID: 'b9d2fa7e-8809-46fa-af83-f872044b8444',
-            first_name: 'Juan',
-            middle_name: null,
-            last_name: 'Dela Cruz',
-            sex: 'Biologically Male',
-            birth_date: '2000-01-01',
-            user_type: 'Citizen',
-            password: '$P@ssw0rd;',
-            user_accounts: [{
-                details: 'juandelacruz@gmail.com',
-                type: 'Email',
-                verified: 1,
-            }, {
-                details: '09123456789',
-                type: 'Contact Number',
-                verified: 0,
-            }, ],
-        }],
-    }, {
-        include: [{
-            model: db.Users,
-            as: 'user',
-            include: [{
-                model: db.User_Accounts,
-                as: 'user_accounts',
-            }]
-        }]
-    }).then(() => {
-        console.log('==> A citizen has been registered.\n');
-
-        // Health Status Log
-        db.Health_Status_Logs.create({
-            health_status_log_ID: 'b9a17c89-47e3-4eab-9d2e-72627142180a',
-            citizen_ID: 'b9d2fa7e-8809-46fa-af83-f872044b8444',
-            temperature: 35.7,
-            fever: false,
-            dry_cough: false,
-            sore_throat: false,
-            breath_shortness: false,
-            smell_taste_loss: false,
-            fatigue: false,
-            aches_pain: false,
-            runny_nose: false,
-            diarrhea: false,
-            headache: false,
         })
         .then(() => {
-            console.log('==> A health status log has been logged.\n');
+            console.log('==> Super Admin is added');
+
+            // Add health official added by this super admin
+            db.Users
+                .create({
+                    user_ID: 'ebcad302-7c12-4083-8198-4953e0c8356a',
+                    first_name: 'John',
+                    last_name: 'Doe',
+                    user_type: 'Health Official',
+                    password: '$P@ssw0rd;',
+                    added_by: '0971a50a-de92-4603-89b2-fd03d777a893',
+                    user_accounts: [{
+                        user_account_ID: 'a4df2d4c-954f-4ce3-b02e-f7c6fe635882',
+                        details: 'johndoe@gmail.com',
+                        type: 'Email',
+                        verified: true
+                    }]
+                }, {
+                    include: [{
+                        model: db.User_Accounts,
+                        as: 'user_accounts'
+                    }]
+                })
+                .then(() => {
+                    console.log('==> Health Official has been added');
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            // Add health official added by this super admin
+            db.Users
+                .create({
+                    user_ID: '054683e2-8001-4095-851a-f077908bc9b6',
+                    first_name: 'Jane',
+                    last_name: 'Doe',
+                    user_type: 'Health Official',
+                    password: '$P@ssw0rd;',
+                    added_by: '0971a50a-de92-4603-89b2-fd03d777a893',
+                    user_accounts: [{
+                        user_account_ID: '3d07b126-1f5b-490d-93c2-5a2e53b2c88a',
+                        details: 'janedoe01@gmail.com',
+                        type: 'Email',
+                        verified: true
+                    }]
+                }, {
+                    include: [{
+                        model: db.User_Accounts,
+                        as: 'user_accounts'
+                    }]
+                })
+                .then(() => {
+                    console.log('==> Health Official has been added');
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         })
         .catch((err) => {
             console.log(err);
         });
-    }).catch((err) => {
-        console.log(err);
-    });
+
+        // Register Representative
+        db.Users
+            .create({
+                user_ID: 'c0762c69-78e9-4656-8b79-1a6bebd0358a',
+                first_name: 'Timothy',
+                middle_name: 'Dave',
+                last_name: 'McDuffy',
+                user_type: 'Representative',
+                password: '$P@ssw0rd;',
+                user_accounts: [{
+                    user_account_ID: '322fa011-5017-4edf-85bc-f9bb1e43e910',
+                    details: 'timothy.mcduffy@gmail.com',
+                    type: 'Email',
+                    verified: true,
+                }],
+                establishments_with_roles: [{
+                    establishment_ID: '73cedc92-5152-4535-9f24-4f3160e2e358',
+                    name: 'ABC Company',
+                    type: 'Company',
+                    address: [{
+                        address_ID: '74b3ab4a-dd0a-475a-8f6c-9c9ec43d11d5',
+                        region: 'NATIONAL CAPITAL REGION',
+                        province: 'NCR THIRD DISTRICT',
+                        city_municipality: 'City of Valenzuela',
+                        barangay_district: 'Bignay',
+                        street: 'Hulo',
+                        specific_location: '290 Hulo Road',
+                        zip_code: 1440,
+                        latitude: 100.45,
+                        longitude: 291.42
+                    }],
+                    Roles: {
+                        role_ID: 'b7b3a379-e1f9-4f7d-9998-97b8d8d3f656',
+                        role: 'CEO',
+                        isAdmin: true
+                    }
+                }]
+            }, {
+                include: [
+                    {
+                        model: db.User_Accounts,
+                        as: 'user_accounts',
+                    }, {
+                        model: db.Establishments,
+                        as: 'establishments_with_roles',
+                        include: [{
+                            model: db.Addresses,
+                            as: 'address'
+                        }]
+                    }
+                ]
+            })
+            .then(() => {
+                console.log('==> A representative has been registered');
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    
+        // Register Representative
+        db.Users
+            .create({
+                user_ID: '0d9af050-1ee9-41b6-be8f-114c4fa3855b',
+                first_name: 'Peter',
+                last_name: 'Everson',
+                user_type: 'Representative',
+                password: '$P@ssw0rd;',
+                user_accounts: [{
+                    user_account_ID: 'ee4b34bd-18cc-472b-8315-09cee8d1d163',
+                    details: 'peter.everson@gmail.com',
+                    type: 'Email',
+                    verified: true,
+                }],
+                establishments_with_roles: [{
+                    establishment_ID: 'aedec51e-2c46-4ead-8348-9721a1c32f5c',
+                    name: 'San Roque Supermarket',
+                    type: 'Business',
+                    address: [{
+                        address_ID: '5a125582-845c-4787-b74b-5f9820e31e34',
+                        region: 'NATIONAL CAPITAL REGION',
+                        province: 'NCR THIRD DISTRICT',
+                        city_municipality: 'City of Caloocan',
+                        barangay_district: 'Deparo',
+                        street: 'Kabatuhan',
+                        specific_location: '124 Kabatuhan Road',
+                        zip_code: 1447,
+                        latitude: 123.65,
+                        longitude: 241.12
+                    }],
+                    Roles: {
+                        role_ID: '1adbabe9-0f36-4396-a35f-9c7843f3c3f5',
+                        role: 'Manager',
+                        isAdmin: true
+                    }
+                }]
+            }, {
+                include: [
+                    {
+                        model: db.User_Accounts,
+                        as: 'user_accounts',
+                    }, {
+                        model: db.Establishments,
+                        as: 'establishments_with_roles',
+                        include: [{
+                            model: db.Addresses,
+                            as: 'address'
+                        }]
+                    }
+                ]
+            })
+            .then(() => {
+                console.log('==> A representative has been registered');
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    
+    // Register Citizen
+    db.Users
+        .create({
+            user_ID: '220ff9d5-4de3-4d58-bf91-968bb129b2fa',
+            first_name: 'Juan',
+            middle_name: 'Dela',
+            last_name: 'Cruz',
+            sex: 'Male',
+            birth_date: '2000-01-01',
+            civil_status: 'Single',
+            user_type: 'Citizen',
+            password: '$P@ssw0rd',
+            user_accounts: [
+                {
+                    details: 'juandelacruz@gmail.com',
+                    type: 'Email',
+                    verified: true
+                }, {
+                    user_account_ID: 'b482155f-d977-4612-ab3b-5396a33f3a18',
+                    details: '09123456789',
+                    type: 'Contact Number',
+                    verified: true
+                }
+            ],
+            address: [{
+                address_ID: '5db574ac-b2da-41e8-95c3-d1813557aa5d',
+                region: 'NATIONAL CAPITAL REGION',
+                province: 'NCR SECOND DISTRICT',
+                city_municipality: 'City of Quezon',
+                barangay_district: 'Don Fabian',
+                street: 'Gitna St.',
+                specific_location: 'Blk 1 Lot 2, Amore Subdivision',
+                zip_code: 1443,
+                latitude: 253.86,
+                longitude: 248.02
+            }]
+        }, {
+            include: [
+                {
+                    model: db.User_Accounts,
+                    as: 'user_accounts'
+                }, {
+                    model: db.Addresses,
+                    as: 'address'
+                }
+            ]
+        })
+        .then(() => {
+            console.log('==> A Citizen has been registered');
+
+            // Add Health Status Log
+            db.Health_Status_Logs
+                .create({
+                    health_status_log_ID: '2a8e8a7d-224d-4d74-b855-85d3665a4bb7',
+                    citizen_ID: '220ff9d5-4de3-4d58-bf91-968bb129b2fa',
+                    temperature: 36.5,
+                    fever: false,
+                    dry_cough: false,
+                    sore_throat: false,
+                    breath_shortness: false,
+                    smell_taste_loss: false,
+                    fatigue: false,
+                    aches_pain: false,
+                    runny_nose: false,
+                    diarrhea: false,
+                    headache: false
+                })
+                .then(() => {
+                    console.log('==> A health status log has been recorded');
+
+                    // Add Visiting Log
+                    db.Visiting_Logs
+                        .create({
+                            visiting_log_ID: 'fa0fba0d-592b-4368-8ef3-15381b43eb43',
+                            citizen_ID: '220ff9d5-4de3-4d58-bf91-968bb129b2fa',
+                            establishment_ID: 'aedec51e-2c46-4ead-8348-9721a1c32f5c',
+                            temperature: 36.8,
+                            health_status_log_ID: '2a8e8a7d-224d-4d74-b855-85d3665a4bb7',
+                            purpose: 'Visiting'
+                        })
+                        .then(() => {
+                            console.log('==> A visiting log has been recorded');
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
+
+                    // Add Visiting Log
+                    db.Visiting_Logs
+                        .create({
+                            visiting_log_ID: '9ca9c940-a610-4f04-960c-5fbb8ac6e587',
+                            citizen_ID: '220ff9d5-4de3-4d58-bf91-968bb129b2fa',
+                            establishment_ID: '73cedc92-5152-4535-9f24-4f3160e2e358',
+                            temperature: 36.4,
+                            health_status_log_ID: '2a8e8a7d-224d-4d74-b855-85d3665a4bb7',
+                            purpose: 'Visiting'
+                        })
+                        .then(() => {
+                            console.log('==> A visiting log has been recorded');
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 
     // Register Another Citizen
-    db.Addresses.create({
-        address_ID: '7452024c-02a6-407c-903d-0737bb50debb',
-        region: 'NATIONAL CAPITAL REGION',
-        province: 'Metro Manila',
-        city_municipality: 'Paranaque City',
-        baranggay_district: 'Paranaque',
-        street: 'Kalibo',
-        specific_location: '234 Nawawala Road',
-        zip_code: 1532,
-        latitude: 189.93,
-        longitude: 154.23,
-        user: [{
-            user_ID: '5ae995ba-94be-408a-a8c3-eb1d42dc6f40',
-            first_name: 'John',
-            middle_name: null,
-            last_name: 'Doe',
-            sex: 'Biologically Male',
-            birth_date: '1983-01-01',
+    db.Users
+        .create({
+            user_ID: '211c9f7f-286f-4201-b7ac-2ce5e13dbda7',
+            first_name: 'Maria',
+            middle_name: 'Dela Paz',
+            last_name: 'Mercedez',
+            sex: 'Female',
+            birth_date: '2000-01-01',
+            civil_status: 'Married',
             user_type: 'Citizen',
-            password: '$P@ssw0rd;',
+            password: '$P@ssw0rd',
             user_accounts: [{
-                details: 'johndoe@gmail.com',
+                user_account_ID: '8095115b-255b-4cc2-82f4-9f6e420f67df',
+                details: 'mariamercedez@gmail.com',
                 type: 'Email',
-                verified: 1,
+                verified: true
             }],
-        }],
-    }, {
-        include: [{
-            model: db.Users,
-            as: 'user',
-            include: [{
-                model: db.User_Accounts,
-                as: 'user_accounts',
+            address: [{
+                address_ID: '41dff44a-a7fd-430b-8f06-c878ab226a8f',
+                region: 'NATIONAL CAPITAL REGION',
+                province: 'NCR SECOND DISTRICT',
+                city_municipality: 'City of Quezon',
+                barangay_district: 'Commonwealth',
+                street: 'Don Fabian',
+                specific_location: 'Blk 1 Lot 2, Amore Subdivision',
+                zip_code: 1234,
+                latitude: 223.86,
+                longitude: 138.02
             }]
-        }]
-    }).then(() => {
-        console.log('==> A citizen has been registered.\n');
-
-        // Health Status Log
-        db.Health_Status_Logs.create({
-            health_status_log_ID: '8516c061-461f-4a26-8ec4-40fe17a514c4',
-            citizen_ID: '5ae995ba-94be-408a-a8c3-eb1d42dc6f40',
-            temperature: 36.1,
-            fever: false,
-            dry_cough: false,
-            sore_throat: false,
-            breath_shortness: false,
-            smell_taste_loss: false,
-            fatigue: false,
-            aches_pain: false,
-            runny_nose: false,
-            diarrhea: false,
-            headache: false,
+        }, {
+            include: [
+                {
+                    model: db.User_Accounts,
+                    as: 'user_accounts'
+                }, {
+                    model: db.Addresses,
+                    as: 'address'
+                }
+            ]
         })
         .then(() => {
-            console.log('==> A health status log has been logged.\n');
+            console.log('==> A Citizen has been registered');
+
+            // Add Health Status Log
+            db.Health_Status_Logs
+                .create({
+                    health_status_log_ID: '0df1b48c-8fc7-4329-aea8-2a0a91ebe902',
+                    citizen_ID: '211c9f7f-286f-4201-b7ac-2ce5e13dbda7',
+                    temperature: 35.9,
+                    fever: false,
+                    dry_cough: false,
+                    sore_throat: false,
+                    breath_shortness: false,
+                    smell_taste_loss: false,
+                    fatigue: false,
+                    aches_pain: false,
+                    runny_nose: false,
+                    diarrhea: false,
+                    headache: false
+                })
+                .then(() => {
+                    console.log('==> A health status log has been recorded');
+
+                    // Add Visiting Log
+                    db.Visiting_Logs
+                        .create({
+                            visiting_log_ID: '47490e20-ea55-47df-8a8e-bd0c416965e1',
+                            citizen_ID: '211c9f7f-286f-4201-b7ac-2ce5e13dbda7',
+                            establishment_ID: '73cedc92-5152-4535-9f24-4f3160e2e358',
+                            temperature: 36.1,
+                            health_status_log_ID: '0df1b48c-8fc7-4329-aea8-2a0a91ebe902',
+                            purpose: 'Visiting'
+                        })
+                        .then(() => {
+                            console.log('==> A visiting log has been recorded');
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         })
         .catch((err) => {
             console.log(err);
         });
-    }).catch((err) => {
-        console.log(err);
-    });
-
-    // Register Representative
-    db.Users.create({
-        user_ID: 'f9015dc2-9ba4-412c-a2c6-d7b7ed113198',
-        first_name: "Maria",
-        last_name: "Mercedez",
-        user_type: "Representative",
-        password:  "$P@ssw0rd;",
-        user_accounts: [{
-            "details": "mariamercedez@gmail.com",
-            "type": "Email",
-            "verified": true
-        }],
-        establishments_with_roles: [{
-            establishment_ID: 'a48e2b18-e7a6-4a0f-b1e5-ead46072c666',
-            name: "San Crest Corporation",
-            type: "Industrial",
-            address: {
-                region: "NCR",
-                province: "Metro Manila",
-                city_municipality: "Caloocan City",
-                baranggay_district: "Deparo",
-                street: "Kabatuhan",
-                specific_location: "123",
-                zip_code: "1234",
-                latitude: "100",
-                longitude: "200",
-            },
-            Roles: [{
-                role_ID: '049977f3-a6bd-4653-a0b3-61eab76feacc',
-                role: 'Manager',
-                isAdmin: true
-            }]
-        }]
-    }, {
-        include: [{
-            model: db.User_Accounts,
-            as: 'user_accounts'
-        }, {
-            model: db.Establishments,
-            as: 'establishments_with_roles',
-            include: [{
-                model: db.Addresses,
-                as: 'address'
-            }]
-        }]
-    })
-    .then(() => {
-        console.log('==> A representative has been registered.\n');
-
-        // Visiting Log
-        db.Visiting_Logs.create({
-            visiting_log_ID: '6402b2c0-18ab-4c62-a786-9b4c86c14b59',
-            citizen_ID: '5ae995ba-94be-408a-a8c3-eb1d42dc6f40',
-            establishment_ID: 'a48e2b18-e7a6-4a0f-b1e5-ead46072c666',
-            temperature: 36.1,
-            health_status_log_ID: '8516c061-461f-4a26-8ec4-40fe17a514c4',
-            purpose: 'Visiting'
-        })
-        .then(() => {
-            console.log('==> A visiting log has been recorded.\n');
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    })
-    .catch((err) => {
-        console.log(err);
-    });
-
-    // Register Representative
-    db.Users.create({
-        user_ID: '1d069520-3600-4157-87ed-e55e2a2ca8b1',
-        first_name: "Andrea",
-        last_name: "Luzviminda",
-        user_type: "Representative",
-        password:  "$P@ssw0rd;",
-        user_accounts: [{
-            "details": "andrea123@gmail.com",
-            "type": "Email",
-            "verified": true
-        }],
-        establishments_with_roles: [{
-            name: "ABC Company",
-            type: "Company",
-            address: {
-                region: "NATIONAL CAPITAL REGION",
-                province: "Metro Manila",
-                city_municipality: "Makati City",
-                baranggay_district: "Mahapdi",
-                street: "Sinugatan",
-                specific_location: "535 Masakit Road",
-                zip_code: "1111",
-                latitude: "134.66",
-                longitude: "200.20",
-            },
-            Roles: [{
-                role_ID: 'dfe728fc-1ae0-4f5d-b544-9e004eb458fb',
-                role: 'Manager',
-                isAdmin: true
-            }]
-        }]
-    }, {
-        include: [{
-            model: db.User_Accounts,
-            as: 'user_accounts'
-        }, {
-            model: db.Establishments,
-            as: 'establishments_with_roles',
-            include: [{
-                model: db.Addresses,
-                as: 'address'
-            }]
-        }]
-    })
-    .then(() => {
-        console.log('==> A representative has been registered.\n');
-    })
-    .catch((err) => {
-        console.log(err);
-    });
 }
