@@ -170,7 +170,7 @@
 
 3. Test it. The output should be the same as previous
 
-#### Citizen Information
+## Citizen Information
 
 1. Create a controller named `information.controller.js` in `controllers/citizen` for this case
 
