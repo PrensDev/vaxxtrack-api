@@ -125,7 +125,9 @@
 
 3. Test it. The output should be the same as previous, but only specific visiting log.
 
-### Get Information
+### Representative Information
+
+#### Get Information
 
 1. In `controller/representative/info.controller.js`, create a property called `get_info` that will return the information of the logged-in citizen.
 
@@ -143,7 +145,7 @@
 }
 ```
 
-### Edit/Update Information
+#### Edit/Update Information
 
 2. In `controllers/representative/info.controller.js`, create a property called `update_info` that updates the existing information of the representative, any field must can be update
 

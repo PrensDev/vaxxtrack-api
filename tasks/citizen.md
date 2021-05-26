@@ -170,13 +170,13 @@
 
 3. Test it. The output should be the same as previous
 
-## Citizen Information
+### Citizen Information
 
 1. Create a controller named `information.controller.js` in `controllers/citizen` for this case
 
 2. In `routes.controller.js`, create a variable `infoController` that requires the previous file that created
 
-### Get Information
+#### Get Information
 
 1. In `controller/citizen/info.controller.js`, create a property called `get_info` that will return the information of the logged-in citizen.
 
@@ -197,7 +197,7 @@
 }
 ```
 
-### Edit Information
+#### Edit/Update Information
 
 2. In `controllers/citizen/info.controller.js`, create a property called `update_info` that updates the existing information of the citizen, any field must can be update
 
