@@ -23,6 +23,7 @@ var visitingLogController = require('../controllers/citizen/visiting_log.control
 var infoController = require('../controllers/citizen/info.controller');
 // Todo: include the properties and paths here
 router.get('/info', infoController.get_info);
+router.put("/:id", infoController.update_info);
 
 // Account Controller
 var accountController = require('../controllers/citizen/account.controller');
@@ -30,4 +31,4 @@ var accountController = require('../controllers/citizen/account.controller');
 
 
 // Export module
-module.exports = router;
+module.exports = router; 
