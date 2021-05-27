@@ -24,6 +24,8 @@ var visitingLogController = require('../controllers/representative/visiting_log.
 // Use Information Controller
 var infoController = require('../controllers/representative/info.controller');
 // Todo: include the properties and paths here
+router.get('/info', infoController.get_info);
+router.put("/:id", infoController.update_info);                                   
 
 
 // Account Controller
