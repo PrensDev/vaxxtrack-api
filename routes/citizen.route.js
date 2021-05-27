@@ -22,7 +22,7 @@ var visitingLogController = require('../controllers/citizen/visiting_log.control
 // User Information Controller
 var infoController = require('../controllers/citizen/info.controller');
 // Todo: include the properties and paths here
-
+router.get('/info', infoController.get_info);
 
 // Account Controller
 var accountController = require('../controllers/citizen/account.controller');
