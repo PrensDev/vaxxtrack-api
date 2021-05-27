@@ -10,9 +10,27 @@ const User = db.User;
 const bcrypt = require("bcrypt");
 
 
+// return the information of the citizen
 exports.get_info = (req, res, next) => {
     if(req.user.user_type === 'Citizen') {
-        res.send({ token_data: req.user });
+            const id = req.user.user_ID;
+          
+            User.findByPk(id)
+              .then((data) => {
+                res.send({
+                  error: false,
+                  data: data,
+                  message: [process.env.SUCCESS_RETRIEVED],
+                });
+              })
+              .catch((err) => {
+                res.status(500).send({
+                  error: true,
+                  data: [],
+                  message:
+                    err.errors.map((e) => e.message) || process.env.GENERAL_ERROR_MSG,
+                });
+              });
     } else {
         res.sendStatus(403);
     }
@@ -28,7 +46,7 @@ exports.update_info = async (req, res) => {
             parseInt(process.env.SALT_ROUND)
         ); 
     }
-
+// update the information of the citizen
     User.update_info(req.body, {
         where : { id : id }
     }).then((result) => {
