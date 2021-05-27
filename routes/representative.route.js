@@ -24,11 +24,15 @@ var visitingLogController = require('../controllers/representative/visiting_log.
 // Use Information Controller
 var infoController = require('../controllers/representative/info.controller');
 // Todo: include the properties and paths here
+router.get('/info', infoController.get_info);
+router.put("/:id", infoController.update_info);                                   
 
 
 // Account Controller
 var accountController = require('../controllers/representative/account.controller');
 // Todo: include the properties and paths here
+router.put('/update-password/:id'  ,  accountController.update_password);
+
 
 
 // Export module
