@@ -9,15 +9,32 @@ const db = require("../../models");
 const User = db.User;
 const bcrypt = require("bcrypt");
 
-
+// return the information of the representative
 exports.get_info = (req, res, next) => {
     if(req.user.user_type === 'Representative') {
-        res.send({ token_data: req.user });
+            const id = req.user.user_ID;
+            
+            User.findByPk(id)
+              .then((data) => {
+                res.send({
+                  error: false,
+                  data: data,
+                  message: [process.env.SUCCESS_RETRIEVED],
+                });
+              })
+              .catch((err) => {
+                res.status(500).send({
+                  error: true,
+                  data: [],
+                  message:
+                    err.errors.map((e) => e.message) || process.env.GENERAL_ERROR_MSG,
+                });
+              });
     } else {
         res.sendStatus(403);
     }
 }
-// return the information of the representative
+
 exports.update_info = async (req, res) => {
     const id = req.params.id;
     req.body.full_name = "";
