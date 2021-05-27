@@ -29,6 +29,8 @@ var infoController = require('../controllers/representative/info.controller');
 // Account Controller
 var accountController = require('../controllers/representative/account.controller');
 // Todo: include the properties and paths here
+router.put('/update-password/:id'  ,  accountController.update_password);
+
 
 
 // Export module
