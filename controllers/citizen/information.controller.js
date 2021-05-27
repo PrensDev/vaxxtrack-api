@@ -5,3 +5,6 @@
  */
 
 // Todo: include the properties here
+const db = require("../../modles");
+
+exports.get_info = (req, res, next) => {}
