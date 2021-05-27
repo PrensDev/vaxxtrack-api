@@ -224,7 +224,7 @@ exports.populate = () => {
             birth_date: '2000-01-01',
             civil_status: 'Single',
             user_type: 'Citizen',
-            password: '$P@ssw0rd',
+            password: '$P@ssw0rd;',
             user_accounts: [
                 {
                     details: 'juandelacruz@gmail.com',
@@ -336,7 +336,7 @@ exports.populate = () => {
             birth_date: '2000-01-01',
             civil_status: 'Married',
             user_type: 'Citizen',
-            password: '$P@ssw0rd',
+            password: '$P@ssw0rd;',
             user_accounts: [{
                 user_account_ID: '8095115b-255b-4cc2-82f4-9f6e420f67df',
                 details: 'mariamercedez@gmail.com',
