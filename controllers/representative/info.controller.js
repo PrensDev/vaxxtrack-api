@@ -13,7 +13,7 @@ const bcrypt = require("bcrypt");
 exports.get_info = (req, res, next) => {
     if(req.user.user_type === 'Representative') {
             const id = req.user.user_ID;
-          
+            
             User.findByPk(id)
               .then((data) => {
                 res.send({
