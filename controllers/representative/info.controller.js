@@ -26,7 +26,8 @@ exports.get_info = (req, res, next) => {
                 res.status(500).send({
                   error: true,
                   data: [],
-                  message: ["Error in retrieving the data"],
+                  message: 
+                     err.errors.map((e) => e.message),
                 });
               });
     } else {
