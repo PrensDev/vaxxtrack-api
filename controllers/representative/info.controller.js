@@ -33,7 +33,7 @@ exports.getInfo = (req, res, next) => {
     }
 }
 
-exports.update_info = async (req, res) => {
+exports.updateInfo = async (req, res) => {
     const id = req.user.user_ID;
     req.body.full_name = "";
 
