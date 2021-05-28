@@ -5,12 +5,12 @@
  */
 
 const db = require("../../models");
-const User = db.User;
+const User = db.Users;
 
 
 // Return the information of the citizen
 exports.getInfo = (req, res, next) => {
-    if(req.user.user_type === 'Citizen') {
+    if(req.user.user_ID === 'Citizen') {
             const id = req.user.user_ID;
             console.log(id)
           
@@ -40,7 +40,7 @@ exports.updateInfo = (req, res) => {
 
 // update the information of the citizen
     User.update_info(req.body, {
-        where : { id : id }
+        where : { user_ID : id }
     }).then((result) => {
         console.log(result);
         if (result){
