@@ -262,8 +262,7 @@ module.exports = (sequelize, DataTypes) => {
       beforeCreate: (users, options) => {
 
         // Encrypt user's password before record create 
-        const saltRounds = process.env.SALT_ROUNDS || 10;
-        users.password = bcrypt.hashSync(users.password, saltRounds);
+        users.password = bcrypt.hashSync(users.password, 10);
       },
       
       afterCreate: () => {
