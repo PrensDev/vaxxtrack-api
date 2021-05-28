@@ -39,11 +39,11 @@ exports.get_info = (req, res, next) => {
 
 // update the information of the citizen
 exports.update = (req, res) => {
-    const id = req.params.id;
+    const id = req.user.user_ID;
     req.body.full_name = "";
 
     User.update(req.body, {
-        where : { id : id }
+        where : { user_ID : id }
     }).then((result) => {
         console.log(result);
         if (result){
