@@ -4,7 +4,6 @@
  * This controller is for properties related to user information
  */
 
-// Todo: include the properties here
 const db = require("../../models");
 const User = db.User;
 const bcrypt = require("bcrypt");
@@ -17,28 +16,16 @@ exports.getInfo = (req, res, next) => {
         User.findByPk(user_ID)
             .then((data) => {
                 res.send({
-<<<<<<< Updated upstream
                   error: false,
                   data: data,
                   message: ["Successfully retrieved the data"],
-=======
-                    error: false,
-                    data: data,
-                    message: [process.env.SUCCESS_RETRIEVED],
->>>>>>> Stashed changes
                 });
             })
             .catch((err) => {
                 res.status(500).send({
-<<<<<<< Updated upstream
                   error: true,
                   data: [],
                   message: ["Error in retrieving the data"],
-=======
-                    error: true,
-                    data: [],
-                    message: err.errors.map((e) => e.message) || process.env.GENERAL_ERROR_MSG,
->>>>>>> Stashed changes
                 });
         });
     } else {
@@ -46,13 +33,8 @@ exports.getInfo = (req, res, next) => {
     }
 }
 
-<<<<<<< Updated upstream
 exports.update_info = async (req, res) => {
     const id = req.user.user_ID;
-=======
-exports.updateInfo = async (req, res) => {
-    const id = req.params.id;
->>>>>>> Stashed changes
     req.body.full_name = "";
 
     if (req.body.password) {
