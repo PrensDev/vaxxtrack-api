@@ -6,31 +6,29 @@
 const db = require("../../models");
 
 // Create New Visiting Log
-exports.create = async (req, res) => {
-    if(req.user.user_type !== 'Citizen') {
+exports.create = (req, res) => {
+    if (req.user.user_type !== 'Citizen') {
         res.sendStatus(403);
     } else {
         db.Visiting_Logs
             .create({
                 citizen_ID: req.user.user_ID,
                 establishment_ID: req.body.establishment_ID,
-                temperature: req.body.temperature,
+                temperature: 36.1,
                 health_status_log_ID: req.body.health_status_log_ID,
-                purpose: req.body.purpose
+                purpose: 'Employee'
             })
             .then((data) => {
-                db.Establishments.findByPk(data.id, { include: ["visiting_logs"] }).then((data) => {
-                    res.send({
-                        error   : false,
-                        data    : data,
-                        message : ['[Visiting Logs] record successfully'],
-                    });
-                })
+                res.send({
+                    error: false,
+                    data: data,
+                    message: 'A visiting log has been successfuly recorded'
+                });
             })
             .catch((err) => {
                 res.status(500).send({
-                    error   : true,
-                    message : err.errors.map((e) => e.message),
+                    error: true,
+                    message: `${ err }`
                 });
             });
     }
@@ -91,7 +89,7 @@ exports.findOne = (req, res, next) => {
                 include: [
                     {
                         model: db.Users,
-                        as: 'establishments_with_vlogs',
+                        as: 'visiting_log_by',
                     },
                 ],
             })

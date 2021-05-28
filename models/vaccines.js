@@ -35,7 +35,25 @@ module.exports = (sequelize, DataTypes) => {
     product_name: {
       type: DataTypes.STRING,
       allowNull: false,
-      comment: 'In this column tells the name of the vaccine'
+      comment: 'In this column tells the product name of the vaccine'
+    },
+
+    vaccine_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: 'In this column tells the vaccine name of the vaccine'
+    },
+
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: 'This column indicates the type of vaccine'
+    },
+
+    shots: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      comment: 'This column indicates the number of shots required'
     },
 
     manufacturer: {
