@@ -24,8 +24,8 @@ router.post ("/visiting-logs/add"               , visitingLogController.create);
 // User Information Controller
 var infoController = require('../controllers/citizen/info.controller');
 // Todo: include the properties and paths here
-router.get('/info', infoController.get_info);
-router.put("/:id", infoController.update_info);
+router.get ('/info', infoController.get_info);
+router.put ("/edit_info", infoController.update);
 
 // Account Controller
 var accountController = require('../controllers/citizen/account.controller');
