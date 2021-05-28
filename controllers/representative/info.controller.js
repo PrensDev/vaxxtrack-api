@@ -19,15 +19,14 @@ exports.get_info = (req, res, next) => {
                 res.send({
                   error: false,
                   data: data,
-                  message: [process.env.SUCCESS_RETRIEVED],
+                  message: ["Successfully retrieved the data"],
                 });
               })
               .catch((err) => {
                 res.status(500).send({
                   error: true,
                   data: [],
-                  message:
-                    err.errors.map((e) => e.message) || process.env.GENERAL_ERROR_MSG,
+                  message: ["Error in retrieving the data"],
                 });
               });
     } else {
@@ -36,7 +35,7 @@ exports.get_info = (req, res, next) => {
 }
 
 exports.update_info = async (req, res) => {
-    const id = req.params.id;
+    const id = req.user.user_ID;
     req.body.full_name = "";
 
     if (req.body.password) {
@@ -56,7 +55,7 @@ exports.update_info = async (req, res) => {
                 res.send({
                     error : false,
                     data : data,
-                    message : process.env.SUCCESS_UPDATE,
+                    message : ["Successfully updated"],
                 });
             });
         } else {
