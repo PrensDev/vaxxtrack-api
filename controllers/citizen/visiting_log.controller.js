@@ -16,7 +16,11 @@ exports.create = (req, res) => {
                 establishment_ID: req.body.establishment_ID,
                 temperature: req.body.temperature,
                 health_status_log_ID: req.body.health_status_log_ID,
+<<<<<<< Updated upstream
                 purpose: req.body.purpose, 
+=======
+                purpose: req.body.purpose
+>>>>>>> Stashed changes
             })
             .then((data) => {
                 db.Visiting_Logs

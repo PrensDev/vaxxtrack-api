@@ -117,7 +117,7 @@ module.exports = (sequelize, DataTypes) => {
 
     hooks: {
       afterCreate: () => {
-        if(process.env.ENABLE_MODEL_LOGS) {
+        if (process.env.ENABLE_MODEL_LOGS === 'true') {
           console.log('A new record has been added to table [vaccination_records]');
         }
       }

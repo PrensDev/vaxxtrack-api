@@ -1,2 +1,5 @@
 # Populate Data
 GET http://localhost:3000/test/populate
+
+### Generate Vaccine Data
+GET http://localhost:3000/test/generate-vaccine-data

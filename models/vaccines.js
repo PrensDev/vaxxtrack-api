@@ -26,9 +26,9 @@ module.exports = (sequelize, DataTypes) => {
 
     vaccine_ID: {
       type: DataTypes.UUID,
-      allowNull: false,
-      defaultValue: Sequelize.UUIDv4,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
+      allowNull: false,
       comment: 'This contains the unique identifiers for each record on this table'
     },
 
@@ -50,16 +50,16 @@ module.exports = (sequelize, DataTypes) => {
       comment: 'This column indicates the type of vaccine'
     },
 
-    shots: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      comment: 'This column indicates the number of shots required'
-    },
-
     manufacturer: {
       type: DataTypes.STRING,
       allowNull: false,
       comment: 'In this column tells the name of the manufacturer'
+    },
+
+    shots_details: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: 'This column indicates the number of shots required'
     },
 
     description: {

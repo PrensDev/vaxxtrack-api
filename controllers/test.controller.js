@@ -437,3 +437,59 @@ For super admin, the password is:
 $P@ssw0rd_ADMIN;
     `);
 }
+
+exports.generateVaccineData = (req, res, next) => {
+    db.Vaccines
+        .bulkCreate([
+            {
+                vaccine_ID: '8ad6d284-7026-4694-b190-5e3b38f1e05f',
+                product_name: 'Pfizer-BioNTech',
+                vaccine_name: 'BNT162b2',
+                manufacturer: 'Pfizer, Inc., and BioNTech',
+                type: 'mRNA',
+                shots_details: '2 shots, 21 days apart',
+                description: ''
+            }, {
+                vaccine_ID: 'b603614e-250a-4598-aa62-5fee984eb0ba',
+                product_name: 'Moderna',
+                vaccine_name: 'mRNA-1273',
+                manufacturer: 'ModernaTX, Inc.',
+                type: 'mRNA',
+                shots_details: '2 shots, one month (28 days) apart',
+                description: ''
+            }, {
+                vaccine_ID: '77b4f71d-5546-4511-a568-900114ab9797',
+                product_name: 'Johnson & Johnson’s Janssen',
+                vaccine_name: 'JNJ-78436735',
+                manufacturer: 'Janssen Pharmaceuticals Companies of Johnson & Johnson',
+                type: 'Viral Vector',
+                shots_details: '1 shot',
+                description: ''
+            }
+        ], {
+            validate: true
+        })
+        .then(() => {
+            db.Vaccines
+                .findAll()
+                .then((data) => {
+                    res.send({
+                        error: false,
+                        data: data,
+                        message: 'Vaccines are successfully created'
+                    })
+                })
+                .catch((err) => {
+                    res.status(500).send({
+                        error: true,
+                        message: `${err}`
+                    })
+                });
+        })
+        .catch((err) => {
+            res.status(500).send({
+                error: true,
+                message: `${err}`
+            })
+        });
+}

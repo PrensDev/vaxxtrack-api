@@ -4,62 +4,57 @@
  * This controller is for managing account settings of representatives
  */
 
-// Todo: include the properties here
+const Users  = require("../../models").Users;
+const bcrypt = require('bcrypt');
 
-const db = require("../../models");
-const Users = db.Users;
-const bcrypt = require("bcrypt");
+// Update Password
+exports.updatePassword = (req, res) =>  {
 
+    console.log(req.user.user_type);
+    
+    // Check if user logged in is representative
+    if (req.user.user_type !== 'Representative') {
+        
+        // Send Forbidden Result
+        res.sendStatus(403);
 
-exports.update = async (req, res) => 
-{
-    const id = req.params.id;
-    req.body.full_name = "";
+    } else {
 
-    if (req.body.password) 
-    {
-        req.body.password = await bcrypt.hash(req.body.password, parseInt(process.env.SALT_ROUNDS));
-    }
+        // Get password from req.body
+        var password = req.body.password;
 
-    Users.update(req.body,
-        {
-            where: {user_ID: id},
-        })
-        .then((result) => 
-        {
-            if(result)
-            {
-                console.log(result);
-                //success
-                Users.findByPk(id).then((data) =>
-                {
-                    res.send(
-                        {
-                            error: false,
-                            data: data,
-                            message: [process.env.SUCCESS_UPDATE],
-                        })
+        // Check if password is null
+        if (password == null || password == '') {
+            res.status(500).send({
+                error: false,
+                message: 'Password is required'
+            });
+        } else { 
+            
+            // Encrypt password before update
+            password = bcrypt.hashSync(password, 10);
+
+            // Update user password
+            Users
+                .update({
+                    password: password
+                }, {
+                    where: {
+                        user_ID: req.user.user_ID
+                    }
                 })
-            }
-            else
-            {
-                // error in updating
-                res.status(500).send(
-                    {
-                        error: true,
-                        data: [],
-                        message: ["Error in updating a record."],
+                .then(() => {
+                    res.send({
+                        error: false,
+                        message: 'Password has been successfully changed',
                     });
-            }
-        })
-        .catch((err) =>
-        {
-            console.log(err);
-            res.status(500).send(
-                {
-                    error: true,
-                    data: [],
-                    message: err.errors.map((e) => e.message) || process.env.GENERAL_ERROR_MSG,
+                })
+                .catch((err) => {
+                    res.status(500).send({
+                        error: true,
+                        message: `${ err }`,
+                    });
                 });
-        });
+        }
+    }
 };

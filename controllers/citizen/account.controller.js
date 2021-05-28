@@ -9,15 +9,9 @@ const Users = db.Users;
 const bcrypt = require("bcrypt");
 
 
-exports.update= async (req, res) => 
-{
+exports.update = (req, res) => {
     const id = req.params.id;
     req.body.full_name = "";
-
-    if (req.body.password) 
-    {
-        req.body.password = await bcrypt.hash(req.body.password, parseInt(process.env.SALT_ROUNDS));
-    }
 
     Users.update(req.body,
         {

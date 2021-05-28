@@ -21,17 +21,15 @@ var visitingLogController = require('../controllers/representative/visiting_log.
 // Todo: include the properties and paths here
 
 
-// Use Information Controller
+// User Information Controller
 var infoController = require('../controllers/representative/info.controller');
-// Todo: include the properties and paths here
-router.get('/info', infoController.get_info);
-router.put("/:id", infoController.update_info);                                   
+router.get('/info'        , infoController.getInfo);
+router.put('/update-info' , infoController.updateInfo);                                   
 
 
 // Account Controller
 var accountController = require('../controllers/representative/account.controller');
-// Todo: include the properties and paths here
-router.put('/update_password/:id'  ,  accountController.update);
+router.put('/update-password'  ,  accountController.updatePassword);
 
 
 
