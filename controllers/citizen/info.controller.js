@@ -6,7 +6,7 @@
 
 // Todo: include the properties here
 const db = require("../../models");
-const User = db.User;
+const User = db.Users;
 const bcrypt = require("bcrypt");
 
 
@@ -14,13 +14,14 @@ const bcrypt = require("bcrypt");
 exports.get_info = (req, res, next) => {
     if(req.user.user_type === 'Citizen') {
             const id = req.user.user_ID;
+            console.log(id)
           
             User.findByPk(id)
               .then((data) => {
                 res.send({
                   error: false,
                   data: data,
-                  message: [process.env.SUCCESS_RETRIEVED],
+                  message: ['[citizen] record retrieves successfully'],
                 });
               })
               .catch((err) => {
@@ -28,7 +29,7 @@ exports.get_info = (req, res, next) => {
                   error: true,
                   data: [],
                   message:
-                    err.errors.map((e) => e.message) || process.env.GENERAL_ERROR_MSG,
+                    err.errors.map((e) => e.message),
                 });
               });
     } else {
@@ -36,18 +37,12 @@ exports.get_info = (req, res, next) => {
     }
 }
 
-exports.update_info = async (req, res) => {
+// update the information of the citizen
+exports.update = (req, res) => {
     const id = req.params.id;
     req.body.full_name = "";
 
-    if (req.body.password) {
-        req.body.password = await bcrypt.hash(
-            req.body.password,
-            parseInt(process.env.SALT_ROUND)
-        ); 
-    }
-// update the information of the citizen
-    User.update_info(req.body, {
+    User.update(req.body, {
         where : { id : id }
     }).then((result) => {
         console.log(result);
@@ -57,7 +52,7 @@ exports.update_info = async (req, res) => {
                 res.send({
                     error : false,
                     data : data,
-                    message : process.env.SUCCESS_UPDATE,
+                    message : 'Citizen record has been updated',
                 });
             });
         } else {
