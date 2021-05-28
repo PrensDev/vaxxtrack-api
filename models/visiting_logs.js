@@ -11,10 +11,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
 
-      // M:1 with [health_status_logs]
+      // M:1 [visiting_logs]:[health_status_logs]
       this.belongsTo(models.Health_Status_Logs, {
         foreignKey: 'health_status_log_ID',
-        as: 'health_status_logs',
+        as: 'health_status_log_by',
+        onDelete: 'RESTRICT'
+      });
+
+      // M:1 [visiting_logs]:[users]
+      this.belongsTo(models.Users, {
+        foreignKey: 'citizen_ID',
+        as: 'visiting_log_by',
         onDelete: 'RESTRICT'
       });
     }

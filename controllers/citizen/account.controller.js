@@ -4,8 +4,6 @@
  * This controller is for managing account settings of citizens
  */
 
-// Todo: include the properties here
-
 const db = require("../../models");
 const User = db.User;
 const bcrypt = require("bcrypt");

@@ -5,21 +5,20 @@
  */
 const db = require("../../models");
 
-//Create Visiting Logs
+// Create New Visiting Log
 exports.create = async (req, res) => {
     if(req.user.user_type !== 'Citizen') {
         res.sendStatus(403);
     } else {
         db.Visiting_Logs
-            .create(
-                {
-                    citizen_ID: req.user.user_ID,
-                    establishment_ID: req.body.establishment_ID,
-                    temperature: req.body.temperature,
-                    health_status_log_ID: req.body.health_status_log_ID,
-                    purpose: req.body.purpose
-                }
-            ).then((data) => {
+            .create({
+                citizen_ID: req.user.user_ID,
+                establishment_ID: req.body.establishment_ID,
+                temperature: req.body.temperature,
+                health_status_log_ID: req.body.health_status_log_ID,
+                purpose: req.body.purpose
+            })
+            .then((data) => {
                 db.Establishments.findByPk(data.id, { include: ["visiting_logs"] }).then((data) => {
                     res.send({
                         error   : false,
@@ -38,20 +37,31 @@ exports.create = async (req, res) => {
 
 };
 
-//View All
+// Find All Visiting Logs
 exports.findAll = (req, res, next) => {
-    if(req.user.user_type !== 'Citizen') {
+    if (req.user.user_type !== 'Citizen') {
         res.sendStatus(403);
     } else {
         db.Visiting_Logs
-            .findAll({
-                include: [
-                    {
-                        model: db.Users,
-                        as: 'establishments_with_vlogs',
+            .findAll(
+                {
+                    where: {
+                        citizen_ID: req.user.user_ID
                     },
-                ],
-            })
+                    include: [{
+                        model: db.Users,
+                        as: 'visiting_log_by',
+                        attributes: {
+                            exclude: [
+                                'password',
+                                'added_by',
+                                'created_datetime',
+                                'updated_datetime'
+                            ]
+                        }
+                    }],
+                }
+            )
             .then((data) => {
                 res.send({
                     error   : false,
@@ -68,7 +78,7 @@ exports.findAll = (req, res, next) => {
     }
 };
 
-//View One
+// Get One Visiting Log
 exports.findOne = (req, res, next) => {
     if(req.user.user_type !== 'Citizen') {
         res.sendStatus(403);
@@ -76,7 +86,7 @@ exports.findOne = (req, res, next) => {
         db.Visiting_Logs
             .findOne({
                 where: {
-                    visiting_log_ID: req.params.id,
+                    visiting_log_ID: req.params.visiting_log_ID,
                 },
                 include: [
                     {

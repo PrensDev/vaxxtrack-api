@@ -46,6 +46,13 @@ module.exports = (sequelize, DataTypes) => {
         onDelete    : 'RESTRICT'
       });
 
+      // 1:M [users]:[visiting_logs]
+      this.hasMany(models.Visiting_Logs, {
+        foreignKey  : 'citizen_ID',
+        as          : 'visiting_logs',
+        onDelete    : 'RESTRICT'
+      });
+
       // 1:M [users]:[vaccination_appointments]
       this.hasMany(models.Vaccination_Appointments, {
         foreignKey  : 'citizen_ID',
@@ -253,7 +260,10 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       
       beforeCreate: (users, options) => {
-        users.password = bcrypt.hashSync(users.password, 10);
+
+        // Encrypt user's password before record create 
+        const saltRounds = process.env.SALT_ROUNDS || 10;
+        users.password = bcrypt.hashSync(users.password, saltRounds);
       },
       
       afterCreate: () => {

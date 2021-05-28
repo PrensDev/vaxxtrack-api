@@ -16,10 +16,9 @@ var healthStatusLogController = require('../controllers/citizen/health_status_lo
 
 // Visiting Log Controller
 var visitingLogController = require('../controllers/citizen/visiting_log.controller');
-// Todo: include the properties and paths here
-router.post("/add_visiting_log", visitingLogController.create);
-router.get("/all_visiting_logs", visitingLogController.findAll);
-router.get("/one_visiting_log/:id", visitingLogController.findOne);
+router.get  ("/visiting-logs"                   , visitingLogController.findAll);
+router.get  ("/visiting-logs/:visiting_log_ID"  , visitingLogController.findOne);
+router.post ("/visiting-logs/add"               , visitingLogController.create);
 
 
 // User Information Controller

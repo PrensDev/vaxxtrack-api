@@ -10,7 +10,7 @@ exports.test = (req, res, next) => {
         })
 }
 
-exports.populate = () => {
+exports.populate = (req, res, next) => {
     
     // Add Super Admin
     db.Users
@@ -413,4 +413,27 @@ exports.populate = () => {
         .catch((err) => {
             console.log(err);
         });
+    
+    res.send(`
+===========================================
+Success! Database has been populated.
+-------------------------------------------
+Check your console for some errors.
+===========================================
+
+For login, please use this json format as input:
+
+{
+    "authDetails": "",
+    "password": ""
+}
+
+For "authDetails", please see the user_accounts table.
+
+The citizens', representatives', and health officials' password is
+$P@ssw0rd;
+
+For super admin, the password is:
+$P@ssw0rd_ADMIN;
+    `);
 }
