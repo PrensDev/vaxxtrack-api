@@ -10,18 +10,25 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-
-      // M:1 [visiting_logs]:[health_status_logs]
-      this.belongsTo(models.Health_Status_Logs, {
-        foreignKey: 'health_status_log_ID',
-        as: 'health_status_log_by',
-        onDelete: 'RESTRICT'
-      });
-
+      
       // M:1 [visiting_logs]:[users]
       this.belongsTo(models.Users, {
         foreignKey: 'citizen_ID',
         as: 'visiting_log_by',
+        onDelete: 'RESTRICT'
+      });
+      
+      // M:1 [visiting_logs]:[users]
+      this.belongsTo(models.Establishments, {
+        foreignKey: 'establishment_ID',
+        as: 'visiting_log_for',
+        onDelete: 'RESTRICT'
+      });
+      
+      // M:1 [visiting_logs]:[health_status_logs]
+      this.belongsTo(models.Health_Status_Logs, {
+        foreignKey: 'health_status_log_ID',
+        as: 'health_status_log',
         onDelete: 'RESTRICT'
       });
     }
@@ -47,12 +54,6 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Citizen ID must not be null',
         }
       },
-      references: {
-        model: {
-          tableName: 'users'
-        },
-        key: 'user_ID'
-      },
       comment: 'This links a citizen to indicate who owns the visiting log record'
     },
 
@@ -63,12 +64,6 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           msg: 'Establishment ID must not be null',
         }
-      },
-      references: {
-        model: {
-          tableName: 'establishments'
-        },
-        key: 'establishment_ID'
       },
       comment: 'This links the establishments for the visiting logs'
     },

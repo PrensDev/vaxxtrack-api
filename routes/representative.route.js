@@ -11,9 +11,9 @@ router.get('/', indexController.render);
 
 // Establishment Controller
 var establishmentController = require('../controllers/representative/establishment.controller');
-router.get('/establishment'             , establishmentController.findAll);
-router.get('/establishment/:id'         , establishmentController.find);
-router.put('/update-establishment/:id'  , establishmentController.update);
+router.get('/establishment'                          , establishmentController.findAll);
+router.get('/establishment/:establishment_ID'        , establishmentController.find);
+router.put('/update-establishment/:establishment_ID' , establishmentController.update);
 
 
 // Visiting Log Controller

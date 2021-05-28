@@ -88,15 +88,8 @@ module.exports = (sequelize, DataTypes) => {
         through     : 'Roles',
         as          : 'establishments_with_roles',
         foreignKey  : 'representative_ID',
-        otherKey    : 'establishment_ID'
-      });
-
-      // M:M [users]:[establishments] through [visiting_logs]
-      this.belongsToMany(models.Establishments, {
-        through     : 'Visiting_Logs',
-        as          : 'establishments_with_vlogs',
-        foreignKey  : 'citizen_ID',
-        otherKey    : 'establishment_ID'
+        otherKey    : 'establishment_ID',
+        onDelete    : 'RESTRICT'
       });
     }
     

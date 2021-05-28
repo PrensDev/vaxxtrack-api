@@ -18,27 +18,22 @@ module.exports = (sequelize, DataTypes) => {
         onDelete    : 'RESTRICT'
       });
 
-      // 1:M with [visiting_logs]
+      // 1:M [establishments]:[visiting_logs]
       this.hasMany(models.Visiting_Logs, {
         foreignKey  : 'establishment_ID',
         as          : 'visiting_logs',
         onDelete    : 'RESTRICT'
       });
 
-      // M:M [users]:[establishments] through [roles]
+      // M:M [establishments]:[users] through [roles]
       this.belongsToMany(models.Users, {
         through     : 'Roles',
-        as          : 'representatives_and_roles',
+        as          : 'role_by',
         foreignKey  : 'establishment_ID',
         otherKey    : 'representative_ID',
-      });
-
-      // M:M [users]:[establishments] through [visiting_logs]
-      this.belongsToMany(models.Users, {
-        through     : 'Visiting_Logs',
-        as          : 'citizens_with_vlogs',
-        foreignKey  : 'establishment_ID',
-        otherKey    : 'citizen_ID',
+        scope       : {
+          user_type: 'Representative'
+        }
       });
     }
   };
@@ -98,11 +93,11 @@ module.exports = (sequelize, DataTypes) => {
       type          : DataTypes.UUID,
       allowNull     : false,
       validate      : {
-        notNull     : {
-          msg       : 'Address ID must not be null',
+        notNull: {
+          msg : 'Address ID must not be null',
         }
       },
-      comment       :'This links the address of the establsihment'
+      comment       : 'This links the address of the establsihment'
     },
 
   }, {
