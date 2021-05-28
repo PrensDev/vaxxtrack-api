@@ -17,7 +17,9 @@ router.post('/login', loginController.login);
 // Register Controller
 var registerController = require('../controllers/main/register.controller');
 router.post('/register/representative', registerController.representative);
-
+router.post('/register/citizen', registerController.citizen);
+router.post('/register/super_admin', registerController.super_admin);
+router.post('/register/health_official', registerController.health_official);
 
 // Export module
 module.exports = router;

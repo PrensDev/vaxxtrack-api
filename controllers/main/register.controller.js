@@ -60,3 +60,134 @@ exports.representative = (req, res) => {
             });
         });
 }
+
+// Register a citizen
+exports.citizen = (req, res) => {
+    db.Users
+        .create(req.body, {
+            include: [{
+                model: db.User_Accounts,
+                as: 'user_accounts'
+            }, {
+                model: db.Addresses,
+                as: 'address'
+            }]
+        })
+        .then((data) => {
+            db.Users
+                .findByPk(data.user_ID, {
+                    include: [{
+                        model: db.User_Accounts,
+                        as: 'user_accounts'
+                    }, {
+                        model: db.Addresses,
+                        as: 'address'
+                    }]    
+                })
+                .then((result) => {
+                    res.send({
+                        err     : false,
+                        data    : result,
+                        msg     : 'A new Citizen has been registered!'
+                    })
+                })
+                .catch((err) => {
+                    res.status(500).send({
+                        error   : true,
+                        data    : [],
+                        message : ['Opps! Error caught!', `${ err }`],
+                    });
+                });
+        })
+        .catch((err) => {
+            res.status(500).send({
+                error   : true,
+                data    : [],
+                message : ['Opps! Error caught!', `${ err }`],
+            });
+        });
+}
+
+
+// Register a super admin
+exports.super_admin = (req, res) => {
+    db.Users
+        .create(req.body, {
+            include: [{
+                model: db.User_Accounts,
+                as: 'user_accounts'
+            }]
+        })
+        .then((data) => {
+            db.Users
+                .findByPk(data.user_ID, {
+                    include: [{
+                        model: db.User_Accounts,
+                        as: 'user_accounts'
+                    }]
+                })
+                .then((result) => {
+                    res.send({
+                        err     : false,
+                        data    : result,
+                        msg     : 'A new Super Admin has been registered!'
+                    })
+                })
+                .catch((err) => {
+                    res.status(500).send({
+                        error   : true,
+                        data    : [],
+                        message : ['Opps! Error caught!', `${ err }`],
+                    });
+                });
+        })
+        .catch((err) => {
+            res.status(500).send({
+                error   : true,
+                data    : [],
+                message : ['Opps! Error caught!', `${ err }`],
+            });
+        });
+}
+
+
+// Register a health official
+exports.health_official = (req, res) => {
+    db.Users
+        .create(req.body, {
+            include: [{
+                model: db.User_Accounts,
+                as: 'user_accounts'
+            }]
+        })
+        .then((data) => {
+            db.Users
+                .findByPk(data.user_ID, {
+                    include: [{
+                        model: db.User_Accounts,
+                        as: 'user_accounts'
+                    }]
+                })
+                .then((result) => {
+                    res.send({
+                        err     : false,
+                        data    : result,
+                        msg     : 'A new Health Official has been registered!'
+                    })
+                })
+                .catch((err) => {
+                    res.status(500).send({
+                        error   : true,
+                        data    : [],
+                        message : ['Opps! Error caught!', `${ err }`],
+                    });
+                });
+        })
+        .catch((err) => {
+            res.status(500).send({
+                error   : true,
+                data    : [],
+                message : ['Opps! Eror caught!', `${ err }`],
+            });
+        });
+}
