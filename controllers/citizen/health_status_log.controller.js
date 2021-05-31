@@ -79,19 +79,6 @@ exports.findOne = (req, res) => {
                 where: {
                     health_status_log_ID: req.params.health_status_log_ID
                 },
-
-               include:{
-                   model: db.Users,
-                   as: "citizen",
-                   attributes: {
-                    exclude: [
-                        'password',
-                        'added_by',
-                        'created_datetime',
-                        'updated_datetime'
-                    ]
-                }
-               }
             })
 
             .then((data) => {
