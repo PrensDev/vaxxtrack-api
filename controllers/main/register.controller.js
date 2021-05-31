@@ -4,7 +4,10 @@
  * This controller is for user registration
  */
 
+
+// Import models
 const db = require("../../models");
+
 
 // Register a representative including its establishment
 exports.representative = (req, res) => {

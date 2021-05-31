@@ -28,8 +28,7 @@ exports.login = (req, res) => {
     if (String(req.body.authDetails) === '' || String(req.body.password) === '') {
         res.status(500).send({
             error   : true,
-            data    : [],
-            message : ["Fields cannot be empty"],
+            message : "Fields cannot be empty",
         });
     } else {
         db.User_Accounts
@@ -59,25 +58,22 @@ exports.login = (req, res) => {
                                 message : ["A user is successfully identified"],
                             });
                         } else {
-                            res.status(500).send({
+                            res.send({
                                 error   : true,
-                                data    : [],
-                                message : ["Invalid details or password"],
+                                message : "Invalid details or password",
                             });
                         }
                     })
                 } else {
-                    res.status(500).send({
+                    res.send({
                         error   : true,
-                        data    : [],
-                        message : ["User does not exists"],
+                        message : "User does not exists",
                     });
                 }
             })
             .catch((err) => {
                 res.status(500).send({
                     error   : true,
-                    data    : [],
                     message : ['Opps! Error caught!', `${ err }`],
                 })
             });

@@ -18,10 +18,9 @@ router.put('/update-establishment/:establishment_ID' , establishmentController.u
 
 // Visiting Log Controller
 var visitingLogController = require('../controllers/representative/visiting_log.controller');
-// Todo: include the properties and paths here
 router.get  ("/visiting-logs/:establishment_ID"                  , visitingLogController.findAll);
 router.get  ("/visiting-logs/:establishment_ID/:visiting_log_ID" , visitingLogController.findOne);
-router.post("/add-visiting-log"                                    , visitingLogController.create);
+router.post ("/add-visiting-log"                                 , visitingLogController.create);
 
 
 // User Information Controller

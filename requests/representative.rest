@@ -30,3 +30,7 @@ Content-Type: application/json
 {
     "password": "MyPassword"
 }
+
+### Representative Info
+GET http://localhost:3000/representative/info
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2FjY291bnRfSUQiOiIzMjJmYTAxMS01MDE3LTRlZGYtODViYy1mOWJiMWU0M2U5MTAiLCJ1c2VyX0lEIjoiYzA3NjJjNjktNzhlOS00NjU2LThiNzktMWE2YmViZDAzNThhIiwidXNlcl90eXBlIjoiUmVwcmVzZW50YXRpdmUiLCJhY2NvdW50X2RldGFpbHMiOiJ0aW1vdGh5Lm1jZHVmZnlAZ21haWwuY29tIiwiaWF0IjoxNjIyNDQ5MTc0LCJleHAiOjE2MjI0NTM5NzR9.xgC2RrjoFEnZwpFIb372ejQPdBsequhzYZhQlE0tjgE
