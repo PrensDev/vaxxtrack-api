@@ -7,13 +7,12 @@
 const Users  = require("../../models").Users;
 const bcrypt = require('bcrypt');
 
+
 // Update Password
 exports.updatePassword = (req, res) =>  {
 
-    console.log(req.user.user_type);
-    
     // Check if user logged in is representative
-    if (req.user.user_type !== 'Representative') {
+    if (req.user == null || req.user.user_type !== 'Representative') {
         
         // Send Forbidden Result
         res.sendStatus(403);

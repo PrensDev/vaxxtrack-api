@@ -64,22 +64,23 @@ exports.findAll = (req, res, next) => {
         res.sendStatus(403);
     } else {
         db.Visiting_Logs
-            .findAll(
-                {
-                    include: [{
-                        model: db.Users,
-                        as: 'visiting_log_by',
-                        attributes: {
-                            exclude: [
-                                'password',
-                                'added_by',
-                                'created_datetime',
-                                'updated_datetime'
-                            ]
-                        }
-                    }],
-                }
-            )
+            .findAll({
+                include: [{
+                    model: db.Users,
+                    as: 'visiting_log_by',
+                    where: {
+                        user_ID: req.user.user_ID
+                    },
+                    attributes: {
+                        exclude: [
+                            'password',
+                            'added_by',
+                            'created_datetime',
+                            'updated_datetime'
+                        ]
+                    }
+                }],
+            })
             .then((data) => {
                 res.send({
                     error   : false,

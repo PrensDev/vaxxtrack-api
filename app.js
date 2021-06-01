@@ -68,6 +68,7 @@ app.use('/test', require('./routes/test.route'));
 // Authenticated Routes
 app.use('/citizen', authenticateToken, require('./routes/citizen.route'));
 app.use('/representative', authenticateToken, require('./routes/representative.route'));
+app.use('/admin', authenticateToken, require('./routes/super_admin.route'));
 
 // Database Connection Messages
 const connSuccessMsg = `
