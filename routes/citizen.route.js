@@ -20,8 +20,8 @@ router.put ("/update_health_status_log", healthStatusLogController.update);
 
 // Visiting Log Controller
 var visitingLogController = require('../controllers/citizen/visiting_log.controller');
-router.get  ("/visiting-logs"                  , visitingLogController.findAll);
-router.get  ("/visiting-logs/:visiting_log_ID" , visitingLogController.findOne);
+router.get  ("/visiting-logs"                  , visitingLogController.all_visiting_logs);
+router.get  ("/visiting-logs/:visiting_log_ID" , visitingLogController.one_visiting_log);
 router.post ("/visiting-logs/add"              , visitingLogController.create);
 
 
