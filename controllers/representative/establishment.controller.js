@@ -8,11 +8,14 @@ const db = require("../../models");
 
 
 // Find all establishments
-exports.findAll = (req, res, next) => {
+exports.getAllEstablishments = (req, res, next) => {
     
-    // Check if user logged in was representative
-    if(req.user.user_type !== 'Representative') {
+    // Check if user logged in or logged in but not representative
+    if(req.user == null || req.user.user_type !== 'Representative') {
+
+        // Send Forbidden response
         res.sendStatus(403);
+
     } else {
 
         // Find all representative establishments
@@ -30,19 +33,7 @@ exports.findAll = (req, res, next) => {
                     }, {
                         model: db.Users,
                         as: 'role_by',
-                        attributes : {
-                            exclude: [
-                                'sex',
-                                'birth_date',
-                                'civil_status',
-                                'address_ID',
-                                'user_type',
-                                'password',
-                                'added_by',
-                                'created_datetime',
-                                'updated_datetime'
-                            ]
-                        },
+                        attributes: ['user_ID'],
                         where: {
                             user_ID: req.user.user_ID
                         }
@@ -53,12 +44,12 @@ exports.findAll = (req, res, next) => {
                 res.send({
                     error   : false,
                     data    : data,
-                    message : ['[establishments] record retrieves successfully'],
+                    message : 'Establisjements retrieves successfully',
                 });
             })
             .catch((err) => {
                 res.status(500).send({
-                    error   : false,
+                    error   : true,
                     message : ['Oops! Error caught!', `${ err }`],
                 });
             });
@@ -67,121 +58,130 @@ exports.findAll = (req, res, next) => {
 
 
 // Find an establishment
-exports.find = (req, res, next) => {
+exports.getOneEstablishment = (req, res, next) => {
     
-    // Check if user logged in is a representative
-    if(req.user.user_type !== 'Representative') {
+    // Check if user logged or logged in but not representative
+    if(req.user == null || req.user.user_type !== 'Representative') {
         res.sendStatus(403);
     } else {
-        const establishment_ID = req.params.establishment_ID;
-        
-        // Check parameter 'establishment_ID' if null 
-        if (establishment_ID == null) {
-            res.status(500).send({
-                error: true,
-                message: 'Parameter [establishment_ID] is required'
-            })
-        } else {
 
-            // Find establishment by its ID
-            db.Establishments
-                .findOne({
-                    where: {
-                        establishment_ID: establishment_ID,
-                    },
-                    include: [
-                        {
-                            model: db.Addresses,
-                            as: 'address',
-                            attributes: {
-                                exclude: [
-                                    'created_datetime'
-                                ]
-                            }
-                        }, {
-                            model: db.Users,
-                            as: 'role_by',
-                            attributes: {
-                                exclude: [
-                                    'sex',
-                                    'birth_date',
-                                    'civil_status',
-                                    'address_ID',
-                                    'user_type',
-                                    'password',
-                                    'added_by',
-                                    'created_datetime',
-                                    'updated_datetime'
-                                ]
-                            },
-                            where: {
-                                user_ID: req.user.user_ID
-                            }
+        // Find establishment by its establishment_ID parameter
+        db.Establishments
+            .findByPk(req.params.establishment_ID, {
+                include: [
+                    {
+                        model: db.Addresses,
+                        as: 'address',
+                        attributes: {
+                            exclude: [
+                                'created_datetime'
+                            ]
                         }
-                    ]
-                })
-                .then((data) => {
-                    if(data) {
-                        res.send({
-                            error   : false,
-                            data    : data,
-                            message : 'An establishment has been identified',
-                        });
-                    } else {
-                        res.status(404).send({
-                            error   : true,
-                            message : 'Establishment not found',
-                        });
+                    }, {
+                        model: db.Users,
+                        as: 'role_by',
+                        attributes: ['user_ID'],
+                        where: {
+                            user_ID: req.user.user_ID
+                        }
                     }
-                })
-                .catch((err) => {
+                ]
+            })
+            .then((data) => {
+                if(data) {
+                    res.send({
+                        error   : false,
+                        data    : data,
+                        message : 'An establishment has been identified',
+                    });
+                } else {
                     res.status(500).send({
                         error   : true,
-                        message : ['Oops! Error caught!', `${ err }`],
+                        message : 'Establishment not found',
                     });
-                })
-        }
+                }
+            })
+            .catch((err) => {
+                res.status(500).send({
+                    error   : true,
+                    message : ['Oops! Error caught!', `${ err }`],
+                });
+            })
     }
 }
 
 
 // Update an establishment
-exports.update = (req, res, next) => {
-    if(req.user.user_type !== 'Representative') {
+exports.updateEstablishment = (req, res, next) => {
+    if(req.user == null || req.user.user_type !== 'Representative') {
         res.sendStatus(403);
     } else {
         const establishment_ID = req.params.establishment_ID;
+
         if(establishment_ID == null) {
             res.status(500).send({
                 error   : true,
                 message : 'Parameter [establishment_ID] is required',
             });
         } else {
+
+            // Check if establishment was existed and roled by logged in representative
             db.Establishments
-                .update(req.body, {
-                    where: {
-                        establishment_ID: establishment_ID
-                    },
-                    include: [{
-                        model: db.Addresses,
-                        as: 'address'
-                    }]
+                .findByPk(establishment_ID, {
+                    include: {
+                        model: db.Users,
+                        as: 'role_by',
+                        where: {
+                            user_ID: req.user.user_ID
+                        }
+                    }
                 })
                 .then((result) => {
+
+                    // If has result then update
                     if(result) {
                         db.Establishments
-                            .findByPk(establishment_ID, {
-                                include: {
-                                    model   : db.Addresses,
-                                    as      : 'address'
-                                }
+                            .update(req.body, {
+                                where: {
+                                    establishment_ID: establishment_ID
+                                },
+                                include: [{
+                                    model: db.Addresses,
+                                    as: 'address'
+                                }]
                             })
-                            .then((data) => {
-                                res.send({
-                                    error   : false,
-                                    data    : data,
-                                    message : 'An establishment has been updated'
-                                })
+                            .then((result) => {
+
+                                // If successfully updated
+                                if(result) {
+                                    db.Establishments
+                                        .findByPk(establishment_ID, {
+                                            include: {
+                                                model   : db.Addresses,
+                                                as      : 'address'
+                                            }
+                                        })
+                                        .then((data) => {
+                                            res.send({
+                                                error   : false,
+                                                data    : data,
+                                                message : 'An establishment has been updated'
+                                            })
+                                        })
+                                        .catch((err) => {
+                                            res.status(500).send({
+                                                error   : true,
+                                                message : ['Oops! Error caught!', `${ err }`],
+                                            });
+                                        });
+                                } else {
+
+                                    // If not successfully updated
+                                    res.status(500).send({
+                                        error   : true,
+                                        message : 'There was an error in updating an establishment',
+                                    });
+                                }
                             })
                             .catch((err) => {
                                 res.status(500).send({
@@ -190,18 +190,14 @@ exports.update = (req, res, next) => {
                                 });
                             });
                     } else {
+                        
+                        // If no result, return error response
                         res.status(500).send({
-                            error   : true,
-                            message : 'There was an error in updating an establishment',
-                        });
+                            error: true,
+                            message: 'Establishment was not found'
+                        })
                     }
                 })
-                .catch((err) => {
-                    res.status(500).send({
-                        error   : true,
-                        message : ['Oops! Error caught!', `${ err }`],
-                    });
-                });
         }
     }
 }

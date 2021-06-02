@@ -10,16 +10,17 @@ router.get('/', indexController.render);
 
 
 // Login Controller
-var loginController = require('../controllers/main/login.controller');
-router.post('/login', loginController.login);
+var loginCtlr = require('../controllers/main/login.controller');
+router.post('/login', loginCtlr.login);
 
 
 // Register Controller
-var registerController = require('../controllers/main/register.controller');
-router.post('/register/representative', registerController.representative);
-router.post('/register/citizen', registerController.citizen);
-router.post('/register/super_admin', registerController.super_admin);
-router.post('/register/health_official', registerController.health_official);
+var registerCtlr = require('../controllers/main/register.controller');
+router.post('/register/representative'  , registerCtlr.representative);
+router.post('/register/citizen'         , registerCtlr.citizen);
+router.post('/register/super_admin'     , registerCtlr.super_admin);
+router.post('/register/health_official' , registerCtlr.health_official);
+
 
 // Export module
 module.exports = router;

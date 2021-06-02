@@ -4,13 +4,14 @@
  * This controller is for health status log activities of citizens
  */
 
-// Todo: include the properties here
 
+// Import models
 const db = require("../../models");
 
+
 // Create New Health Status Log
-exports.create = (req, res) => {
-    if (req.user.user_type !== 'Citizen') {
+exports.createHealthStatusLog = (req, res) => {
+    if (req.user = null || req.user.user_type !== 'Citizen') {
         res.sendStatus(403);
     } else {
         db.Health_Status_Logs
@@ -27,10 +28,12 @@ exports.create = (req, res) => {
             });
 
     }
-    };
+};
 
-exports.findAll = (req, res) => {
-    if (req.user.user_type !== 'Citizen') {
+
+// Get All Health Status Logs
+exports.getAllHealthStatusLogs = (req, res) => {
+    if (req.user = null || req.user.user_type !== 'Citizen') {
         res.sendStatus(403);
     } else {
         db.Health_Status_Logs
@@ -70,8 +73,9 @@ exports.findAll = (req, res) => {
     }
 };
 
-exports.findOne = (req, res) => {
-    if (req.user.user_type !== 'Citizen') {
+// Get One Health Status Log
+exports.getOneHealthStatusLog = (req, res) => {
+    if (req.user == null || req.user.user_type !== 'Citizen') {
         res.sendStatus(403);
     } else {
         db.Health_Status_Logs

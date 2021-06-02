@@ -6,7 +6,7 @@
 const db = require("../../models");
 
 // Create New Visiting Log
-exports.create = (req, res) => {
+exports.createVisitingLog = (req, res) => {
     if (req.user == null || req.user.user_type !== 'Citizen') {
         res.sendStatus(403);
     } else {
@@ -59,7 +59,7 @@ exports.create = (req, res) => {
 };
 
 // Find All Visiting Logs
-exports.all_visiting_logs = (req, res, next) => {
+exports.getAllVisitingLogs = (req, res, next) => {
     if (req.user == null || req.user.user_type !== 'Citizen') {
         res.sendStatus(403);
     } else {
@@ -105,7 +105,7 @@ exports.all_visiting_logs = (req, res, next) => {
 };
 
 // Get One Visiting Log
-exports.one_visiting_log = (req, res, next) => {
+exports.getOneVisitingLog = (req, res, next) => {
     if(req.user == null || req.user.user_type !== 'Citizen') {
         res.sendStatus(403);
     } else {

@@ -3,3 +3,7 @@ GET http://localhost:3000/test/populate
 
 ### Generate Vaccine Data
 GET http://localhost:3000/test/generate-vaccine-data
+
+### User Accounts
+GET http://localhost:3000/test/users/47490e20-ea55-47df-8a8e-bd0c416965e1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2FjY291bnRfSUQiOiIwZmMwZDllYi1hZDEyLTQyOTktYTNiYS1hNzhlMjRjNGM2YmUiLCJ1c2VyX0lEIjoiMjIwZmY5ZDUtNGRlMy00ZDU4LWJmOTEtOTY4YmIxMjliMmZhIiwidXNlcl90eXBlIjoiQ2l0aXplbiIsImFjY291bnRfZGV0YWlscyI6Imp1YW5kZWxhY3J1ekBnbWFpbC5jb20iLCJpYXQiOjE2MjI1NTI3NTMsImV4cCI6MTYyMjU1NzU1M30.-d-ArNXB7qoNq9YSAlzwFYIRl2eOQ5yNuGBrgGE-uuQ

@@ -7,18 +7,12 @@
  const db = require("../../models");
 
 // Create New Visiting Log
-exports.create = (req, res) => {
+exports.createVisitingLog = (req, res) => {
     if (req.user.user_type !== 'Representative') {
         res.sendStatus(403);
     } else {
         db.Visiting_Logs
-            .create({
-                citizen_ID: req.body.citizen_ID,
-                establishment_ID: req.body.establishment_ID,
-                temperature: req.body.temperature,
-                health_status_log_ID: req.body.health_status_log_ID,
-                purpose: req.body.purpose
-            })
+            .create(req.body)
             .then((data) => {
                 db.Visiting_Logs
                     .findByPk(data.visiting_log_ID, {
@@ -63,7 +57,7 @@ exports.create = (req, res) => {
 };
 
 // Find All Visiting Logs
-exports.findAll = (req, res, next) => {
+exports.getAllVisitingLogs = (req, res, next) => {
     if (req.user.user_type !== 'Representative') {
         res.sendStatus(403);
     } else {
@@ -127,7 +121,7 @@ exports.findAll = (req, res, next) => {
 };
 
 // Get One Visiting Log
-exports.findOne = (req, res, next) => {
+exports.getOneVisitingLog = (req, res, next) => {
     if(req.user.user_type !== 'Representative') {
         res.sendStatus(403);
     } else {

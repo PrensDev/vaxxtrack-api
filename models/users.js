@@ -83,6 +83,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete    : 'RESTRICT'
       });
 
+
       // M:M [users]:[establishments] through [roles]
       this.belongsToMany(models.Establishments, {
         through     : 'Roles',

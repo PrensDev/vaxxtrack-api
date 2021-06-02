@@ -55,7 +55,7 @@ exports.login = (req, res) => {
                                     user_type       : data.user.user_type, 
                                     account_details : data.details
                                 }),
-                                message : ["A user is successfully identified"],
+                                message : "A user has been successfully identified",
                             });
                         } else {
                             res.send({

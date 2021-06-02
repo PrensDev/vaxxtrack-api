@@ -6,8 +6,8 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "authDetails": "juandelacruz@gmail.com",
-    "password": "$P@ssw0rd;"
+    "authDetails": "jetsunprincetorres@gmail.com",
+    "password": "$P@ssw0rd_ADMIN;"
 }
 
 ### Register Representative

@@ -1,7 +1,14 @@
+/*
+|================================================================
+| APP CONFIGURATIONS
+|================================================================
+*/
+
 // Import modules or packages
-const express = require('express');
-const jwt = require('jsonwebtoken');
-const cors = require('cors');
+const express   = require('express');
+const jwt       = require('jsonwebtoken');
+const cors      = require('cors');
+
 
 // Reference to database
 const db = require('./models');
@@ -27,7 +34,9 @@ app.use(express.json());
 // Middlewares
 app.use(cors());
 app.use((req, res, next) => {
-    console.log(`Request has been sent to ${ req.url }`);
+    if(process.env.ENABLE_REQUEST_LOGS === 'true' || false) {
+        console.log(`Request has been sent to ${ req.url }`);
+    }
     next();
 });
 
@@ -62,13 +71,21 @@ const authenticateToken = (req, res, next) => {
 // Main Routes
 app.use('/', require('./routes/main.route'));
 
-// Test Route
+// Test Route (this will be removed before production)
 app.use('/test', require('./routes/test.route'));
 
 // Authenticated Routes
-app.use('/citizen', authenticateToken, require('./routes/citizen.route'));
-app.use('/representative', authenticateToken, require('./routes/representative.route'));
-app.use('/admin', authenticateToken, require('./routes/super_admin.route'));
+app.use('/citizen',         authenticateToken, require('./routes/citizen.route'));
+app.use('/representative',  authenticateToken, require('./routes/representative.route'));
+app.use('/admin',           authenticateToken, require('./routes/super_admin.route'));
+
+
+/*
+|================================================================
+| DATABASE CONFIGURATIONS
+|================================================================
+*/
+
 
 // Database Connection Messages
 const connSuccessMsg = `
@@ -77,9 +94,11 @@ SUCCESSFULLY CONNECTED TO THE DATABASE!
 =========================================================================
 `
 
-const connFailedMsg = `
+const connFailedMsg = (err) => { return `
 =========================================================================
 FAILED TO CONNECT TO THE DATABASE!
+-------------------------------------------------------------------------
+${ err }
 -------------------------------------------------------------------------
 Have you already done the following?
 - Open XAMPP and start Apache and MySql
@@ -90,6 +109,7 @@ If yes and still cannot connect to the database,
 please message your lead developer immediately.
 =========================================================================
 `
+}
 
 // Test if connected to the database
 db.sequelize
@@ -98,7 +118,7 @@ db.sequelize
         console.log(connSuccessMsg);
     })
     .catch((err) => {
-        console.log(connFailedMsg);
+        console.log(connFailedMsg(err));
     });
 
 
@@ -123,9 +143,9 @@ const syncFailedMsgFooter = `
 // Save changes to the database
 db.sequelize
     .sync({
-        force: process.env.SEQUELIZE_FORCE_SYNC === 'true' || false,
-        alter: process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
-        sync: process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
+        force:  process.env.SEQUELIZE_FORCE_SYNC === 'true' || false,
+        alter:  process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
+        sync:   process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
     })
     .then(() => {
         app.listen(port, () => {

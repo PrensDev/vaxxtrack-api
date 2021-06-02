@@ -5,37 +5,34 @@ var router = require('express').Router();
 
 
 // Index Controller
-var indexController = require('../controllers/citizen/index.controller');
-router.get('/', indexController.render);
+var indexCtlr = require('../controllers/citizen/index.controller');
+router.get('/', indexCtlr.render);
 
 
 // Health Status Log Controller
-var healthStatusLogController = require('../controllers/citizen/health_status_log.controller');
-// Todo: include the properties and paths here
-router.post ("/add_health_status_log", healthStatusLogController.create);
-router.get ("/health_status_logs",  healthStatusLogController.findAll);
-router.get ("/health_status_logs/:health_status_log_ID", healthStatusLogController.findOne);
-router.put ("/update_health_status_log", healthStatusLogController.update);
+var healthStatusLogCtlr = require('../controllers/citizen/health_status_log.controller');
+router.get ("/health-status-logs"                       , healthStatusLogCtlr.findAll);
+router.get ("/health-status-logs/:health_status_log_ID" , healthStatusLogCtlr.findOne);
+router.put ("/update-health-status-log"                 , healthStatusLogCtlr.update);
+router.post("/add-health-status-log"                    , healthStatusLogCtlr.create);
 
 
 // Visiting Log Controller
-var visitingLogController = require('../controllers/citizen/visiting_log.controller');
-router.get  ("/visiting-logs"                  , visitingLogController.all_visiting_logs);
-router.get  ("/visiting-logs/:visiting_log_ID" , visitingLogController.one_visiting_log);
-router.post ("/visiting-logs/add"              , visitingLogController.create);
+var visitingLogCtlr = require('../controllers/citizen/visiting_log.controller');
+router.get ("/visiting-logs"                  , visitingLogCtlr.getAllVisitingLogs);
+router.get ("/visiting-logs/:visiting_log_ID" , visitingLogCtlr.getOneVisitingLog);
+router.post("/add-visiting-log"               , visitingLogCtlr.createVisitingLog);
+
 
 
 // User Information Controller
-var infoController = require('../controllers/citizen/info.controller');
-router.get ('/citizens',                 infoController.getAllCitizens);
-router.get ('/citizens/:user_ID',        infoController.getOneCitizen);
-router.put ('/update-citizen/:user_ID',  infoController.updateCitizen);
+var infoCtlr = require('../controllers/citizen/info.controller');
 
 
 
 // Account Controller
-var accountController = require('../controllers/citizen/account.controller');
-router.put('/update_password/:id'  ,  accountController.update);
+var accountCtlr = require('../controllers/citizen/account.controller');
+router.put('/update_password/:id'  ,  accountCtlr.update);
 
 
 // Export module

@@ -5,33 +5,33 @@ var router = require('express').Router();
 
 
 // Index Controller
-var indexController = require('../controllers/representative/index.controller');
-router.get('/', indexController.render);
+var indexCtlr = require('../controllers/representative/index.controller');
+router.get('/', indexCtlr.render);
 
 
 // Establishment Controller
-var establishmentController = require('../controllers/representative/establishment.controller');
-router.get('/establishment'                          , establishmentController.findAll);
-router.get('/establishment/:establishment_ID'        , establishmentController.find);
-router.put('/update-establishment/:establishment_ID' , establishmentController.update);
+var establishmentCtlr = require('../controllers/representative/establishment.controller');
+router.get('/establishments'                         , establishmentCtlr.getAllEstablishments);
+router.get('/establishments/:establishment_ID'       , establishmentCtlr.getOneEstablishment);
+router.put('/update-establishment/:establishment_ID' , establishmentCtlr.updateEstablishment);
 
 
 // Visiting Log Controller
-var visitingLogController = require('../controllers/representative/visiting_log.controller');
-router.get  ("/visiting-logs/:establishment_ID"                  , visitingLogController.findAll);
-router.get  ("/visiting-logs/:establishment_ID/:visiting_log_ID" , visitingLogController.findOne);
-router.post ("/add-visiting-log"                                 , visitingLogController.create);
+var visitingLogCtlr = require('../controllers/representative/visiting_log.controller');
+router.get ("/visiting-logs/:establishment_ID"                  , visitingLogCtlr.getAllVisitingLogs);
+router.get ("/visiting-logs/:establishment_ID/:visiting_log_ID" , visitingLogCtlr.getOneVisitingLog);
+router.post("/add-visiting-log"                                 , visitingLogCtlr.createVisitingLog);
 
 
 // User Information Controller
-var infoController = require('../controllers/representative/info.controller');
-router.get('/info'        , infoController.getInfo);
-router.put('/update-info' , infoController.updateInfo);                                   
+var infoCtlr= require('../controllers/representative/info.controller');
+router.get('/info'        , infoCtlr.getInfo);
+router.put('/update-info' , infoCtlr.updateInfo);                                   
 
 
 // Account Controller
-var accountController = require('../controllers/representative/account.controller');
-router.put('/update-password'  ,  accountController.updatePassword);
+var accountCtlr = require('../controllers/representative/account.controller');
+router.put('/update-password'  ,  accountCtlr.updatePassword);
 
 
 

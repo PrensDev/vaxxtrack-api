@@ -11,10 +11,10 @@ const bcrypt = require('bcrypt');
 // Update Password
 exports.updatePassword = (req, res) =>  {
 
-    // Check if user logged in is representative
+    // Check if user is not logged in or not representative
     if (req.user == null || req.user.user_type !== 'Representative') {
         
-        // Send Forbidden Result
+        // Send Forbidden response
         res.sendStatus(403);
 
     } else {
