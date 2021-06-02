@@ -5,60 +5,83 @@
  */
 
  const db = require("../../models");
- const User = db.Users;
- 
- 
+
+
  // Return the information of the representative
  exports.getInfo = (req, res, next) => {
-     if(req.user.user_ID === 'Representative') {
-             const id = req.user.user_ID;
-             console.log(id)
-           
-             User.findByPk(id)
-               .then((data) => {
-                 res.send({
-                   error: false,
-                   data: data,
-                   message: ['[Representative] record retrieves successfully'],
-                 });
-             })
-                 .catch((err) => {
-                 res.status(500).send({
-                   error: true,
-                   data: [],
-                   message:
-                     err.errors.map((e) => e.message),
-                 });
-             });
-     } else {
-         res.sendStatus(403);
-     }
- }
- 
- exports.updateInfo = (req, res) => {
-     const id = req.params.id;
- 
- // update the information of the Representative
-     User.update_info(req.body, {
-         where : { user_ID : id }
-     }).then((result) => {
-         console.log(result);
-         if (result){
-             // success
-             User.findByPk(id).then((data) => {
-                 res.send({
-                     error : false,
-                     data : data,
-                     message : 'Representative record has been updated.',
-                 });
-             });
-         } else {
-             // error in updating
-             res.status(500).send({
-                 error: true,
-                 data: [],
-                 message: ["Error in updating a record"],
-             });
-         }
-     })
- }
+    if(req.user == null || req.user.user_type !== 'Representative') {
+        res.sendStatus(403);
+    } else {
+        db.Users
+            .findByPk(req.user.user_ID)
+            .then((data) => {
+                if(data) {
+                    res.send({
+                        error: false,
+                        data: data,
+                        message: 'Representative record retrieves successfully'
+                    });
+                } else {
+                    res.send({
+                        error: true,
+                        message: 'There is no representative record retrieved'
+                    });
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+}
+
+
+ exports.updateInfo = (req, res, next) => {
+    if(req.user == null || req.user.user_type !== 'Representative') {
+        res.sendStatus(403);
+    } else {
+
+        // Check if user ID is existed in database
+        db.Users
+            .findByPk(req.user.user_ID)
+            .then((result) => {
+                if (result) {
+
+                    // Update a representative info
+                    db.Users
+                        .update(req.body, {
+                            where: {
+                                user_ID: req.user.user_ID
+                            }
+                        })
+                        .then(() => {
+
+                            // Get representative info
+                            db.Users
+                                .findByPk(req.user.user_ID)
+                                .then((data) => {
+                                    res.send({
+                                        error: false,
+                                        data: data,
+                                        message: 'A record has been successfully updated'
+                                    })
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                })
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
+                    
+                } else {
+                    res.send({
+                        error: true,
+                        message: 'No representative records has been identified'
+                    })
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+}

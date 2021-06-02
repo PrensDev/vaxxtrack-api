@@ -25,7 +25,7 @@ router.post ("/add-visiting-log"                                 , visitingLogCo
 
 // User Information Controller
 var infoController = require('../controllers/representative/info.controller');
-router.get('/info'        , infoController.getInfo);
+router.get('/info'        , infoController.Info);
 router.put('/update-info' , infoController.updateInfo);                                   
 
 
