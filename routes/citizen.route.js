@@ -27,9 +27,8 @@ router.post ("/visiting-logs/add"              , visitingLogController.create);
 
 // User Information Controller
 var infoController = require('../controllers/citizen/info.controller');
-router.get ('/citizens',                 infoController.getAllCitizens);
-router.get ('/citizens/:user_ID',        infoController.getOneCitizen);
-router.put ('/update-citizen/:user_ID',  infoController.updateCitizen);
+router.get ('/citizens',        infoController.getInfo);
+router.put ('/update-citizen',  infoController.updateInfo);
 
 
 
