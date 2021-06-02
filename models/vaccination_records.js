@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       // M:1 with [users]
       this.belongsTo(models.Users, {
         foreignKey: 'citizen_ID',
-        as: 'citizen',
+        as: 'vaccinated_citizen',
         scope: {
           user_type: 'Citizen'
         },

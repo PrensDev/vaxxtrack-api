@@ -103,6 +103,6 @@ exports.getOneHealthStatusLog = (req, res) => {
 };
 
 
-exports.update = (req, res) => {
-
+exports.updateHealthStatusLog = (req, res) => {
+    // TODO: Please insert methods here
 };

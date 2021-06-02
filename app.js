@@ -75,9 +75,10 @@ app.use('/', require('./routes/main.route'));
 app.use('/test', require('./routes/test.route'));
 
 // Authenticated Routes
-app.use('/citizen',         authenticateToken, require('./routes/citizen.route'));
-app.use('/representative',  authenticateToken, require('./routes/representative.route'));
-app.use('/admin',           authenticateToken, require('./routes/super_admin.route'));
+app.use('/citizen'        , authenticateToken , require('./routes/citizen.route'));
+app.use('/representative' , authenticateToken , require('./routes/representative.route'));
+app.use('/health-official', authenticateToken , require('./routes/health_official.route'));
+app.use('/admin'          , authenticateToken , require('./routes/super_admin.route'));
 
 
 /*
@@ -115,11 +116,11 @@ please message your lead developer immediately.
 db.sequelize
     .authenticate()
     .then(() => {
-        console.log(connSuccessMsg);
+        if(process.env.ENABLE_DB_CONN_LOGS === 'true' || false) {
+            console.log(connSuccessMsg)
+        }
     })
-    .catch((err) => {
-        console.log(connFailedMsg(err));
-    });
+    .catch((err) => console.log(connFailedMsg(err)));
 
 
 // Sequelize Sync Messages 
@@ -143,15 +144,9 @@ const syncFailedMsgFooter = `
 // Save changes to the database
 db.sequelize
     .sync({
-        force:  process.env.SEQUELIZE_FORCE_SYNC === 'true' || false,
-        alter:  process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
-        sync:   process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
+        force: process.env.SEQUELIZE_FORCE_SYNC === 'true' || false,
+        alter: process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
+        sync:  process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
     })
-    .then(() => {
-        app.listen(port, () => {
-            console.log(syncSuccessMsg);
-        });
-    })
-    .catch((err) => {
-        console.log(syncFailedMsgHeader + `Your error:\n` + err + syncFailedMsgFooter);
-    });
+    .then(() => app.listen(port, () => console.log(syncSuccessMsg)))
+    .catch((err) => console.log(syncFailedMsgHeader + `Your error:\n` + err + syncFailedMsgFooter));

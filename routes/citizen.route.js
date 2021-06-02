@@ -11,10 +11,10 @@ router.get('/', indexCtlr.render);
 
 // Health Status Log Controller
 var healthStatusLogCtlr = require('../controllers/citizen/health_status_log.controller');
-router.get ("/health-status-logs"                       , healthStatusLogCtlr.findAll);
-router.get ("/health-status-logs/:health_status_log_ID" , healthStatusLogCtlr.findOne);
-router.put ("/update-health-status-log"                 , healthStatusLogCtlr.update);
-router.post("/add-health-status-log"                    , healthStatusLogCtlr.create);
+router.get ("/health-status-logs"                       , healthStatusLogCtlr.getAllHealthStatusLogs);
+router.get ("/health-status-logs/:health_status_log_ID" , healthStatusLogCtlr.getOneHealthStatusLog);
+router.put ("/update-health-status-log"                 , healthStatusLogCtlr.updateHealthStatusLog);
+router.post("/add-health-status-log"                    , healthStatusLogCtlr.createHealthStatusLog);
 
 
 // Visiting Log Controller
@@ -27,8 +27,8 @@ router.post("/add-visiting-log"               , visitingLogCtlr.createVisitingLo
 
 // User Information Controller
 var infoController = require('../controllers/citizen/info.controller');
-router.get ('/citizens',        infoController.getInfo);
-router.put ('/update-citizen',  infoController.updateInfo);
+router.get ('/info'        , infoController.getInfo);
+router.put ('/update-info' , infoController.updateInfo);
 
 
 

@@ -4,11 +4,15 @@
  * This controller is for properties related to user information
  */
 
- const db = require("../../models");
+
+// Import models
+const db = require("../../models");
 
 
- // Return the information of the representative
- exports.getInfo = (req, res, next) => {
+// Return the information of the representative
+exports.getInfo = (req, res, next) => {
+
+    // Check if user logged in or logged in but not Representative
     if(req.user == null || req.user.user_type !== 'Representative') {
         res.sendStatus(403);
     } else {
@@ -35,7 +39,10 @@
 }
 
 
- exports.updateInfo = (req, res, next) => {
+// Update Representative Information
+exports.updateInfo = (req, res, next) => {
+
+    // Check if user logged in or logged in but not Representative
     if(req.user == null || req.user.user_type !== 'Representative') {
         res.sendStatus(403);
     } else {

@@ -4,10 +4,12 @@
  * This controller is for properties related to user information
  */
 
-const db = require("../../models");
-const User = db.Users;
 
-// Get One Citizen Record
+// Import models
+const db = require("../../models");
+
+
+// Get Citizen Info
 exports.getInfo = (req, res, next) => {
     if(req.user == null || req.user.user_type !== 'Citizen') {
         res.sendStatus(403);
@@ -34,8 +36,10 @@ exports.getInfo = (req, res, next) => {
     }
 }
 
-// Update a Citizen
+// Update Citizen Info
 exports.updateInfo = (req, res, next) => {
+
+    // Check if user logged in or logged in but not Citizen
     if(req.user == null || req.user.user_type !== 'Citizen') {
         res.sendStatus(403);
     } else {

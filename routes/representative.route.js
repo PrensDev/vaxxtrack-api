@@ -31,7 +31,7 @@ router.put('/update-info' , infoController.updateInfo);
 
 // Account Controller
 var accountCtlr = require('../controllers/representative/account.controller');
-router.put('/update-password'  ,  accountCtlr.updatePassword);
+router.put('/update-password' ,  accountCtlr.updatePassword);
 
 
 

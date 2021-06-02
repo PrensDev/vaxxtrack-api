@@ -493,3 +493,33 @@ exports.generateVaccineData = (req, res, next) => {
             })
         });
 }
+
+
+exports.populate2 = () => {
+
+    // Vaccination Record
+    db.Vaccination_Records
+        .bulkCreate([
+            {
+                citizen_ID: '220ff9d5-4de3-4d58-bf91-968bb129b2fa',
+                vaccine_ID: 'b603614e-250a-4598-aa62-5fee984eb0ba',
+                vaccination_date: '2020-02-13',
+                vaccinated_by: 'Dr. Jimmy D. Valero',
+                vaccinated_in: 'Philippine General Hospital',
+                remarks: ''
+            }, {
+                citizen_ID: '220ff9d5-4de3-4d58-bf91-968bb129b2fa',
+                vaccine_ID: 'b603614e-250a-4598-aa62-5fee984eb0ba',
+                vaccination_date: '2020-03-13',
+                vaccinated_by: 'Dr. Jimmy D. Valero',
+                vaccinated_in: 'Philippine General Hospital',
+                remarks: ''
+            }
+        ])
+        .then(() => {
+            console.log('==>Vaccination Record has been created');
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+}

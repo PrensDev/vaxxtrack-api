@@ -4,6 +4,8 @@
  * This controller is for managing account settings of representatives
  */
 
+
+// Import models and bcrypt for this controller
 const Users  = require("../../models").Users;
 const bcrypt = require('bcrypt');
 
@@ -35,9 +37,7 @@ exports.updatePassword = (req, res) =>  {
 
             // Update user password
             Users
-                .update({
-                    password: password
-                }, {
+                .update({ password: password }, {
                     where: {
                         user_ID: req.user.user_ID
                     }
@@ -51,7 +51,7 @@ exports.updatePassword = (req, res) =>  {
                 .catch((err) => {
                     res.status(500).send({
                         error: true,
-                        message: `${ err }`,
+                        message: ['Oops! Error occured.',`${err}`],
                     });
                 });
         }
