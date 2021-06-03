@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       // M:M [establishments]:[users] through [roles]
       this.belongsToMany(models.Users, {
         through     : 'Roles',
-        as          : 'role_by',
+        as          : 'roled_by',
         foreignKey  : 'establishment_ID',
         otherKey    : 'representative_ID',
         scope       : {

@@ -1,8 +1,9 @@
 /**
- * INFORMATION CONTROLLER
+ * ACCOUNT CONTROLLER
  * 
- * This controller is for properties related to user information
+ * This controller is for managing account settings of super admin
  */
+
 
 // Import required packages
 const db     = require('../../models');

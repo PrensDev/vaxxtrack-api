@@ -24,7 +24,6 @@ router.get ("/visiting-logs/:visiting_log_ID" , visitingLogCtlr.getOneVisitingLo
 router.post("/add-visiting-log"               , visitingLogCtlr.createVisitingLog);
 
 
-
 // User Information Controller
 var infoController = require('../controllers/citizen/info.controller');
 router.get ('/info'        , infoController.getInfo);

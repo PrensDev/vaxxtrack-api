@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       // 1:M [users]:[case_information]
       this.hasOne(models.Case_Information, {
         foreignKey  : 'citizen_ID',
-        as          : 'case',
+        as          : 'case_information',
         onDelete    : 'RESTRICT'
       });
 

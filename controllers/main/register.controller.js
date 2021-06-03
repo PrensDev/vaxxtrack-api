@@ -6,8 +6,8 @@
 
 
 // Import models
-const db = require("../../models");
-const helper = require('../../helpers/helper.controller');
+const db     = require("../../models");
+const helper = require('../../helpers/controller.helper');
 
 
 // Register a representative including its establishment

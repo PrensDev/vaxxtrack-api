@@ -17,13 +17,11 @@ const dbEstablishmentsOp = (req) => {
             model: db.Addresses,
             as: 'address',
             attributes: {
-                exclude: [
-                    'created_datetime'
-                ]
+                exclude: ['created_datetime']
             }
         }, {
             model: db.Users,
-            as: 'role_by',
+            as: 'roled_by',
             attributes: ['user_ID'],
             where: {
                 user_ID: req.user.user_ID

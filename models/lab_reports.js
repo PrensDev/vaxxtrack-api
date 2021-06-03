@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // 1:1 with [cases]
       this.hasOne(models.Case_Information, {
-        foreignKey: 'case_ID',
+        foreignKey: 'lab_report_ID',
         as: 'case_information',
         onDelete: 'RESTRICT'
       });

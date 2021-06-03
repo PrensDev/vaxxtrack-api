@@ -1,3 +1,4 @@
+const { errResponse } = require('../helpers/controller.helper');
 const db = require('../models');
 
 exports.test = (req, res, next) => {
@@ -438,7 +439,10 @@ $P@ssw0rd_ADMIN;
     `);
 }
 
-exports.generateVaccineData = (req, res, next) => {
+
+exports.populate2 = (req, res) => {
+
+    // Generate Vaccine Records
     db.Vaccines
         .bulkCreate([
             {
@@ -470,56 +474,180 @@ exports.generateVaccineData = (req, res, next) => {
             validate: true
         })
         .then(() => {
-            db.Vaccines
-                .findAll()
-                .then((data) => {
-                    res.send({
-                        error: false,
-                        data: data,
-                        message: 'Vaccines are successfully created'
-                    })
-                })
-                .catch((err) => {
-                    res.status(500).send({
-                        error: true,
-                        message: `${err}`
-                    })
-                });
+            console.log('==>Vaccines Record has been created')
+            
+            // Vaccination Record
+            db.Vaccination_Records
+                .bulkCreate([
+                    {
+                        citizen_ID: '220ff9d5-4de3-4d58-bf91-968bb129b2fa',
+                        vaccine_ID: 'b603614e-250a-4598-aa62-5fee984eb0ba',
+                        vaccination_date: '2020-02-13',
+                        vaccinated_by: 'Dr. Jimmy D. Valero',
+                        vaccinated_in: 'Philippine General Hospital',
+                        remarks: ''
+                    }, {
+                        citizen_ID: '220ff9d5-4de3-4d58-bf91-968bb129b2fa',
+                        vaccine_ID: 'b603614e-250a-4598-aa62-5fee984eb0ba',
+                        vaccination_date: '2020-03-13',
+                        vaccinated_by: 'Dr. Jimmy D. Valero',
+                        vaccinated_in: 'Philippine General Hospital',
+                        remarks: ''
+                    }
+                ])
+                .then(() => console.log('==>Vaccination Record has been created'))
+                .catch((err) => console.log(err));
         })
-        .catch((err) => {
-            res.status(500).send({
-                error: true,
-                message: `${err}`
-            })
-        });
-}
+        .catch((err) => console.log(err));
+        
 
+    const regUserOp = {
+        include: [
+            {
+                model: db.User_Accounts,
+                as: 'user_accounts'
+            }, {
+                model: db.Addresses,
+                as: 'address'
+            }
+        ]
+    };
 
-exports.populate2 = () => {
-
-    // Vaccination Record
-    db.Vaccination_Records
+    // Citizens Registration
+    db.Users
         .bulkCreate([
             {
-                citizen_ID: '220ff9d5-4de3-4d58-bf91-968bb129b2fa',
-                vaccine_ID: 'b603614e-250a-4598-aa62-5fee984eb0ba',
-                vaccination_date: '2020-02-13',
-                vaccinated_by: 'Dr. Jimmy D. Valero',
-                vaccinated_in: 'Philippine General Hospital',
-                remarks: ''
+                user_ID: '145dd9e0-23c5-4e56-b01b-4690f808f4f0',
+                first_name: 'Alejandro',
+                middle_name: 'B.',
+                last_name: 'McCormick',
+                sex: 'Male',
+                birth_date: '1992-04-01',
+                civil_status: 'Single',
+                user_type: 'Citizen',
+                password: '$P@ssw0rd;',
+                user_accounts: [{
+                    user_account_ID: '10d2192b-9cd7-493c-b4d4-3d873bf4f638',
+                    details: 'alejandro01@gmail.com',
+                    type: 'Email',
+                    verified: true
+                }],
+                address: [{
+                    address_ID: '4a16caa6-2ab8-41b8-955d-e629e5bfe623',
+                    region: 'NATIONAL CAPITAL REGION',
+                    province: 'NCR FOURTH DISTRICT',
+                    city_municipality: 'City of Marikina',
+                    barangay_district: 'Calumpang',
+                    street: 'Rowas Street',
+                    specific_location: '114 M. A.',
+                    zip_code: 1800,
+                    latitude: 13.8635632,
+                    longitude: 75.0223564
+                }]
             }, {
-                citizen_ID: '220ff9d5-4de3-4d58-bf91-968bb129b2fa',
-                vaccine_ID: 'b603614e-250a-4598-aa62-5fee984eb0ba',
-                vaccination_date: '2020-03-13',
-                vaccinated_by: 'Dr. Jimmy D. Valero',
-                vaccinated_in: 'Philippine General Hospital',
-                remarks: ''
+                user_ID: '798da685-dd2c-4243-988a-1aac7af69d3b',
+                first_name: 'Barbara',
+                middle_name: 'J.',
+                last_name: 'Green',
+                sex: 'Female',
+                birth_date: '1994-03-24',
+                civil_status: 'Married',
+                user_type: 'Citizen',
+                password: '$P@ssw0rd;',
+                user_accounts: [{
+                    user_account_ID: 'f185056e-f5e6-455a-9a5d-d7a824095ef9',
+                    details: 'barbaragreen@gmail.com',
+                    type: 'Email',
+                    verified: true
+                }],
+                address: [{
+                    address_ID: '18fc40f1-c94a-4800-ba6b-f3a8e93b5a8d',
+                    region: 'NATIONAL CAPITAL REGION',
+                    province: 'NCR SECOND DISTRICT',
+                    city_municipality: 'City of Quezon',
+                    barangay_district: 'Diliman',
+                    street: 'Sgt. Esguerra Avenue',
+                    specific_location: 'Mother Ignacia Corner',
+                    zip_code: 1103,
+                    latitude: 23.862345,
+                    longitude: 43.0234534
+                }]
             }
-        ])
-        .then(() => {
-            console.log('==>Vaccination Record has been created');
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+        ], 
+        regUserOp
+    )
+    .then(() => {
+        console.log('==>New Users has been registered');
+
+        db.Case_Information
+            .bulkCreate([
+                {
+                    case_ID: '984aa323-485f-4de5-9ae1-f72ae0ea2a58',
+                    case_code: 'CASE-0001',
+                    citizen_ID: '145dd9e0-23c5-4e56-b01b-4690f808f4f0',
+                    confirmed_date: '2021-01-01',
+                    admitted: true,
+                    is_pregnant: false,
+                    removal_type: null,
+                    removal_date: null,
+                    current_health_status: 'Asymptomatic',
+                    lab_report: {
+                        lab_report_ID: 'ad41b6c4-5be4-468f-b8ab-9e0c883df2f9',
+                        laboratory: 'Philippine General Hospital',
+                        requested_exam: 'Real-time Polymerase Chain Reaction',
+                        requested_datetime: '2021-03-23',
+                        collected_datetime: '2021-03-23',
+                        released_datetime: '2021-03-23',
+                        specimen_ID: 'ABC-12345-BSIT1',
+                        specimen_type: 'Nasopharyngeal and Oropharyngeal Swab',
+                        result: 'Positive for SARS-CoV-2',
+                        remarks: 'Correlation with clinical and radiologic findings is recommended',
+                        performed_by: 'Dr. Ruth A. Sullivan',
+                        verified_by: 'Dr. Sylvia G. Wilber',
+                        noted_by: 'Dr. Michael J. Davis'
+                    }
+                }, {
+                    case_ID: 'a6a2a803-43ab-4a77-a294-fb1f745cc9e7',
+                    case_code: 'CASE-0002',
+                    citizen_ID: '798da685-dd2c-4243-988a-1aac7af69d3b',
+                    confirmed_date: '2021-02-01',
+                    admitted: true,
+                    is_pregnant: false,
+                    removal_type: null,
+                    removal_date: null,
+                    current_health_status: 'Severe',
+                    lab_report: {
+                        lab_report_ID: '1542aa4b-40de-4021-828c-f80169843dd2',
+                        laboratory: 'Philippine General Hospital',
+                        requested_exam: 'Real-time Polymerase Chain Reaction',
+                        requested_datetime: '2021-03-23',
+                        collected_datetime: '2021-03-23',
+                        released_datetime: '2021-03-23',
+                        specimen_ID: 'ABC-12346-BSIT1',
+                        specimen_type: 'Nasopharyngeal and Oropharyngeal Swab',
+                        result: 'Positive for SARS-CoV-2',
+                        remarks: 'Correlation with clinical and radiologic findings is recommended',
+                        performed_by: 'Dr. Ruth A. Sullivan',
+                        verified_by: 'Dr. Sylvia G. Wilber',
+                        noted_by: 'Dr. Michael J. Davis'
+                    }
+                }
+            ], {
+                include: {
+                    model: db.Lab_Reports,
+                    as: 'lab_report'
+                }
+            })
+            .then(() => console.log('==>Case Information Record has been created'))
+            .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+
+    res.send(`
+===========================================
+Success! Database has been populated (2).
+-------------------------------------------
+Check your console for some errors.
+===========================================
+    `);
 }

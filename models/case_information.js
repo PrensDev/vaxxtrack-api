@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       // M:1 with [users]
       this.belongsTo(models.Users, {
         foreignKey: 'citizen_ID',
-        as: 'citizen',
+        as: 'patient',
         scope: {
           user_type: 'Citizen'
         },
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // 1:1 with [case_information]
       this.belongsTo(models.Lab_Reports, {
-        foreignKey: 'case_ID',
+        foreignKey: 'lab_report_ID',
         as: 'lab_report',
         onDelete: 'RESTRICT'
       })
@@ -56,10 +56,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validation: {
         notNull: {
-          msg: 'Case code cannot be null'
+          msg: '[case_code] is required'
         },
         notEmpty: {
-          msg: "Case code cannot be empty"
+          msg: "[case_code] cannot be empty"
         }
       },
       comment: 'This contains the case codes of each case information'
@@ -67,11 +67,8 @@ module.exports = (sequelize, DataTypes) => {
 
     citizen_ID: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       validate: {
-        notNull: {
-          msg: '[case_information].[citizen_ID] cannot be null'
-        },
         isUUID: 4,
       },
       comment: 'This links a citizen to indicate who owns a case record'
@@ -79,12 +76,9 @@ module.exports = (sequelize, DataTypes) => {
 
     lab_report_ID: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       unique: true,
       validate: {
-        notNull: {
-          msg: '[case_information].[lab_report_ID] cannot be null',
-        },
         isUUID: 4,
       },
       comment: 'This links to a lab report for each case'
@@ -95,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isDate: {
-          msg: '[case_information].[confirmed_date] must be a valid date'
+          msg: '[confirmed_date] must have a valid value'
         }
       },
       comment: 'This contains the date when a case is declared publicly as confirmed'

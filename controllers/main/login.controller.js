@@ -8,6 +8,7 @@
 // Import Required Modules/Packages
 const bcrypt    = require('bcrypt');
 const jwt       = require('jsonwebtoken');
+const { errResponse, emptyDataResponse } = require('../../helpers/controller.helper');
 const db        = require("../../models");
 
 
@@ -26,56 +27,49 @@ exports.login = (req, res) => {
     
     // Check if authDetails and password field is empty
     if (String(req.body.authDetails) === '' || String(req.body.password) === '') {
-        res.status(500).send({
+        return res.status(500).send({
             error   : true,
             message : "Fields cannot be empty",
         });
-    } else {
-        db.User_Accounts
-            .findOne({
-                where: { 
-                    details     : req.body.authDetails,
-                    verified    : 1,
-                },
-                include: {
-                    model   : db.Users,
-                    as      : 'user',
-                },              
-            })
-            .then((data) => {
-                if (data) {
-                    bcrypt.compare(req.body.password, data.user.password, (err, result) => {
-                        if (result) {
-                            res.send({
-                                error   : false,
-                                data    : data,
-                                token   : generateToken({ 
-                                    user_account_ID : data.user_account_ID,
-                                    user_ID         : data.user.user_ID, 
-                                    user_type       : data.user.user_type, 
-                                    account_details : data.details
-                                }),
-                                message : "A user has been successfully identified",
-                            });
-                        } else {
-                            res.send({
-                                error   : true,
-                                message : "Invalid details or password",
-                            });
-                        }
-                    })
+    } 
+    
+    db.User_Accounts
+        .findOne({
+            where: { 
+                details     : req.body.authDetails,
+                verified    : 1,
+            },
+            include: {
+                model   : db.Users,
+                as      : 'user',
+            },              
+        })
+        .then((data) => {
+
+            // If no data then send empty response
+            if (data == null) emptyDataResponse(res, 'That user does not exist');
+
+            // Else validate password
+            bcrypt.compare(req.body.password, data.user.password, (err, result) => {
+                if (result) {
+                    res.send({
+                        error   : false,
+                        data    : data,
+                        token   : generateToken({ 
+                            user_account_ID : data.user_account_ID,
+                            user_ID         : data.user.user_ID, 
+                            user_type       : data.user.user_type, 
+                            account_details : data.details
+                        }),
+                        message : "A user has been successfully identified",
+                    });
                 } else {
                     res.send({
                         error   : true,
-                        message : "User does not exists",
+                        message : "Invalid details or password",
                     });
                 }
             })
-            .catch((err) => {
-                res.status(500).send({
-                    error   : true,
-                    message : ['Opps! Error caught!', `${ err }`],
-                })
-            });
-    }
+        })
+        .catch((err) => errResponse(res, err));
 }
