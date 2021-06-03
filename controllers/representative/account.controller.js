@@ -34,3 +34,4 @@ exports.updatePassword = (req, res) =>  {
         .then(() => helper.emptyDataResponse(res, 'Password has been changed successfully'))
         .catch((err) => helper.errResponse(res, err));
 };
+

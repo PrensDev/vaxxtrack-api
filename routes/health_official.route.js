@@ -17,6 +17,8 @@ var infoController = require('../controllers/health_official/info.controller');
 // Account Controller
 var accountCtlr = require('../controllers/health_official/account.controller');
 // TODO: include the properties and paths here
+router.put('/update-password' ,  accountCtlr.updatePassword);
+
 
 
 // Export module

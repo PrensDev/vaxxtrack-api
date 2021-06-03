@@ -4,54 +4,33 @@
  * This controller is for managing account settings of citizens
  */
 
-const db = require("../../models");
-const Users = db.Users;
-const bcrypt = require("bcrypt");
+
+// Import models and bcrypt for this controller
+const db     = require("../../models");
+const helper = require("../../helpers/controller.helper");
+const bcrypt = require('bcrypt');
 
 
-exports.update = (req, res) => {
-    const id = req.params.id;
-    req.body.full_name = "";
+// Update Password
+exports.updatePassword = (req, res) =>  {
 
-    Users.update(req.body,
-        {
-            where: {user_ID: id},
+    // Check authorization first
+    helper.checkAuthorization(req, res, 'Citizen');
+
+    // Get password from req.body
+    const password = req.body.password;
+
+    // Check if password is null
+    if (password == null || password == '') return res.status(500).send({
+        error: true,
+        message: 'Password is required'
+    });
+        
+    // Update user password
+    db.Users
+        .update({ password: bcrypt.hashSync(password, 10) }, {
+            where: { user_ID: req.user.user_ID }
         })
-        .then((result) => 
-        {
-            if(result)
-            {
-                console.log(result);
-                //success
-                Users.findByPk(id).then((data) =>
-                {
-                    res.send(
-                        {
-                            error: false,
-                            data: data,
-                            message: [process.env.SUCCESS_UPDATE],
-                        })
-                })
-            }
-            else
-            {
-                // error in updating
-                res.status(500).send(
-                    {
-                        error: true,
-                        data: [],
-                        message: ["Error in updating a record."],
-                    });
-            }
-        })
-        .catch((err) =>
-        {
-            console.log(err);
-            res.status(500).send(
-                {
-                    error: true,
-                    data: [],
-                    message: err.errors.map((e) => e.message) || process.env.GENERAL_ERROR_MSG,
-                });
-        });
+        .then(() => helper.emptyDataResponse(res, 'Password has been changed successfully'))
+        .catch((err) => helper.errResponse(res, err));
 };

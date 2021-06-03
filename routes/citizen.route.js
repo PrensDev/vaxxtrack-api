@@ -32,7 +32,7 @@ router.put ('/update-info' , infoController.updateInfo);
 
 // Account Controller
 var accountCtlr = require('../controllers/citizen/account.controller');
-router.put('/update_password/:id'  ,  accountCtlr.update);
+router.put('/update-password' ,  accountCtlr.updatePassword);
 
 
 // Export module
