@@ -29,15 +29,8 @@ exports.updatePassword = (req, res) =>  {
     // Update user password
     db.Users
         .update({ password: bcrypt.hashSync(password, 10) }, {
-            where: {
-                user_ID: req.user.user_ID
-            }
+            where: { user_ID: req.user.user_ID }
         })
-        .then(() => {
-            res.send({
-                error: false,
-                message: 'Password has been successfully changed',
-            });
-        })
+        .then(() => helper.emptyDataResponse(res, 'Password has been changed successfully'))
         .catch((err) => helper.errResponse(res, err));
 };

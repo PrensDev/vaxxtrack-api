@@ -5,17 +5,17 @@ var router = require('express').Router();
 
 
 // Vaccination Controller
-var vaccCtlr = require('../controllers/health_officials/vaccination.controller');
+var vaccCtlr = require('../controllers/health_official/vaccination.controller');
 router.get('/vaccinated-citizens', vaccCtlr.getAllUsersAndVaccRecords);
 
 
 // User Information Controller
-var infoController = require('../controllers/health_officials/info.controller');
+var infoController = require('../controllers/health_official/info.controller');
 // TODO: include the properties and paths here
 
 
 // Account Controller
-var accountCtlr = require('../controllers/health_officials/account.controller');
+var accountCtlr = require('../controllers/health_official/account.controller');
 // TODO: include the properties and paths here
 
 

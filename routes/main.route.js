@@ -4,7 +4,7 @@ var router = require('express').Router();
 /* Main Controller */
 
 
-// Index Controller
+// Index Controller (for testing purpose yet)
 var indexController = require('../controllers/main/index.controller');
 router.get('/', indexController.render);
 

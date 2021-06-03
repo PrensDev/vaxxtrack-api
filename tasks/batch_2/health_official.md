@@ -10,9 +10,44 @@
 - PLEASE. INCLUDE ERROR HANDLINGS. 
 - DO NOT COMMIT CHANGES IF YOU HAVE EXISTING ERRORS. NAKAKA-ABALA PO SA IBANG MEMBERS NA GUMAGAWA DIN.
 
-### Add Vaccination Record to Citizen
+### Vaccination Record of Citizen
 
-1. 
+#### Add Vaccination Record of Citizen
+
+1. In `controllers/health_official/vaccination.controller.js`, create a property called `createVaccRecord` that will create new vaccination record of a citizen.
+
+2. In `routes/health_official.route.js`, use the variable `vaccCtrl` to call the property you've been created with appropriate HTTP method and path `/add-vaccination-record`
+
+3. DO NOT FORGET TO TEST IT. The INPUT should be this way:
+
+```
+{
+    "citizen_ID": '',
+    "vaccine_ID": '',
+    "vaccination_date": '',
+    "vaccinated_by": '',
+    "vaccinated_in": '',
+    "remarks": ''
+}
+```
+
+#### Update Vaccination Record of Citizen
+
+1. In `controllers/health_official/vaccination.controller.js`, create a property called `updateVaccRecord` that will create new vaccination record of a citizen.
+
+2. In `routes/health_official.route.js`, use the variable `vaccCtrl` to call the property you've been created with appropriate HTTP method and path `/update-vaccination-record/:vaccination_record_ID`. Note: Use the parameter to update a specific vaccination record
+
+3. DO NOT FORGET TO TEST IT. The INPUT should be this way:
+
+```
+{
+    "vaccine_ID": '',
+    "vaccination_date": '',
+    "vaccinated_by": '',
+    "vaccinated_in": '',
+    "remarks": ''
+}
+```
 
 ### User Information
 

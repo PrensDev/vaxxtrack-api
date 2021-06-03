@@ -4,52 +4,37 @@
  * This controller is for visiting log activity of citizen (Representative)
  */
 
-const db = require("../../models");
+
+// Import required packages
+const db     = require("../../models");
 const helper = require("../../helpers/controller.helper");
 
-// db.Visiting Logs options
+
+// db.Visiting_Logs Options
 const dbVisitingLogOp = (req) => {
     return {
         where: {
             establishment_ID: req.params.establishment_ID,
         },
-        include: [{
-            model: db.Users,
-            as: 'visiting_log_by',
-            attributes: {
-                exclude: [
-                    'user_ID',
-                    'sex',
-                    'birth_date',
-                    'civil_status',
-                    'address_ID',
-                    'added_by',
-                    'user_type',
-                    'password',
-                    'created_datetime',
-                    'updated_datetime'
+        include: [
+            {
+                model: db.Users,
+                as: 'visiting_log_by',
+                attributes: [
+                    'first_name',
+                    'middle_name',
+                    'last_name',
+                    'suffix_name'
                 ]
+            }, {
+                model: db.Health_Status_Logs,
+                as: "health_status_log",
             }
-        }, {
-            model: db.Health_Status_Logs,
-            as: "health_status_log",
-            attributes: {
-                exclude: [
-                    'user_ID',
-                    'sex',
-                    'birth_date',
-                    'civil_status',
-                    'address_ID',
-                    'added_by',
-                    'user_type',
-                    'password',
-                    'created_datetime',
-                    'updated_datetime'
-                ]
-            }
-        }],
+        ],
+        order: [['created_datetime','DESC']]
     }
 }
+
 
 // Create New Visiting Log
 exports.createVisitingLog = (req, res) => {
@@ -59,16 +44,23 @@ exports.createVisitingLog = (req, res) => {
 
     // Create Visiting Log record
     db.Visiting_Logs
-            .create(req.body)
-            .then((data) => {
-                db.Visiting_Logs
-                    .findByPk(data.visiting_log_ID, {
-                        include : [{
+        .create(req.body)
+        .then((result) => {
+            db.Visiting_Logs
+                .findByPk(result.visiting_log_ID, {
+                    include : [
+                        {
                             model: db.Establishments,
                             as : "visiting_log_for"
                         }, {
                             model: db.Users,
                             as : "visiting_log_by",
+                            attributes: [
+                                'first_name',
+                                'middle_name',
+                                'last_name',
+                                'suffix_name'
+                            ], 
                             include : [{
                                 model : db.Addresses,
                                 as : "address"
@@ -76,22 +68,16 @@ exports.createVisitingLog = (req, res) => {
                         }, {
                             model : db.Health_Status_Logs,
                             as : "health_status_log"
-                        }]
+                        }],
                 })
-                .then((result) => {
-                    res.send({
-                        err     : false,
-                        data    : result,
-                        msg     : 'A new visiting log has been created.'
-                    })
-                })
+                .then((data) => helper.dataResponse(res, data, 'A new visiting log has been created','Error occured in creating a visiting log'))
                 .catch((err) => helper.errResponse(res, err));
         })
-        .catch((err) => helper.errResponse(res, err));
-                
-        
-}    
-// Find All Visiting Logs
+        .catch((err) => helper.errResponse(res, err));      
+} 
+
+
+// Get All Visiting Logs
 exports.getAllVisitingLogs = (req, res) => {
 
     // Check authorization 
@@ -102,8 +88,8 @@ exports.getAllVisitingLogs = (req, res) => {
         .findAll(dbVisitingLogOp(req))
         .then((data) => helper.dataResponse(res, data, 'Visiting Log Records retrieved successfully', 'No Visiting Log Record has been identified'))
         .catch((err) => helper.errResponse(res, err));
-
 }
+
 
 // Get One Visiting Log
 exports.getOneVisitingLog = (req, res) => {
@@ -116,5 +102,4 @@ exports.getOneVisitingLog = (req, res) => {
         .findByPk(req.params.visiting_log_ID, dbVisitingLogOp(req))
         .then((data) => helper.dataResponse(res, data, 'A Visiting Log has been identified', 'No Visiting Log has been identified'))
         .catch((err) => helper.errResponse(res, err));
-
 }

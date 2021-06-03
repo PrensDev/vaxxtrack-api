@@ -4,7 +4,7 @@ var router = require('express').Router();
 /* Representative Controller */
 
 
-// Index Controller
+// Index Controller (for testing purpose yet)
 var indexCtlr = require('../controllers/representative/index.controller');
 router.get('/', indexCtlr.render);
 
@@ -32,7 +32,6 @@ router.put('/update-info' , infoController.updateInfo);
 // Account Controller
 var accountCtlr = require('../controllers/representative/account.controller');
 router.put('/update-password' ,  accountCtlr.updatePassword);
-
 
 
 // Export module

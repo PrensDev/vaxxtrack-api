@@ -26,7 +26,8 @@ const dbEstablishmentsOp = (req) => {
             where: {
                 user_ID: req.user.user_ID
             }
-        }]
+        }],
+        order: [['name', 'ASC']]
     }
 }
 

@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
 
     // Model attributes
 
-    vaccination_record__ID: {
+    vaccination_record_ID: {
       type: DataTypes.UUID,
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,

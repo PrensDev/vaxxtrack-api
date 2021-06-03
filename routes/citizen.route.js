@@ -4,7 +4,7 @@ var router = require('express').Router();
 /* Citizen Controller */
 
 
-// Index Controller
+// Index Controller (for testing purpose yet)
 var indexCtlr = require('../controllers/citizen/index.controller');
 router.get('/', indexCtlr.render);
 
@@ -28,7 +28,6 @@ router.post("/add-visiting-log"               , visitingLogCtlr.createVisitingLo
 var infoController = require('../controllers/citizen/info.controller');
 router.get ('/info'        , infoController.getInfo);
 router.put ('/update-info' , infoController.updateInfo);
-
 
 
 // Account Controller
