@@ -7,6 +7,7 @@
 
 // Import models
 const db = require("../../models");
+const helper = require('../../helpers/helper.controller');
 
 
 // Register a representative including its establishment
@@ -47,21 +48,9 @@ exports.representative = (req, res) => {
                         msg     : 'A new Representative has been registered!'
                     })
                 })
-                .catch((err) => {
-                    res.status(500).send({
-                        error   : true,
-                        data    : [],
-                        message : ['Opps! Error caught!', `${ err }`],
-                    });
-                });
+                .catch((err) => helper.errResponse(res, err));
         })
-        .catch((err) => {
-            res.status(500).send({
-                error   : true,
-                data    : [],
-                message : ['Opps! Error caught!', `${ err }`],
-            });
-        });
+        .catch((err) => helper.errResponse(res, err));
 }
 
 // Register a citizen
@@ -94,21 +83,9 @@ exports.citizen = (req, res) => {
                         msg     : 'A new Citizen has been registered!'
                     })
                 })
-                .catch((err) => {
-                    res.status(500).send({
-                        error   : true,
-                        data    : [],
-                        message : ['Opps! Error caught!', `${ err }`],
-                    });
-                });
+                .catch((err) => helper.errResponse(res, err));
         })
-        .catch((err) => {
-            res.status(500).send({
-                error   : true,
-                data    : [],
-                message : ['Opps! Error caught!', `${ err }`],
-            });
-        });
+        .catch((err) => helper.errResponse(res, err));
 }
 
 
@@ -136,21 +113,9 @@ exports.super_admin = (req, res) => {
                         msg     : 'A new Super Admin has been registered!'
                     })
                 })
-                .catch((err) => {
-                    res.status(500).send({
-                        error   : true,
-                        data    : [],
-                        message : ['Opps! Error caught!', `${ err }`],
-                    });
-                });
+                .catch((err) => helper.errResponse(res, err));
         })
-        .catch((err) => {
-            res.status(500).send({
-                error   : true,
-                data    : [],
-                message : ['Opps! Error caught!', `${ err }`],
-            });
-        });
+        .catch((err) => helper.errResponse(res, err));
 }
 
 
@@ -178,19 +143,7 @@ exports.health_official = (req, res) => {
                         msg     : 'A new Health Official has been registered!'
                     })
                 })
-                .catch((err) => {
-                    res.status(500).send({
-                        error   : true,
-                        data    : [],
-                        message : ['Opps! Error caught!', `${ err }`],
-                    });
-                });
+                .catch((err) => helper.errResponse(res, err));
         })
-        .catch((err) => {
-            res.status(500).send({
-                error   : true,
-                data    : [],
-                message : ['Opps! Eror caught!', `${ err }`],
-            });
-        });
+        .catch((err) => helper.errResponse(res, err));
 }
