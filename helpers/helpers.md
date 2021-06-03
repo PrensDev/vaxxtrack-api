@@ -10,7 +10,9 @@ Helpers are used because of 3 reasons:
 
 This are helpers made for controllers. To use it, just import this in your controllers
 
-`const helper = require('../../helpers/helper.controller')`
+```
+const helper = require('../../helpers/controller.helper')
+```
 
 ### Methods
 
@@ -21,7 +23,7 @@ This method is used to check the authorization of user. It return authorized res
 The old way:
 
 ```
-// Check if user is not logged in or looged in but not citizen
+// Check if user is not logged in or logged in but not citizen
 if(req.user == null || req.user.user_type !== 'Citizen') {
 
     // Send unauthorized response
@@ -113,7 +115,7 @@ db.Users
     .then((data) => helper.dataResponse(res, data, 'Users retrieved successfully', 'No users has been identified'))
 ```
 
-#### .errResponse(res, errMessage)
+#### `.errResponse(res, errMessage)`
 
 There will be instance that you have to check only if there is no data then return an error response. 
 
