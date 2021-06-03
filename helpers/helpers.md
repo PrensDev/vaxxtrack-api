@@ -115,7 +115,7 @@ db.Users
     .then((data) => helper.dataResponse(res, data, 'Users retrieved successfully', 'No users has been identified'))
 ```
 
-#### `.errResponse(res, errMessage)`
+#### `.emptyDataResponse(res, errMessage)`
 
 There will be instance that you have to check only if there is no data then return an error response. 
 
@@ -146,7 +146,7 @@ db.Establishments
     .then((result) => {
 
         // Check if no result then return error response
-        if(result == null) helper.errResponse(res, 'No establishment has been identified');
+        if(result == null) helper.emptyDataResponse(res, 'No establishment has been identified');
 
         // Update method
     })
