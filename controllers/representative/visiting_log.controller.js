@@ -4,14 +4,61 @@
  * This controller is for visiting log activity of citizen (Representative)
  */
 
- const db = require("../../models");
+const db = require("../../models");
+const helper = require("../../helpers/controller.helper");
+
+// db.Visiting Logs options
+const dbVisitingLogOp = (req) => {
+    return {
+        where: {
+            establishment_ID: req.params.establishment_ID,
+        },
+        include: [{
+            model: db.Users,
+            as: 'visiting_log_by',
+            attributes: {
+                exclude: [
+                    'user_ID',
+                    'sex',
+                    'birth_date',
+                    'civil_status',
+                    'address_ID',
+                    'added_by',
+                    'user_type',
+                    'password',
+                    'created_datetime',
+                    'updated_datetime'
+                ]
+            }
+        }, {
+            model: db.Health_Status_Logs,
+            as: "health_status_log",
+            attributes: {
+                exclude: [
+                    'user_ID',
+                    'sex',
+                    'birth_date',
+                    'civil_status',
+                    'address_ID',
+                    'added_by',
+                    'user_type',
+                    'password',
+                    'created_datetime',
+                    'updated_datetime'
+                ]
+            }
+        }],
+    }
+}
 
 // Create New Visiting Log
 exports.createVisitingLog = (req, res) => {
-    if (req.user.user_type !== 'Representative') {
-        res.sendStatus(403);
-    } else {
-        db.Visiting_Logs
+
+    // Check authorization 
+    helper.checkAuthorization(req, res, 'Representative');
+
+    // Create Visiting Log record
+    db.Visiting_Logs
             .create(req.body)
             .then((data) => {
                 db.Visiting_Logs
@@ -30,147 +77,44 @@ exports.createVisitingLog = (req, res) => {
                             model : db.Health_Status_Logs,
                             as : "health_status_log"
                         }]
-                    })
-                    .then((result) => {
+                })
+                .then((result) => {
                     res.send({
-                            err     : false,
-                            data    : result,
-                            msg     : 'New Visiting Log created.'
-                        })
+                        err     : false,
+                        data    : result,
+                        msg     : 'A new visiting log has been created.'
                     })
-                    .catch((err) => {
-                        res.status(500).send({
-                            error   : true,
-                            data    : [],
-                            message : ['Opps! Error caught!', `${ err }`],
-                        });
-                    });
-            })
-            .catch((err) => {
-                res.status(500).send({
-                    error: true,
-                    message: `${ err }`
-                });
-            });
-    }
-
-};
-
+                })
+                .catch((err) => helper.errResponse(res, err));
+        })
+        .catch((err) => helper.errResponse(res, err));
+                
+        
+}    
 // Find All Visiting Logs
-exports.getAllVisitingLogs = (req, res, next) => {
-    if (req.user.user_type !== 'Representative') {
-        res.sendStatus(403);
-    } else {
-        db.Visiting_Logs
-            .findAll(
-                {
-                    where: {
-                        establishment_ID: req.params.establishment_ID,
-                    },
-                    include: [{
-                        model: db.Users,
-                        as: 'visiting_log_by',
-                        attributes: {
-                            exclude: [
-                                'user_ID',
-                                'sex',
-                                'birth_date',
-                                'civil_status',
-                                'address_ID',
-                                'added_by',
-                                'user_type',
-                                'password',
-                                'created_datetime',
-                                'updated_datetime'
-                            ]
-                        }
-                    }, {
-                        model: db.Health_Status_Logs,
-                        as: "health_status_log",
-                        attributes: {
-                            exclude: [
-                                'user_ID',
-                                'sex',
-                                'birth_date',
-                                'civil_status',
-                                'address_ID',
-                                'added_by',
-                                'user_type',
-                                'password',
-                                'created_datetime',
-                                'updated_datetime'
-                            ]
-                        }
-                    }],
-                }
-            )
-            .then((data) => {
-                res.send({
-                    error   : false,
-                    data    : data,
-                    message : ['[Visiting Logs] record retrieves successfully'],
-                });
-            })
-            .catch((err) => {
-                res.status(500).send({
-                    error   : true,
-                    message : ['Oops! Error caught!', `${ err }`],
-                });
-            });
-    }
-};
+exports.getAllVisitingLogs = (req, res) => {
+
+    // Check authorization 
+    helper.checkAuthorization(req, res, 'Representative');
+
+    // Find all visiting logs in an establishment establishments
+    db.Visiting_Logs
+        .findAll(dbVisitingLogOp(req))
+        .then((data) => helper.dataResponse(res, data, 'Visiting Log Records retrieved successfully', 'No Visiting Log Record has been identified'))
+        .catch((err) => helper.errResponse(res, err));
+
+}
 
 // Get One Visiting Log
-exports.getOneVisitingLog = (req, res, next) => {
-    if(req.user.user_type !== 'Representative') {
-        res.sendStatus(403);
-    } else {
-        db.Visiting_Logs
-            .findOne({
-                where: {
-                    establishment_ID: req.params.establishment_ID,
-                    visiting_log_ID: req.params.visiting_log_ID,
-                },
-                include: [
-                    {
-                        model: db.Users,
-                        as: 'visiting_log_by',
-                        attributes: {
-                            exclude: [
-                                'user_ID',
-                                'sex',
-                                'birth_date',
-                                'civil_status',
-                                'address_ID',
-                                'added_by',
-                                'user_type',
-                                'password',
-                                'created_datetime',
-                                'updated_datetime'
-                            ]
-                        }
-                    },
-                ],
-            })
-            .then((data) => {
-                if(data) {
-                    res.send({
-                        error   : false,
-                        data    : data,
-                        message : ['An Visiting Logs is identified'],
-                    });
-                } else {
-                    res.status(404).send({
-                        error   : true,
-                        message : 'Visiting Logs not found',
-                    });
-                }
-            })
-            .catch((err) => {
-                res.status(500).send({
-                    error   : true,
-                    message : ['Oops! Error caught!', `${ err }`],
-                });
-            })
-    }
-};
+exports.getOneVisitingLog = (req, res) => {
+
+    // Check authorization 
+    helper.checkAuthorization(req, res, 'Representative');
+
+    // Find one visiting log in an establishment establishments
+    db.Visiting_Logs
+        .findByPk(req.params.visiting_log_ID, dbVisitingLogOp(req))
+        .then((data) => helper.dataResponse(res, data, 'A Visiting Log has been identified', 'No Visiting Log has been identified'))
+        .catch((err) => helper.errResponse(res, err));
+
+}
