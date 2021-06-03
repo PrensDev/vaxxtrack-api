@@ -50,12 +50,16 @@ const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(" ")[1];
 
-    // Check if token is null then unauthorized
+    // If token is null then send unauthorized response
     if (token == null) return res.sendStatus(401);
     
     // Verify the token, if not verified then forbidden
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+
+        // If token is not verified then send forbidden response
         if (err) return res.sendStatus(403);
+
+        // Save token data to req.user
         req.user = user;
         next();
     });
@@ -92,6 +96,8 @@ app.use('/admin'          , authenticateToken , require('./routes/super_admin.ro
 const connSuccessMsg = `
 =========================================================================
 SUCCESSFULLY CONNECTED TO THE DATABASE!
+-------------------------------------------------------------------------
+Execution is in process... Please wait...
 =========================================================================
 `
 
@@ -100,7 +106,8 @@ const connFailedMsg = (err) => { return `
 FAILED TO CONNECT TO THE DATABASE!
 -------------------------------------------------------------------------
 ${ err }
--------------------------------------------------------------------------
+=========================================================================
+
 Have you already done the following?
 - Open XAMPP and start Apache and MySql
 - Create database
@@ -108,25 +115,14 @@ Have you already done the following?
 
 If yes and still cannot connect to the database, 
 please message your lead developer immediately.
-=========================================================================
 `
 }
-
-// Test if connected to the database
-db.sequelize
-    .authenticate()
-    .then(() => {
-        if(process.env.ENABLE_DB_CONN_LOGS === 'true' || false) {
-            console.log(connSuccessMsg)
-        }
-    })
-    .catch((err) => console.log(connFailedMsg(err)));
-
 
 // Sequelize Sync Messages 
 const syncSuccessMsg = `
 =========================================================================
 Execution is successful!
+-------------------------------------------------------------------------
 Listening on http://localhost:${ port }
 =========================================================================
 `
@@ -141,12 +137,20 @@ const syncFailedMsgFooter = `
 =========================================================================
 `
 
-// Save changes to the database
+// Test if connected to the database
 db.sequelize
-    .sync({
-        force: process.env.SEQUELIZE_FORCE_SYNC === 'true' || false,
-        alter: process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
-        sync:  process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
+    .authenticate()
+    .then(() => {
+        if(process.env.ENABLE_DB_CONN_LOGS === 'true' || false) console.log(connSuccessMsg)
+
+        // Save changes to the database
+        db.sequelize
+            .sync({
+                force: process.env.SEQUELIZE_FORCE_SYNC === 'true' || false,
+                alter: process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
+                sync:  process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
+            })
+            .then(() => app.listen(port, () => console.log(syncSuccessMsg)))
+            .catch((err) => console.log(syncFailedMsgHeader + err + syncFailedMsgFooter));
     })
-    .then(() => app.listen(port, () => console.log(syncSuccessMsg)))
-    .catch((err) => console.log(syncFailedMsgHeader + `Your error:\n` + err + syncFailedMsgFooter));
+    .catch((err) => console.log(connFailedMsg(err)));

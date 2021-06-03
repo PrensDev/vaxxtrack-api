@@ -6,54 +6,38 @@
 
 
 // Import models and bcrypt for this controller
-const Users  = require("../../models").Users;
+const db     = require("../../models");
+const helper = require("../../helpers/controller.helper");
 const bcrypt = require('bcrypt');
 
 
 // Update Password
 exports.updatePassword = (req, res) =>  {
 
-    // Check if user is not logged in or not representative
-    if (req.user == null || req.user.user_type !== 'Representative') {
+    // Check authorization first
+    helper.checkAuthorization(req, res, 'Representative');
+
+    // Get password from req.body
+    const password = req.body.password;
+
+    // Check if password is null
+    if (password == null || password == '') return res.status(500).send({
+        error: true,
+        message: 'Password is required'
+    });
         
-        // Send Forbidden response
-        res.sendStatus(403);
-
-    } else {
-
-        // Get password from req.body
-        var password = req.body.password;
-
-        // Check if password is null
-        if (password == null || password == '') {
-            res.status(500).send({
+    // Update user password
+    db.Users
+        .update({ password: bcrypt.hashSync(password, 10) }, {
+            where: {
+                user_ID: req.user.user_ID
+            }
+        })
+        .then(() => {
+            res.send({
                 error: false,
-                message: 'Password is required'
+                message: 'Password has been successfully changed',
             });
-        } else { 
-            
-            // Encrypt password before update
-            password = bcrypt.hashSync(password, 10);
-
-            // Update user password
-            Users
-                .update({ password: password }, {
-                    where: {
-                        user_ID: req.user.user_ID
-                    }
-                })
-                .then(() => {
-                    res.send({
-                        error: false,
-                        message: 'Password has been successfully changed',
-                    });
-                })
-                .catch((err) => {
-                    res.status(500).send({
-                        error: true,
-                        message: ['Oops! Error occured.',`${err}`],
-                    });
-                });
-        }
-    }
+        })
+        .catch((err) => helper.errResponse(res, err));
 };
