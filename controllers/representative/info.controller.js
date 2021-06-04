@@ -7,88 +7,52 @@
 
 // Import models
 const db = require("../../models");
+const helper = require("../../helpers/controller.helper");
 
 
 // Return the information of the representative
 exports.getInfo = (req, res, next) => {
 
     // Check if user logged in or logged in but not Representative
-    if(req.user == null || req.user.user_type !== 'Representative') {
-        res.sendStatus(403);
-    } else {
+    helper.checkAuthorization(req, res, 'Representative');
+
         db.Users
             .findByPk(req.user.user_ID)
-            .then((data) => {
-                if(data) {
-                    res.send({
-                        error: false,
-                        data: data,
-                        message: 'Representative record retrieves successfully'
-                    });
-                } else {
-                    res.send({
-                        error: true,
-                        message: 'There is no representative record retrieved'
-                    });
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
+            .then((data) => helper.dataResponse(res, data, 'A Record has been identified', 'No Record has been identified'))
+            .catch((err) => helper.errResponse(res, err));
 }
-
 
 // Update Representative Information
 exports.updateInfo = (req, res, next) => {
 
     // Check if user logged in or logged in but not Representative
-    if(req.user == null || req.user.user_type !== 'Representative') {
-        res.sendStatus(403);
-    } else {
+    helper.checkAuthorization(req, res, 'Representative');
 
         // Check if user ID is existed in database
         db.Users
             .findByPk(req.user.user_ID)
             .then((result) => {
-                if (result) {
 
-                    // Update a representative info
+                // If no result return empty response
+                if(result == null) helper.emptyDataResponse(res, 'No Record has been identified');
+
+                // Update a representative info
+                db.Users
+                .update(req.body, {
+                    where: {
+                        user_ID: req.user.user_ID
+                    }
+                })
+                .then(() => {
+
+                    // Get representative info
                     db.Users
-                        .update(req.body, {
-                            where: {
-                                user_ID: req.user.user_ID
-                            }
-                        })
-                        .then(() => {
-
-                            // Get representative info
-                            db.Users
-                                .findByPk(req.user.user_ID)
-                                .then((data) => {
-                                    res.send({
-                                        error: false,
-                                        data: data,
-                                        message: 'A record has been successfully updated'
-                                    })
-                                })
-                                .catch((err) => {
-                                    console.log(err);
-                                })
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        })
-                    
-                } else {
-                    res.send({
-                        error: true,
-                        message: 'No representative records has been identified'
-                    })
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }
+                        .findByPk(req.user.user_ID)
+                        .then((data) => helper.dataResponse(res, data, 'A Record has been successfully updated', 'No changes in the record'))
+                        .catch((err) => helper.errResponse(res, err));
+                })
+                .catch((err) => helper.errResponse(res, err));
+        })
+        .catch((err) => helper.errResponse(res, err));
 }
+
