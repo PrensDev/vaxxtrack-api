@@ -13,16 +13,16 @@ module.exports = (sequelize, DataTypes) => {
 
       // 1:1 with [users]
       this.hasOne(models.Users, {
-        foreignKey: 'address_ID',
-        as: 'citizen',
-        onDelete: 'RESTRICT',
+        foreignKey : 'address_ID',
+        as         : 'citizen',
+        onDelete   : 'RESTRICT',
       });
 
       // 1:1 with [establishments]
       this.hasOne(models.Establishments, {
-        foreignKey: 'address_ID',
-        as: 'establishment',
-        onDelete: 'RESTRICT',
+        foreignKey : 'address_ID',
+        as         : 'establishment',
+        onDelete   : 'RESTRICT',
       });
     }
   };

@@ -13,9 +13,9 @@ module.exports = (sequelize, DataTypes) => {
 
       // 1:1 with [contacts]
       this.belongsTo(models.Contacts, {
-        foreignKey: 'contact_ID',
-        as: 'contact',
-        onDelete: 'RESTRICT'
+        foreignKey : 'contact_ID',
+        as         : 'quarantined_individual',
+        onDelete   : 'RESTRICT'
       })
     }
   };
@@ -37,9 +37,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validations: {
         notNull: {
-          msg: 'This conact ID cannot be null'
+          msg: '[quarantine_information].[contact_ID] cannot be null'
         },
-        isUUID: 4,
+        isUUID: {
+          args: 4,
+          msg: '[quarantine_information].[contact_ID] value must be a UUIDV4 type'
+        },
       },
       comment: 'This links contacts to attach the contact information of the patient'
     },
@@ -49,10 +52,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validations: {
         isDate: {
-          msg: 'Start date must have a valid value'
+          msg: '[quarantine_information].[start_date] value must be a valid date'
         },
         notNull: {
-          msg: 'Start date cannot be null'
+          msg: '[quarantine_information].[start_date] cannot be null'
         }
       },
       comment: 'This contains the date and time of the start of the quarantine'
@@ -63,10 +66,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validations: {
         isDate: {
-          msg: 'End date must have a valid value'
+          msg: '[quarantine_information].[end_date] value must be a valid date'
         },
         notNull: {
-          msg: 'End date cannot be null'
+          msg: '[quarantine_information].[end_date] cannot be null'
         }
       },
       comment: 'This contains the date and time of the start of the quarantine'
@@ -77,19 +80,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validation: {
         isIn: {
-          args: [
-            [
-              'In-patients',
-              'out-patient',
-            ]
-          ],
-          msg: 'Invalid input is detected for the result'
+          args: [['In-patient','Out-patient']],
+          msg: '[quarantine_information].[quarantine_type] value must be `In-patient` or `Out-patient` only'
         },
         notNull: {
-          msg: 'Quarantine type cannot be null'
+          msg: '[quarantine_information].[quarantine_type] cannot be null'
         }
       },
-      comment: 'this indicates the patients quaratine status'
+      comment: 'This indicates the patients quaratine status'
     },
 
   }, {

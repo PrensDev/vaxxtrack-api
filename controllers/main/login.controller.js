@@ -8,8 +8,8 @@
 // Import Required Modules/Packages
 const bcrypt    = require('bcrypt');
 const jwt       = require('jsonwebtoken');
-const { errResponse, emptyDataResponse } = require('../../helpers/controller.helper');
 const db        = require("../../models");
+const { errResponse, emptyDataResponse } = require('../../helpers/controller.helper');
 
 
 // Dotenv Configuration
@@ -56,10 +56,8 @@ exports.login = (req, res) => {
                         error   : false,
                         data    : data,
                         token   : generateToken({ 
-                            user_account_ID : data.user_account_ID,
-                            user_ID         : data.user.user_ID, 
-                            user_type       : data.user.user_type, 
-                            account_details : data.details
+                            user_ID   : data.user.user_ID, 
+                            user_type : data.user.user_type, 
                         }),
                         message : "A user has been successfully identified",
                     });

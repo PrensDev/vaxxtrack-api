@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       // M:1 with [vaccines]
       this.belongsTo(models.Vaccines, {
         foreignKey: 'vaccine_ID',
-        as: 'vaccines',
+        as: 'vaccine_used',
         onDelete: 'RESTRICT'
       });
 

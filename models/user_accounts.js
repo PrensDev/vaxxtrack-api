@@ -96,14 +96,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       unique: {
-        msg: 'Account details cannot be null'
+        msg: '[user_accounts].[details] must be unique'
       },
       validate: {
         notNull: {
-          msg: 'Account details is required'
+          msg: '[user_accounts].[details] is required'
         },
         notEmpty: {
-          msg: 'Account details cannot be blank'
+          msg: '[user_accounts].[details] cannot be blank or empty'
         }
       },
       comment: 'This contains the user account details of the users'
@@ -114,14 +114,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validations: {
         notNull: {
-          msg: 'User must provide a Contact',
+          msg: '[user_accounts].[type] is required',
         },
         isIn: {
           args: [[
               'Email',
               'Contact Number',
             ]],
-          msg: 'Please provide valid Email or Contact Number'
+          msg: '[user_accounts].[type] values must be `Email` or `Contact Number` only'
         },
       },
       comment: 'This contains the two different type of contact information a user can give (Email or Contact Number) ',
@@ -129,7 +129,7 @@ module.exports = (sequelize, DataTypes) => {
 
     verified: {
       type: DataTypes.BOOLEAN,
-      allowNull: true,
+      allowNull: false,
       defaultValue: 0,
       comment: 'This indicates if the account of a user is verified or not'
     },

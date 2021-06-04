@@ -11,11 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
 
+      // 1:M with [vaccination_records]
+      this.hasMany(models.Vaccination_Records, {
+        foreignKey : 'vaccine_ID',
+        as         : 'vaccination_records',
+        onDelete   : 'RESTRICT'
+      });
+
       // 1:M with [vaccination_appointments]
       this.hasMany(models.Vaccination_Appointments, {
-        foreignKey: 'preferred_vaccine',
-        as: 'vaccination_appointment',
-        onDelete: 'RESTRICT'
+        foreignKey : 'preferred_vaccine',
+        as         : 'vaccination_appointments',
+        onDelete   : 'RESTRICT'
       });
     }
   };
@@ -35,36 +42,84 @@ module.exports = (sequelize, DataTypes) => {
     product_name: {
       type: DataTypes.STRING,
       allowNull: false,
-      comment: 'In this column tells the product name of the vaccine'
+      validate: {
+        notNull: {
+          msg: '[vaccines].[product_name] cannot be null'
+        },
+        notEmpty: {
+          msg: '[vaccines].[product_name] cannot be blank or empty'
+        }
+      },
+      comment: 'This column indicates the product name of the vaccine'
     },
 
     vaccine_name: {
       type: DataTypes.STRING,
       allowNull: false,
-      comment: 'In this column tells the vaccine name of the vaccine'
+      validate: {
+        notNull: {
+          msg: '[vaccines].[vaccine_name] cannot be null'
+        },
+        notEmpty: {
+          msg: '[vaccines].[vaccine_name] cannot be blank or empty'
+        },
+      },
+      comment: 'This column indicates the general name of the vaccine'
     },
 
     type: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: '[vaccines].[type] cannot be null'
+        },
+        notEmpty: {
+          msg: '[vaccines].[type] cannot be blank or empty'
+        },
+      },
       comment: 'This column indicates the type of vaccine'
     },
 
     manufacturer: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: '[vaccines].[manufacturer] cannot be null'
+        },
+        notEmpty: {
+          msg: '[vaccines].[manufacturer] cannot be blank or empty'
+        },
+      },
       comment: 'In this column tells the name of the manufacturer'
     },
 
     shots_details: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: '[vaccines].[shots_details] cannot be null'
+        },
+        notEmpty: {
+          msg: '[vaccines].[shots_details] cannot be blank or empty'
+        },
+      },
       comment: 'This column indicates the number of shots required'
     },
 
     description: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: '[vaccines].[description] cannot be null'
+        },
+        notEmpty: {
+          msg: '[vaccines].[description] cannot be blank or empty'
+        },
+      },
       comment: 'In this column tells the description of the vaccine'
     },
 

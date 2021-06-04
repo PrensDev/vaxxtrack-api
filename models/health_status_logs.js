@@ -46,9 +46,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false,
       validations: {
+        isUUID: {
+          args: 4,
+          msg: '[health_status_logs].[citizen_ID] value must be a UUIDV4 type'
+        },
         notNull: {
-          msg: 'This column cannot be null'
-        }
+          msg: '[health_status_logs].[citizen_ID] cannot be null'
+        },
       },
       comment: 'This column contains the id of the citizen'
     },
@@ -58,7 +62,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Temperature cannot be null'
+          msg: '[health_status_logs].[temperature] cannot be null'
+        },
+        isNumeric: {
+          msg: '[health_status_logs].[temperature] only accepts numeric values'
         }
       },
       comment: 'This contains the current temperature of the citizen as enter on an establishment'
@@ -69,7 +76,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Fever cannot be null'
+          msg: '[health_status_logs].[fever] cannot be null'
         }
       },
       comment: 'This indicates that if the user does have a fever'
@@ -80,7 +87,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Dry cough cannot be null'
+          msg: '[health_status_logs].[dry_cough] cannot be null'
         }
       },
       comment: 'This indicates that if the user does have a dry cough'
@@ -91,7 +98,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Sore throat cannot be null'
+          msg: '[health_status_logs].[sore_throat] cannot be null'
         }
       },
       comment: 'This indicates that if the user does have a sore throat'
@@ -102,7 +109,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Breath shortness cannot be null'
+          msg: '[health_status_logs].[breath_shortness] cannot be null'
         }
       },
       comment: 'This indicates that if the user does have a shortness in breath'
@@ -113,7 +120,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Loss of smell and taste cannot be null'
+          msg: '[health_status_logs].[smell_taste_loss] cannot be null'
         }
       },
       comment: 'This indicates that if the user does have a loss of smell and taste'
@@ -124,7 +131,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Fatigue cannot be null'
+          msg: '[health_status_logs].[fatigue] cannot be null'
         }
       },
       comment: 'This indicates that if the user does have a fatigue'
@@ -135,7 +142,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Aches and Pain cannot be null'
+          msg: '[health_status_logs].[aches_pain] cannot be null'
         }
       },
       comment: 'This indicates that if the user does have an aches and pain'
@@ -146,7 +153,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Runny Nose cannot be null'
+          msg: '[health_status_logs].[runny_nose] cannot be null'
         }
       },
       comment: 'This indicates that if the user does have a runny nose'
@@ -157,7 +164,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Diarrhea cannot be null'
+          msg: '[health_status_logs].[diarrhea] cannot be null'
         }
       },
       comment: 'This indicates that if the user doess have a diarrhea'
@@ -168,7 +175,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Headache cannot be null'
+          msg: '[health_status_logs].[headache] cannot be null'
         }
       },
       comment: 'This indicates that if the user does have a headache'

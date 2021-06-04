@@ -44,35 +44,38 @@ module.exports = (sequelize, DataTypes) => {
     // Model attributes
 
     establishment_ID: {
-      type          : DataTypes.UUID,
-      allowNull     : false,
-      primaryKey    : true,
-      defaultValue  : Sequelize.UUIDV4,
-      validations   : {
+      type: DataTypes.UUID,
+      allowNull: false,
+      primaryKey: true,
+      defaultValue: Sequelize.UUIDV4,
+      validations: {
         notNull: {
-          msg: 'This establishment ID cannot be null'
+          msg: '[establishments].[establishment_ID] cannot be null'
         }
       },
-      comment       : 'This contains the unique identifiers for each record on this table'
+      comment: 'This contains the unique identifiers for each record on this table'
     },
 
     name: {
-      type          : DataTypes.STRING,
-      allowNull     : false,
-      validate      : {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
         notNull: {
-          msg: 'Name of establishment cannot be null',
+          msg: '[establishments].[name] cannot be null',
         },
+        notEmpty: {
+          msg: '[establishments].[name] cannot be blank or empty',
+        }
       },
-      comment        : 'This contains the name of the representative'
+      comment: 'This contains the name of the representative'
     },
 
     type: {
-      type          : DataTypes.STRING,
-      allowNull     : false,
-      validate      : {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
         notNull: {
-          msg: 'type cannot be null',
+          msg: '[establishments].[type] cannot be null',
         },
         isIn: {
           args: [[
@@ -83,21 +86,25 @@ module.exports = (sequelize, DataTypes) => {
             'LGU', 
             'Organizational'
           ]],
-          msg: 'Must be a valid type'
+          msg: '[establishments].[name] value must be `Company`, `Business`, `Industrial`, `Village/Household`, `LGU`, or `Organizational` only'
         }
       },
-      comment        : 'This contains the type of the establishment'
+      comment: 'This contains the type of the establishment'
     }, 
     
     address_ID: {
-      type          : DataTypes.UUID,
-      allowNull     : false,
-      validate      : {
+      type: DataTypes.UUID,
+      allowNull: false,
+      validate: {
+        isUUID: {
+          args: 4,
+          msg: '[establishments].[address_ID] value must be a UUIDV4 type'
+        },
         notNull: {
-          msg : 'Address ID must not be null',
+          msg: '[establishments].[address_ID] cannot be null'
         }
       },
-      comment       : 'This links the address of the establsihment'
+      comment: 'This links the address of the establsihment'
     },
 
   }, {

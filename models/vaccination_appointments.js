@@ -13,19 +13,18 @@ module.exports = (sequelize, DataTypes) => {
 
       // M:1 with [vaccines]
       this.belongsTo(models.Vaccines, {
-        foreignKey: 'preferred_vaccine',
-        as: 'vaccine',
-        onDelete: 'RESTRICT'
+        foreignKey : 'preferred_vaccine',
+        as         : 'vaccine_preferrence',
+        onDelete   : 'RESTRICT'
       });
 
       // M:1 with [users]
+      // Citizens only
       this.belongsTo(models.Users, {
-        foreignKey: 'citizen_ID',
-        as: 'citizen',
-        scope: {
-          user_type: 'Citizen'
-        },
-        onDelete: 'RESTRICT'
+        foreignKey : 'citizen_ID',
+        as         : 'citizen',
+        scope      : { user_type: 'Citizen' },
+        onDelete   : 'RESTRICT'
       });
     }
   };
@@ -47,7 +46,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isUUID: {
-          msg: 'vaccine_ID must be a valid UUID value'
+          args: 4,
+          msg: '[vaccination_appointments].[vaccine_ID] value must be a UUIDV4 type'
         }
       },
       comment: 'this contains what type of vaccine the patient chose'
@@ -58,7 +58,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Date of Vaccination cannot be null'
+          msg: '[vaccination_appointments].[preferred_date] cannot be null'
+        },
+        isDate: {
+          msg: '[vaccination_appointments].[preferred_date] must contain a valid date'
         }
       },
       comment: 'This contains the preferred date of patient when to vaccinate'
@@ -68,8 +71,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false,
       validate: {
+        isUUID: {
+          args: 4,
+          msg: '[vaccination_appointments].[citizen_ID] value must be a UUIDV4 type'
+        },
         notNull: {
-          msg: 'Citizen ID cannot be null'
+          msg: '[vaccination_appointments].[citizen_ID] cannot be null'
         }
       },
       comment: 'this contains the unique identifiers for each citizen record'
@@ -78,16 +85,11 @@ module.exports = (sequelize, DataTypes) => {
     status_approval: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: 'Pending',
       validate: {
         isIn: {
-          args: [
-            [
-              'pending',
-              'approved',
-              'rejected',
-            ]
-          ],
-          msg: 'The status approval has invalid value'
+          args: [['Pending', 'Approved', 'Rejected']],
+          msg: '[vaccination_appointments].[status_approval] value must be `Pending`, `Approved`, or `Rejected` only'
         }
       },
       comment: 'This indicates whether the patients appointment is pending, approved or rejected'

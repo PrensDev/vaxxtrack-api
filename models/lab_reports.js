@@ -13,9 +13,9 @@ module.exports = (sequelize, DataTypes) => {
 
       // 1:1 with [cases]
       this.hasOne(models.Case_Information, {
-        foreignKey: 'lab_report_ID',
-        as: 'case_information',
-        onDelete: 'RESTRICT'
+        foreignKey : 'lab_report_ID',
+        as         : 'case_information',
+        onDelete   : 'RESTRICT'
       });
     }
   };
@@ -35,6 +35,11 @@ module.exports = (sequelize, DataTypes) => {
     laboratory: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: '[lab_reports].[laboratory] cannot be blank or empty'
+        }
+      },
       comment: 'This contains the laboratory name where the test has been executed',
     },
 
@@ -42,13 +47,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        inIn: [
-          [
-            'RT-PCR Test',
-            'Rapid Antibody Test',
-          ]
-        ],
-        msg: 'Invalid input value for requested exam'
+        notEmpty: {
+          msg: '[lab_reports].[requested_exam] cannot be blank or empty'
+        }
       },
       comment: 'This contains the type of exam that has been requested by the patient',
     },
@@ -58,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isDate: {
-          msg: 'The requested date and time must be a valid date and time value',
+          msg: '[lab_reports].[requested_datetime] mus have a valid value',
         },
       },
       comment: 'This contains the date and time when the patient has been request for the exam'
@@ -69,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isDate: {
-          msg: 'The requested date and time must be a valid date and time value',
+          msg: '[lab_reports].[collected_datetime] mus have a valid value',
         },
       },
       comment: 'This contains the date and time when the speciment has been collected for the exam',
@@ -81,7 +82,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isDate: {
-          msg: 'The released date and time must be a valid date and time value',
+          msg: '[lab_reports].[released_datetime] mus have a valid value',
         },
       },
       comment: 'This contains the date and time when the report has been released'
@@ -93,8 +94,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'You must include the specimen ID',
+          msg: '[lab_reports].[specimen_ID] cannot be null',
         },
+        notEmpty: {
+          msg: '[lab_reports].[specimen_ID] cannot be blank or empty'
+        }
       },
       comment: 'This contains the specimen ID given by the authorized healthcare professional',
     },
@@ -104,8 +108,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'You must include a spcimen type'
+          msg: '[lab_reports].[specimen_type] cannot be null'
         },
+        notEmpty: {
+          msg: '[lab_reports].[specimen_ID] cannot be blank or empty'
+        }
       },
       comment: 'This contains the type of specimen used for the test'
     },
@@ -122,7 +129,7 @@ module.exports = (sequelize, DataTypes) => {
               'Negative for test internal control',
             ]
           ],
-          msg: 'Invalid input is detected for the result',
+          msg: '[lab_reports].[result] value must be `Positive for SARS-CoV-2`, `Negative for SARS-CoV-2`, or `Negative for test internal control` only',
         },
       },
       comment: 'This indicates the result of the test that have been examined'
@@ -138,7 +145,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull: 'You must include the name of person who performed the test'
+        notNull: {
+          msg: '[lab_reports].[performed_by] cannot be null',
+        },
+        notEmpty: {
+          msg: '[lab_reports].[performed_by] cannot be blank or empty'
+        }
       },
       comment: 'This contains the name of healthcare professional who performed the test'
     },
@@ -147,7 +159,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull: 'You must include the name of person who verified the report'
+        notNull: {
+          msg: '[lab_reports].[verified_by] cannot be null',
+        },
+        notEmpty: {
+          msg: '[lab_reports].[verified_by] cannot be blank or empty'
+        }
       },
       comment: 'This contains the name of person who verified the report'
     },
@@ -163,7 +180,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'You must include the name of person who encode the report'
+          msg: '[lab_reports].[encoded_by] cannot be null',
+        },
+        notEmpty: {
+          msg: '[lab_reports].[encoded_by] cannot be blank or empty'
         }
       },
       comment: 'This contains the name of person who encode the report'

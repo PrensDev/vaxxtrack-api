@@ -13,20 +13,18 @@ module.exports = (sequelize, DataTypes) => {
       // M:1 with [users]
       // representatives only
       this.belongsTo(models.Users, {
-        foreignKey: 'representative_ID',
-        as: 'representative',
-        scope: {
-          user_type: 'Representative'
-        },
-        onDelete: 'RESTRICT',
+        foreignKey : 'representative_ID',
+        as         : 'representative',
+        scope      : { user_type: 'Representative' },
+        onDelete   : 'RESTRICT',
       });
 
       // M:1 with [establishments]
       // representatives only
       this.belongsTo(models.Establishments, {
-        foreignKey: 'establishment_ID',
-        as: 'establishment',
-        onDelete: 'RESTRICT',
+        foreignKey : 'establishment_ID',
+        as         : 'establishment',
+        onDelete   : 'RESTRICT',
       });
     }
   };

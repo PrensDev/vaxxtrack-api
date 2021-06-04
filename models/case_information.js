@@ -14,26 +14,24 @@ module.exports = (sequelize, DataTypes) => {
 
       // M:1 with [users]
       this.belongsTo(models.Users, {
-        foreignKey: 'citizen_ID',
-        as: 'patient',
-        scope: {
-          user_type: 'Citizen'
-        },
-        onDelete: 'RESTRICT'
+        foreignKey : 'citizen_ID',
+        as         : 'patient',
+        scope      : { user_type: 'Citizen' },
+        onDelete   : 'RESTRICT'
       });
 
       // 1:1 with [case_information]
       this.belongsTo(models.Lab_Reports, {
-        foreignKey: 'lab_report_ID',
-        as: 'lab_report',
-        onDelete: 'RESTRICT'
+        foreignKey : 'lab_report_ID',
+        as         : 'lab_report',
+        onDelete   : 'RESTRICT'
       })
 
       // 1:M with [contacts]
       this.hasMany(models.Contacts, {
-        foreignKey: 'case_ID',
-        as: 'contacts',
-        onDelete: 'RESTRICT'
+        foreignKey : 'case_ID',
+        as         : 'contacted_individuals',
+        onDelete   : 'RESTRICT'
       });
     }
   };
@@ -56,10 +54,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validation: {
         notNull: {
-          msg: '[case_code] is required'
+          msg: '[case_information].[case_code] cannot be null'
         },
         notEmpty: {
-          msg: "[case_code] cannot be empty"
+          msg: "[case_information].[case_code] cannot be blank or empty"
         }
       },
       comment: 'This contains the case codes of each case information'
@@ -69,7 +67,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: true,
       validate: {
-        isUUID: 4,
+        isUUID: {
+          args: 4,
+          msg: '[case_information].[citizen_ID] value must be a UUIDV4 type'
+        },
       },
       comment: 'This links a citizen to indicate who owns a case record'
     },
@@ -79,7 +80,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       unique: true,
       validate: {
-        isUUID: 4,
+        isUUID: {
+          args: 4,
+          msg: '[case_information].[lab_report_ID] value must be a UUIDV4 type'
+        },
       },
       comment: 'This links to a lab report for each case'
     },
@@ -89,7 +93,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isDate: {
-          msg: '[confirmed_date] must have a valid value'
+          msg: '[case_information].[confirmed_date] must have a valid value'
         }
       },
       comment: 'This contains the date when a case is declared publicly as confirmed'
@@ -117,7 +121,7 @@ module.exports = (sequelize, DataTypes) => {
           args: [
             ['Recovered', 'Died']
           ],
-          msg: 'Removal type only accepts one of the defined values'
+          msg: '[case_information].[removal_type] values must be `Recovered` or `Died` only'
         }
       },
       comment: 'This indicates if the patient is recovered or died'
@@ -128,7 +132,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       validate: {
         isDate: {
-          msg: 'Removal date must be a valid date'
+          msg: '[case_information].[removal_date] must be a valid date'
         }
       },
       comment: 'This contains the date when the patient had been removed from being active case'
@@ -149,10 +153,10 @@ module.exports = (sequelize, DataTypes) => {
               'Recovered'
             ]
           ],
-          msg: 'Current health status only accepts one of the defined values'
+          msg: '[case_information].[current_health_status] values must be `Asymptomatic`, `Mild`, `Severe`, `Critical`, `Died`, or `Recovered` only'
         },
         notNull: {
-          msg: 'Current health status cannot be null'
+          msg: '[case_information].[current_health_status] cannot be null'
         }
       },
       comment: 'This indicates the current health status of a patient'

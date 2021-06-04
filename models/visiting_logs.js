@@ -13,23 +13,23 @@ module.exports = (sequelize, DataTypes) => {
       
       // M:1 [visiting_logs]:[users]
       this.belongsTo(models.Users, {
-        foreignKey: 'citizen_ID',
-        as: 'visiting_log_by',
-        onDelete: 'RESTRICT'
+        foreignKey : 'citizen_ID',
+        as         : 'visiting_log_by',
+        onDelete   : 'RESTRICT'
       });
       
       // M:1 [visiting_logs]:[users]
       this.belongsTo(models.Establishments, {
-        foreignKey: 'establishment_ID',
-        as: 'visiting_log_for',
-        onDelete: 'RESTRICT'
+        foreignKey : 'establishment_ID',
+        as         : 'visiting_log_for',
+        onDelete   : 'RESTRICT'
       });
       
       // M:1 [visiting_logs]:[health_status_logs]
       this.belongsTo(models.Health_Status_Logs, {
-        foreignKey: 'health_status_log_ID',
-        as: 'health_status_log',
-        onDelete: 'RESTRICT'
+        foreignKey : 'health_status_log_ID',
+        as         : 'health_status_log',
+        onDelete   : 'RESTRICT'
       });
     }
   };
@@ -50,8 +50,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false,
       validate: {
+        isUUID: {
+          args: 4,
+          msg: '[visiting_logs].[citizen_ID] value must be a UIUDV4 type'
+        },
         notNull: {
-          msg: 'Citizen ID must not be null',
+          msg: '[visiting_logs].[citizen_ID] cannot be null',
         }
       },
       comment: 'This links a citizen to indicate who owns the visiting log record'
@@ -61,8 +65,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false,
       validate: {
+        isUUID: {
+          args: 4,
+          msg: '[visiting_logs].[establishment_ID] value must be a UIUDV4 type'
+        },
         notNull: {
-          msg: 'Establishment ID must not be null',
+          msg: '[visiting_logs].[establishment_ID] must not be null',
         }
       },
       comment: 'This links the establishments for the visiting logs'
@@ -73,7 +81,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Temperature must not be null'
+          msg: '[visiting_logs].[temperature] cannot be null'
+        },
+        isNumeric: {
+          msg: '[visiting_logs].[temperature] can only accepts numeric value'
         }
       },
       comment: 'This indicate the temperature of citizen before entering into an establishment'
@@ -83,8 +94,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false,
       validate: {
+        isUUID: {
+          args: 4,
+          msg: '[visiting_logs].[health_status_log_ID] value must be a UIUDV4 type'
+        },
         notNull: {
-          msg: 'Health status log ID must not be null',
+          msg: '[visiting_logs].[health_status_log_ID] cannot be null',
         }
       },
       comment: 'This links the health status log for the visiting logs'
@@ -95,15 +110,16 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isIn: {
-          args: [
-            [
-              'Visiting',
-              'Customer',
-              'Employee',
-              'Meeting',
-            ]
-          ],
-          msg: 'The purpose is invalid'
+          args: [[
+            'Visiting',
+            'Customer',
+            'Employee',
+            'Meeting',
+            'Resident',
+            'Organizational Event',
+            'Others'
+          ]],
+          msg: '[visiting_logs].[purpose] value must be `Visiting`, `Customer`, `Employee`, `Meeting`, `Resident`, `Organizational Event`, or `Others` only'
         }
       },
       comment: 'This indicate the visiting purpose of visitor in an establishment'

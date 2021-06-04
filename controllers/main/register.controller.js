@@ -12,9 +12,11 @@ const helper = require('../../helpers/controller.helper');
 
 // Register a representative including its establishment
 exports.representative = (req, res) => {
-    db.Users
-        .create(req.body, {
-            include: [{
+
+    // Register Representative db.User Option
+    const regRepDbOp = {
+        include: [
+            {
                 model: db.User_Accounts,
                 as: 'user_accounts'
             }, {
@@ -24,30 +26,21 @@ exports.representative = (req, res) => {
                     model: db.Addresses,
                     as: 'address'
                 }]
-            }]
-        })
-        .then((data) => {
+            }
+        ]
+    }
+
+    // Set req.body.user_type to Representative
+    // So no need to include in req.body
+    req.body.user_type = 'Representative'
+
+    // Create Record of new representative including other information
+    db.Users
+        .create(req.body, regRepDbOp)
+        .then((result) => {
             db.Users
-                .findByPk(data.user_ID, {
-                    include: [{
-                        model: db.User_Accounts,
-                        as: 'user_accounts'
-                    }, {
-                        model: db.Establishments,
-                        as: 'establishments_with_roles',
-                        include: [{
-                            model: db.Addresses,
-                            as: 'address'
-                        }]
-                    }]
-                })
-                .then((result) => {
-                    res.send({
-                        err     : false,
-                        data    : result,
-                        msg     : 'A new Representative has been registered!'
-                    })
-                })
+                .findByPk(result.user_ID, regRepDbOp)
+                .then((data) => helper.dataResponse(res, data, 'A new representative has been registered', 'Representative was not registered'))
                 .catch((err) => helper.errResponse(res, err));
         })
         .catch((err) => helper.errResponse(res, err));
@@ -55,34 +48,31 @@ exports.representative = (req, res) => {
 
 // Register a citizen
 exports.citizen = (req, res) => {
-    db.Users
-        .create(req.body, {
-            include: [{
+
+    // Register Citizen db.User Option
+    const regCtzDbOp = {
+        include: [
+            {
                 model: db.User_Accounts,
                 as: 'user_accounts'
             }, {
                 model: db.Addresses,
                 as: 'address'
-            }]
-        })
-        .then((data) => {
+            }
+        ]
+    }
+
+    // Set req.body.user_type to Citizen
+    // So no need to include in req.body
+    req.body.user_type = 'Citizen'
+
+    // Create Record of new citizen including other information
+    db.Users
+        .create(req.body, regCtzDbOp)
+        .then((result) => {
             db.Users
-                .findByPk(data.user_ID, {
-                    include: [{
-                        model: db.User_Accounts,
-                        as: 'user_accounts'
-                    }, {
-                        model: db.Addresses,
-                        as: 'address'
-                    }]    
-                })
-                .then((result) => {
-                    res.send({
-                        err     : false,
-                        data    : result,
-                        msg     : 'A new Citizen has been registered!'
-                    })
-                })
+                .findByPk(result.user_ID, regCtzDbOp)
+                .then((data) => helper.dataResponse(res, data, 'A new citizen has been registered', 'Citizen was not registered'))
                 .catch((err) => helper.errResponse(res, err));
         })
         .catch((err) => helper.errResponse(res, err));
@@ -98,21 +88,15 @@ exports.super_admin = (req, res) => {
                 as: 'user_accounts'
             }]
         })
-        .then((data) => {
+        .then((result) => {
             db.Users
-                .findByPk(data.user_ID, {
+                .findByPk(result.user_ID, {
                     include: [{
                         model: db.User_Accounts,
                         as: 'user_accounts'
                     }]
                 })
-                .then((result) => {
-                    res.send({
-                        err     : false,
-                        data    : result,
-                        msg     : 'A new Super Admin has been registered!'
-                    })
-                })
+                .then((data) => helper.dataResponse(res, data, 'A new Super Admin has been registered', 'Super Admin was not registered'))
                 .catch((err) => helper.errResponse(res, err));
         })
         .catch((err) => helper.errResponse(res, err));
@@ -128,21 +112,15 @@ exports.health_official = (req, res) => {
                 as: 'user_accounts'
             }]
         })
-        .then((data) => {
+        .then((result) => {
             db.Users
-                .findByPk(data.user_ID, {
+                .findByPk(result.user_ID, {
                     include: [{
                         model: db.User_Accounts,
                         as: 'user_accounts'
                     }]
                 })
-                .then((result) => {
-                    res.send({
-                        err     : false,
-                        data    : result,
-                        msg     : 'A new Health Official has been registered!'
-                    })
-                })
+                .then((data) => helper.dataResponse(res, data, 'A new Health Official has been registered', 'Health Official was not registered'))
                 .catch((err) => helper.errResponse(res, err));
         })
         .catch((err) => helper.errResponse(res, err));

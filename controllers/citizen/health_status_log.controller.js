@@ -13,31 +13,29 @@ const helper = require("../../helpers/controller.helper");
 // Create New Health Status Log
 exports.createHealthStatusLog = (req, res) => {
     
-
+    // Check Authorization first
     helper.checkAuthorization(req, res, 'Citizen');
 
-        db.Health_Status_Logs
-            .create(req.body)
-            .then((data) => helper.dataResponse(res, data, 'Health status Logs record has been created successfully', 'Health status Logs record cannot created'))
-            .catch((err) => helper.errResponse(res, err)); 
+    db.Health_Status_Logs
+        .create(req.body)
+        .then((data) => helper.dataResponse(res, data, 'Health Status has been logged successfully', 'Failed to logged a health status'))
+        .catch((err) => helper.errResponse(res, err)); 
 };
 
 
 // Get All Health Status Logs
 exports.getAllHealthStatusLogs = (req, res) => {
     
+    // Check Authorization first
     helper.checkAuthorization(req, res, 'Citizen');
 
-        db.Health_Status_Logs
-            .findAll({
-                
-               include:{
-                    model: db.Users,
-                    as: "citizen",
-                    where: {
-                    user_ID: req.user.user_ID
-                    },
-                   attributes: {
+    db.Health_Status_Logs
+        .findAll({
+            include:{
+                model: db.Users,
+                as: "citizen",
+                where: { user_ID: req.user.user_ID },
+                attributes: {
                     exclude: [
                         'sex',
                         'birth_date',
@@ -50,49 +48,47 @@ exports.getAllHealthStatusLogs = (req, res) => {
                         'updated_datetime'
                     ]
                 }
-               }
-            })
-
-            .then((data) => helper.dataResponse(res, data, '[Health status Logs] record retrieve successfully', '[Health status Logs] cannot retrieve records'))
-            .catch((err) => helper.errResponse(res, err)); 
+            }
+        })
+        .then((data) => helper.dataResponse(res, data, 'Health Status Logs retrieved successfully', 'No Health Status Logs have been retrieved'))
+        .catch((err) => helper.errResponse(res, err)); 
 };
+
 
 // Get One Health Status Log
 exports.getOneHealthStatusLog = (req, res) => {
     
+    // Check authorization first
     helper.checkAuthorization(req, res, 'Citizen');
 
-        db.Health_Status_Logs
-            .findByPk(
-                req.params.health_status_log_ID,{
-                    include: [{
-                        model: db.Users,
-                        as: 'citizen',
-                        where: {
-                            user_ID: req.user.user_ID
-                        },
-                        attributes: {
-                            exclude: [
-                                'sex',
-                                'birth_date',
-                                'civil_status',
-                                'address_ID',
-                                'user_type',
-                                'password',
-                                'added_by',
-                                'created_datetime',
-                                'updated_datetime'
-                            ]
-                        },
-                    },
-                ],
-            }
-        )
-            .then((data) => helper.dataResponse(res, data, 'A health status log has been identified', 'A health status log has been not identified'))
-            .catch((err) => helper.errResponse(res, err));
-        };
+    db.Health_Status_Logs
+        .findByPk(req.params.health_status_log_ID, {
+            include: [{
+                model: db.Users,
+                as: 'citizen',
+                where: { user_ID: req.user.user_ID },
+                attributes: {
+                    exclude: [
+                        'sex',
+                        'birth_date',
+                        'civil_status',
+                        'address_ID',
+                        'user_type',
+                        'password',
+                        'added_by',
+                        'created_datetime',
+                        'updated_datetime'
+                    ]
+                },
+            }],
+        }
+    )
+    .then((data) => helper.dataResponse(res, data, 'A health status log has been identified', 'A health status log has been not identified'))
+    .catch((err) => helper.errResponse(res, err));
+};
 
 
+// Update Health Status Log
 exports.updateHealthStatusLog = (req, res) => {
     
     //Check Authorization first
@@ -101,26 +97,25 @@ exports.updateHealthStatusLog = (req, res) => {
     //Check first if health status log ID is existed in database
     db.Health_Status_Logs
         .findByPk(req.params.health_status_log_ID)
+        .then((result) => {
 
-        .then((result) =>{
-
-            //if no result return empty response
+            // If no result return empty response
             if(result == null) helper.emptyDataResponse(res, 'No Citizen has been identified');
 
-            //Update a Health status info
+            // Else update a Health status info
             db.Health_Status_Logs
                 .update(req.body, {
                     where: {
                         health_status_log_ID: req.params.health_status_log_ID
                     }
                 })
-                .then(() =>{
+                .then(() => {
 
-                    //get health status log info after update
+                    // Get health status log info after update
                     db.Health_Status_Logs
-                    .findByPk(req.params.health_status_log_ID)
-                    .then((data) => helper.dataResponse(res, data, 'A health status has been successfully updated', 'No citizen has been identified'))
-                    .catch((err) => helper.errResponse(res, err));
+                        .findByPk(req.params.health_status_log_ID)
+                        .then((data) => helper.dataResponse(res, data, 'A health status has been successfully updated', 'No citizen has been identified'))
+                        .catch((err) => helper.errResponse(res, err));
                 })
                 .catch((err) => helper.errResponse(res, err));
         })

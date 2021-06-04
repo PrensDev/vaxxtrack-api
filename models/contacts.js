@@ -44,10 +44,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validations: {
         isUUID: {
-          msg: '"case_ID" must contain a valid value'
+          args: 4,
+          msg: '[contacts].[case_ID] value must be a UUIDV4 type'
         },
         notNull: {
-          msg: '"case_ID" cannot be null'
+          msg: '[contacts].[case_ID] cannot be null'
         }
       },
       comment: 'This contains the case information ID to identify the user'
@@ -58,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       validations: {
         isUUID: {
-          msg: '"citizen_ID" must have a valid value'
+          msg: '[contacts].[citizen_ID] value must be a UUIDV4 type'
         }
       },
       comment: 'This contains the citizen\'s ID indicating that he/she was with contact to a person positive with COVID-19'

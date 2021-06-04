@@ -452,15 +452,15 @@ exports.populate2 = (req, res) => {
                 manufacturer: 'Pfizer, Inc., and BioNTech',
                 type: 'mRNA',
                 shots_details: '2 shots, 21 days apart',
-                description: ''
+                description: 'The Pfizer–BioNTech COVID-19 vaccine, sold under the brand name Comirnaty, is an mRNA-based COVID-19 vaccine. It is authorized for use in people aged 12 years and older in some jurisdictions and for people 16 years and older in other jurisdictions, to provide protection against infection by the SARS-CoV-2 virus, which causes COVID-19.'
             }, {
                 vaccine_ID: 'b603614e-250a-4598-aa62-5fee984eb0ba',
-                product_name: 'Moderna',
+                product_name: 'Moderna COVID-19 Vaccine PF',
                 vaccine_name: 'mRNA-1273',
                 manufacturer: 'ModernaTX, Inc.',
                 type: 'mRNA',
                 shots_details: '2 shots, one month (28 days) apart',
-                description: ''
+                description: 'The Moderna vaccine is recommended for people aged 18 years and older. Learn more about how CDC is making COVID-19 vaccine recommendations and CDC’s vaccine rollout recommendations.'
             }, {
                 vaccine_ID: '77b4f71d-5546-4511-a568-900114ab9797',
                 product_name: 'Johnson & Johnson’s Janssen',
@@ -468,7 +468,7 @@ exports.populate2 = (req, res) => {
                 manufacturer: 'Janssen Pharmaceuticals Companies of Johnson & Johnson',
                 type: 'Viral Vector',
                 shots_details: '1 shot',
-                description: ''
+                description: 'The Centers for Disease Control and Prevention (CDC) and the US Food and Drug Administration (FDA) recommend that use of Johnson & Johnson’s Janssen (J&J/Janssen) COVID-19 Vaccine resume in the United States, effective April 23, 2021. However, women younger than 50 years old should especially be aware of the rare risk of blood clots with low platelets after vaccination.'
             }
         ], {
             validate: true

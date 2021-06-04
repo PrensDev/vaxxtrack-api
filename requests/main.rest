@@ -15,32 +15,32 @@ POST http://localhost:3000/register/representative
 Content-Type: application/json
 
 {
-    "first_name": "Jose",
-    "middle_name": "",
-    "last_name": "Alonzo",
-    "user_type": "Representative",
+    "first_name": "Richard",
+    "middle_name": "A.",
+    "last_name": "Soto",
     "password":  "$P@ssw0rd;",
+    "user_type": "Citizen",
     "user_accounts": {
-        "details": "josealonzo@gmail.com",
+        "details": "richardsoto@gmail.com",
         "type": "Email",
         "verified": true
     },
     "establishments_with_roles": {
-        "name": "Polytechnic University of the Philippines",
-        "type": "Organizational",
+        "name": "DEF Company",
+        "type": "Company",
         "address": {
-            "region": "NCR",
+            "region": "NATIONAL CAPITAL REGION",
             "province": "Metro Manila",
-            "city_municipality": "Quezon City",
-            "baranggay_district": "Commonwealth",
-            "street": "Don Fabian",
-            "specific_location": "456",
-            "zip_code": "1111",
+            "city_municipality": "Valenzuela City",
+            "barangay_district": "Karuhatan",
+            "street": "Mapulang Lupa St.",
+            "specific_location": "89 Aloha Road",
+            "zip_code": "1748",
             "latitude": "200",
             "longitude": "400"
         },
         "Roles": {
-            "role": "Dean",
+            "role": "Manager",
             "isAdmin": true
         }
     }

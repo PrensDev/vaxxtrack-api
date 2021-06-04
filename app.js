@@ -127,30 +127,31 @@ Listening on http://localhost:${ port }
 =========================================================================
 `
 
-const syncFailedMsgHeader = `
+const syncFailedMsg = (err) => {
+return `
 =========================================================================
 Execution failed... Try to seek bugs and errors!
-
-`
-
-const syncFailedMsgFooter = `
+-------------------------------------------------------------------------
+${err}
 =========================================================================
 `
+}
 
 // Test if connected to the database
 db.sequelize
     .authenticate()
     .then(() => {
         if(process.env.ENABLE_DB_CONN_LOGS === 'true' || false) console.log(connSuccessMsg)
-
-        // Save changes to the database
-        db.sequelize
-            .sync({
-                force: process.env.SEQUELIZE_FORCE_SYNC === 'true' || false,
-                alter: process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
-                sync:  process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
-            })
-            .then(() => app.listen(port, () => console.log(syncSuccessMsg)))
-            .catch((err) => console.log(syncFailedMsgHeader + err + syncFailedMsgFooter));
     })
     .catch((err) => console.log(connFailedMsg(err)));
+
+    
+// Save changes to the database
+db.sequelize
+    .sync({
+        force: process.env.SEQUELIZE_FORCE_SYNC === 'true' || false,
+        alter: process.env.SEQUELIZE_ALTER_SYNC === 'true' || false,
+        sync:  process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
+    })
+    .then(() => app.listen(port, () => console.log(syncSuccessMsg)))
+    .catch((err) => console.log(syncFailedMsg(err)));
