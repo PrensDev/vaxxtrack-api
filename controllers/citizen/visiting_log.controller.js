@@ -4,12 +4,13 @@
  * This controller is for visiting log activity of citizen
  */
 const db = require("../../models");
+const helper = require("../../helpers/controller.helper");
 
 // Create New Visiting Log
 exports.createVisitingLog = (req, res) => {
-    if (req.user == null || req.user.user_type !== 'Citizen') {
-        res.sendStatus(403);
-    } else {
+
+    helper.checkAuthorization(req, res, 'Citizen');
+
         db.Visiting_Logs
             .create({
                 citizen_ID: req.user.user_ID,
@@ -33,45 +34,27 @@ exports.createVisitingLog = (req, res) => {
                             as : "health_status_log"
                         }]
                     })
-                    .then((result) => { 
-                        res.send({
-                            err     : false,
-                            data    : result,
-                            msg     : 'A new Visiting Logs has been created!'
-                        })
-                    })
-                    .catch((err) => {
-                        res.status(500).send({
-                            error   : true,
-                            data    : [],
-                            message : ['Opps! Error caught!', `${ err }`],
-                        });
-                    });
+                    .then((result) => helper.dataResponse(res, result, 'A new Visiting Logs has been created!', 'Error occured when creating a visiting log'))
+                    .catch((err) => helper.errResponse(res, err));
+                    
             })
-            .catch((err) => {
-                res.status(500).send({
-                    error: true,
-                    message: `${ err }`
-                });
-            });
-    }
-
+            .catch((err) => helper.errResponse(res, err));  
 };
 
 // Find All Visiting Logs
 exports.getAllVisitingLogs = (req, res, next) => {
-    if (req.user == null || req.user.user_type !== 'Citizen') {
-        res.sendStatus(403);
-    } else {
+
+    helper.checkAuthorization(req, res, 'Citizen');
+
         db.Visiting_Logs
             .findAll(
                 {
-                    where: {
-                        citizen_ID: req.user.user_ID
-                    },
                     include: [{
-                        model: db.Users,
+                        model: db.Users,    
                         as: 'visiting_log_by',
+                        where: {
+                            user_ID: req.user.user_ID
+                        },
                         attributes: {
                             exclude: [
                                 'sex',
@@ -88,27 +71,15 @@ exports.getAllVisitingLogs = (req, res, next) => {
                     }],
                 }
             )
-            .then((data) => {
-                res.send({
-                    error   : false,
-                    data    : data,
-                    message : ['[Visiting Logs] record retrieves successfully'],
-                });
-            })
-            .catch((err) => {
-                res.status(500).send({
-                    error   : true,
-                    message : ['Oops! Error caught!', `${ err }`],
-                });
-            });
-    }
+            .then((data) => helper.dataResponse(res, data, '[Visiting Logs] record retrieves successfully', '[Visiting Logs] cannot retrieves records'))
+            .catch((err) => helper.errResponse(res, err)); 
 };
 
 // Get One Visiting Log
 exports.getOneVisitingLog = (req, res, next) => {
-    if(req.user == null || req.user.user_type !== 'Citizen') {
-        res.sendStatus(403);
-    } else {
+
+    helper.checkAuthorization(req, res, 'Citizen');
+
         db.Visiting_Logs
             .findByPk(
                 req.params.visiting_log_ID, {
@@ -136,49 +107,6 @@ exports.getOneVisitingLog = (req, res, next) => {
                     ],
                 }
             )
-            // .findOne({
-            //     where: {
-            //         visiting_log_ID: req.params.visiting_log_ID,
-            //     },
-            //     include: [
-            //         {
-            //             model: db.Users,
-            //             as: 'visiting_log_by',
-            //             attributes: {
-            //                 exclude: [
-            //                     'sex',
-            //                     'birth_date',
-            //                     'civil_status',
-            //                     'address_ID',
-            //                     'user_type',
-            //                     'password',
-            //                     'added_by',
-            //                     'created_datetime',
-            //                     'updated_datetime'
-            //                 ]
-            //             },
-            //         },
-            //     ],
-            // })
-            .then((data) => {
-                if(data) {
-                    res.send({
-                        error   : false,
-                        data    : data,
-                        message : ['An Visiting Logs is identified'],
-                    });
-                } else {
-                    res.status(404).send({
-                        error   : true,
-                        message : 'Visiting Logs not found',
-                    });
-                }
-            })
-            .catch((err) => {
-                res.status(500).send({
-                    error   : true,
-                    message : ['Oops! Error caught!', `${ err }`],
-                });
-            })
-    }
+            .then((data) => helper.dataResponse(res, data, 'A Visiting Log has been identified', 'A Visiting Log has been identified'))
+            .catch((err) => helper.errResponse(res, err)); 
 };
