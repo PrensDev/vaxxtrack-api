@@ -26,7 +26,6 @@
     "user_ID": '',
     "details": '',
     "type": '',
-    "verified": '',
     "created_datetime: '',
     "updated_datetime: ''
 }
@@ -43,7 +42,18 @@
 ```
 {
     "details": '',
-    "type": '',
-    "verified": ''
+    "type": ''
 }
 ```
+
+### Verify Account
+
+1. In `controllers/representative/accounts.controller.js`, create a property called `verifyAccount` that will verify the account of the logged in user. 
+
+    - If it is already verified, return a response that it is already verified
+
+2. In `routes/representative.route.js`, use the variable `accountCtlr` to call the property you've been created with appropriate HTTP method and path `/verify-account/:user_account_ID`. Use the parameter `user_account_ID` in your method.
+
+    - Check also if the account is owned by logged in user before verifying. Return an invalid response if it is the case
+
+3. DO NOT FORGET TO TEST IT! The OUTPUT should be like previous.

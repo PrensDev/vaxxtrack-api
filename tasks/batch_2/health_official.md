@@ -31,13 +31,51 @@
 }
 ```
 
+And the output should be this way:
+
+```
+{
+    "first_name": "",
+    "middle_name": "",
+    "last_name": "",
+    "suffix_name": "",
+    "sex": "",
+    "birth_date": "",
+    "civil_status": "",
+    "address": {
+        "region": "",
+        "province": "",
+        "city_municipality": "",
+        "barangay_district": "",
+        "street": "",
+        "specific_location": "",
+        "zip_code": "",
+        "latitude": "",
+        "longitude": ""
+    },
+    "vaccination_records": {
+        "vaccination_record_ID": ""
+        "vaccination_date": "",
+        "vaccinated_by": "",
+        "vaccinated_in": "",
+        "remarks": "",
+        "vaccine": {
+            "product_name": "",
+            "vaccine_name": "",
+            "type": "",
+            "manufacturer": ""
+        }
+    }
+}
+```
+
 #### Update Vaccination Record of Citizen
 
-1. In `controllers/health_official/vaccination.controller.js`, create a property called `updateVaccRecord` that will create new vaccination record of a citizen.
+1. In `controllers/health_official/vaccination.controller.js`, create a property called `updateVaccRecord` that will update the vaccination record of a citizen.
 
 2. In `routes/health_official.route.js`, use the variable `vaccCtrl` to call the property you've been created with appropriate HTTP method and path `/update-vaccination-record/:vaccination_record_ID`. Note: Use the parameter to update a specific vaccination record
 
-3. DO NOT FORGET TO TEST IT. The INPUT should be this way:
+3. DO NOT FORGET TO TEST IT. The OUTPUT should be like the previous. The INPUT should be this way:
 
 ```
 {
@@ -72,7 +110,7 @@
 Note:
 > No other fields should be included but only what is in the output.
 
-### Update User Informtation
+#### Update User Informtation
 
 1. In `controllers/health_official/info.controller.js`, create a property called `updateInfo` that will update the information of the user.
 
@@ -105,7 +143,6 @@ Note:
     "user_ID": '',
     "details": '',
     "type": '',
-    "verified": '',
     "created_datetime: '',
     "updated_datetime: ''
 }
@@ -123,6 +160,17 @@ Note:
 {
     "details": '',
     "type": '',
-    "verified": ''
 }
 ```
+
+### Verify Account
+
+1. In `controllers/health_official/accounts.controller.js`, create a property called `verifyAccount` that will verify the account of the logged in user. 
+
+    - If it is already verified, return a response that it is already verified
+
+2. In `routes/health_official.route.js`, use the variable `accountCtlr` to call the property you've been created with appropriate HTTP method and path `/verify-account/:user_account_ID`. Use the parameter `user_account_ID` in your method.
+
+    - Check also if the account is owned by logged in user before verifying. Return an invalid response if it is the case
+
+3. DO NOT FORGET TO TEST IT! The OUTPUT should be like previous.

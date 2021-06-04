@@ -26,7 +26,6 @@ var infoController = require('../controllers/super_admin/info.controller');
 
 // Account Controller
 var accountCtlr = require('../controllers/super_admin/account.controller');
-// TODO: include the properties and paths here
 router.put('/update-password' ,  accountCtlr.updatePassword);
 
 
