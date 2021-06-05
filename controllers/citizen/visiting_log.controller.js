@@ -108,6 +108,6 @@ exports.getOneVisitingLog = (req, res) => {
                 },
             }],
         })
-        .then((data) => helper.dataResponse(res, data, 'A Visiting Log has been identified', 'A Visiting Log has been identified'))
+        .then((data) => helper.dataResponse(res, data, 'A Visiting Log has been identified', 'A Visiting Log cannot identified'))
         .catch((err) => helper.errResponse(res, err)); 
 };
