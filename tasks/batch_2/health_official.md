@@ -10,7 +10,7 @@
 - PLEASE. INCLUDE ERROR HANDLINGS. 
 - DO NOT COMMIT CHANGES IF YOU HAVE EXISTING ERRORS. NAKAKA-ABALA PO SA IBANG MEMBERS NA GUMAGAWA DIN.
 
-### Vaccination Record of Citizen
+### Vaccination Records of Citizen
 
 #### Add Vaccination Record of Citizen
 
@@ -84,6 +84,57 @@ And the output should be this way:
     "vaccinated_by": '',
     "vaccinated_in": '',
     "remarks": ''
+}
+```
+
+### Vaccination Appointment
+
+#### Get All Vaccination Appointments
+
+1. In `controllers/health_official/vaccination.controller.js`, create a property called `getAllVaccAppointments` that will return all vaccination appointments of all citizens
+
+2. In `routes/health_official.route.js`, use the variable `vaccCtlr` to call the property you've been created with appropriate HTTP method and path `/vaccination-appointments`
+
+3. DO NOT FORGET TO TEST IT. The OUTPUT should be like this way
+
+```
+{
+    data: [
+        {
+            "vaccination_appointment_ID": "",
+            "preferred_vaccine": "",
+            "preferred_date": "",
+            "status_approval": "",
+            "approved_by": "",
+            "approved_datetime": "",
+            "appointed_by": {
+                "first_name": "",
+                "middle_name": "",
+                "last_name": "",
+                "suffix_name": "",
+                "sex": "",
+                "birth_date": "",
+                "civil_status": ""
+            }
+        },
+        ...
+    ]
+}
+```
+
+#### Change/Update Status Approval of Citizen's Vaccination Appointment
+
+1. In `controllers/health_official/vaccination.controller.js`, create a property called `updateVaccAppointmentStatusApproval` that will change the status approval of the citizen's appointment
+
+2. In `routes/health_official.route.js`, use the variable `vaccCtlr` to call the property you've been created with appropriate HTTP method and path `/vaccination-appointments/change-status-approval/:vaccination_record_ID`
+
+3. DO NOT FORGET TO TEST IT. The OUTPUT should be like the previous. The INPUT should be only this way
+
+```
+{
+    "status_approval": "",
+    "approved_by: "",
+    "approved_datetime": ""
 }
 ```
 

@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       // Citizens only
       this.belongsTo(models.Users, {
         foreignKey : 'citizen_ID',
-        as         : 'citizen',
+        as         : 'appointed_by',
         scope      : { user_type: 'Citizen' },
         onDelete   : 'RESTRICT'
       });

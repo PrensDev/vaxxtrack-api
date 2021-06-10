@@ -10,25 +10,117 @@
 - PLEASE. INCLUDE ERROR HANDLINGS. 
 - DO NOT COMMIT CHANGES IF YOU HAVE EXISTING ERRORS. NAKAKA-ABALA PO KAYO SA IBANG MEMBERS NA GUMAGAWA DIN.
 
+### Vaccination Records
+
+#### Get All Vaccination Records of Citizen
+
+1. In `controllers/citizen/vaccination.controller.js`, create a property called `getAllVaccRecord` that will return all vaccination records of the logged in citizen
+
+2. In `routes/citizen.route.js`, use the variable `vaccCtlr` to call the property you've been created with appropriate HTTP method and path `/vaccination-records`
+
+3. DO NOT FORGET TO TEST IT. The OUTPUT should be this way
+
+```
+{
+    data: [
+        {
+            "vaccination_record_ID": "",
+            "citizen_ID": "",
+            "vaccination_date": "",
+            "vaccinated_by": "",
+            "vaccinated_in": "",
+            "remarks": "",
+            "vaccine_used": {
+                "product_name": "",
+                "vaccine_name": "",
+                "type": "",
+                "manufacturer": "",
+                "shots_details": "",
+                "description": ""
+            }
+        },
+        ...
+    ]
+}
+```
+
+#### Get One Vaccination Records of Citizen
+
+1. In `controllers/citizen/vaccination.controller.js`, create a property called `getOneVaccRecord` that will return all vaccination records of the logged in citizen
+
+2. In `routes/citizen.route.js`, use the variable `vaccCtlr` to call the property you've been created with appropriate HTTP method and path `/vaccination-records/:vaccination_record_ID`
+
+3. DO NOT FORGET TO TEST IT. The OUTPUT should be the same as previous
+
+### Vaccination Appointment
+
+#### Get All Vaccination Appointments
+
+1. In `controllers/citizen/vaccination.controller.js`, create a property called `getAllVaccAppointments` that will return all appointments of citizen
+
+2. In `routes/citizen.route.js`, use the variable `vaccCtlr` to call the property you've been created with appropriate HTTP method and path `/vaccination-appointments`
+
+3. DO NOT FORGET TO TEST IT. The OUTPUT should be this way
+
+```
+{
+    data: [
+        {
+            "vaccination_appointment_ID": "",
+            "preferred_date": "",
+            "citizen_ID": "",
+            "status_approval": "",
+            "approved_by": "",
+            "approved_datetime": "",
+            "vaccine_preferrence": {
+                "product_name": "",
+                "vaccine_name": "",
+                "type": "",
+                "manufacturer": "",
+                "shots_details": "",
+                "description": ""
+            }
+        },
+        ...
+    ]
+}
+```
+
+### Cancel Appointment
+
+1. In `controllers/citizen/vaccination.controller.js`, create a property called `cancelVaccAppointment` that will cancel (remove) the vaccination appointment of the citizen
+
+2. In `routes/citizen.route.js`, use the variable `vaccCtlr` to call the property you've been created with appropriate HTTP method and path `/cancel-vaccination-appointment/:vaccination_record_ID`
+
+    Note:
+    - If status approval is not "Pending", it must not remove the appointment. But send a response that this appointment cannot be canceled nor removed.
+
+3. DO NOT FORGET TO TEST IT. The OUTPUT should be a response that it is succesfully deleted. Just check database if the record is truly deleted or removed.
+
 ### Account Settings
 
 #### Get all accounts of logged in user
 
 1. In `controllers/citizen/accounts.controller.js`, create a property called `getAllAccounts` that will get all the accounts of the logged in user.
 
-2. In `routes/citizen.route.js`, use the variable `accountCtlr` to call the property ypu created with appropriate HTTP method and path `/accounts`
+2. In `routes/citizen.route.js`, use the variable `accountCtlr` to call the property you've been created with appropriate HTTP method and path `/accounts`
 
 3. DO NOT FORGET TO TEST IT! The OUPUT should be this way: 
 
 ```
 {
-    "user_account_ID": '',
-    "user_ID": '',
-    "details": '',
-    "type": '',
-    "verified": '',
-    "created_datetime: '',
-    "updated_datetime: ''
+    data: [
+        {
+            "user_account_ID": '',
+            "user_ID": '',
+            "details": '',
+            "type": '',
+            "verified": '',
+            "created_datetime: '',
+            "updated_datetime: ''
+        }, 
+        ...
+    ]
 }
 ```
 

@@ -24,6 +24,11 @@ router.get ("/visiting-logs/:visiting_log_ID" , visitingLogCtlr.getOneVisitingLo
 router.post("/add-visiting-log"               , visitingLogCtlr.createVisitingLog);
 
 
+// Vaccination Controller
+var vaccCtlr = require('../controllers/citizen/vaccination.controller');
+// TODO: include the method and paths here
+
+
 // User Information Controller
 var infoController = require('../controllers/citizen/info.controller');
 router.get ('/info'        , infoController.getInfo);

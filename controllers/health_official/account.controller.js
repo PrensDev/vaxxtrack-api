@@ -11,8 +11,6 @@ const helper = require('../../helpers/controller.helper');
 const bcrypt = require('bcrypt');
 
 
-// TODO: include the properties and methods here
-
 // Update Password
 exports.updatePassword = (req, res) =>  {
 
