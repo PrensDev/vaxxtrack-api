@@ -26,7 +26,9 @@ router.post("/add-visiting-log"               , visitingLogCtlr.createVisitingLo
 
 // Vaccination Controller
 var vaccCtlr = require('../controllers/citizen/vaccination.controller');
-// TODO: include the method and paths here
+router.get ("/vaccination-records"                          , vaccCtlr.getAllVaccRecord);
+router.get ("/vaccination-records/:vaccination_record_ID"  , vaccCtlr.getOneVaccRecord);
+
 
 
 // User Information Controller
