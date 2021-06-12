@@ -18,7 +18,15 @@ exports.getInfo = (req, res, next) => {
         res.sendStatus(403);
     } else {
         db.Users
-            .findByPk(req.user.user_ID)
+            .findByPk(req.user.user_ID,{
+                attributes: [
+                    'first_name',
+                    'middle_name',
+                    'last_name',
+                    'suffix_name',
+                    'user_type'
+                ]
+            })
             .then((data) => {
                 if(data) {
                     res.send({
