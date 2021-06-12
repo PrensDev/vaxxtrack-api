@@ -11,12 +11,15 @@ router.get('/vaccinated-citizens', vaccCtlr.getAllUsersAndVaccRecords);
 
 // User Information Controller
 var infoController = require('../controllers/health_official/info.controller');
-// TODO: include the properties and paths here
+router.get ('/info'        , infoController.getInfo);
+router.put ('/update-info' , infoController.updateInfo);
 
 
 // Account Controller
 var accountCtlr = require('../controllers/health_official/account.controller');
 router.put('/update-password' ,  accountCtlr.updatePassword);
+router.get('/accounts'        , accountCtlr.getAllAccounts);
+router.post('/add-account'        , accountCtlr.createAccount);
 
 
 

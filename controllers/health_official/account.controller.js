@@ -34,3 +34,42 @@ exports.updatePassword = (req, res) =>  {
         .then(() => helper.emptyDataResponse(res, 'Password has been changed successfully'))
         .catch((err) => helper.errResponse(res, err));
 };
+
+// Get all accounts
+exports.getAllAccounts = (req, res, next) => {
+    if(req.user == null || req.user.user_type !== 'Health Official') {
+        res.sendStatus(403);
+    } else {
+        db.User_Accounts
+            .findAll()
+            .then((data) => {
+                if(data) {
+                    res.send({
+                        error: false,
+                        data: data,
+                        message: 'A user has been identified'
+                    });
+                } else {
+                    res.send({
+                        error: true,
+                        message: 'No user has been identified'
+                    });
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+}
+
+// Create new account
+exports.createAccount = (req, res) => {
+    
+    // Check Authorization first
+    helper.checkAuthorization(req, res, 'Health Official');
+
+    db.User_Accounts
+        .create(req.body)
+        .then((data) => helper.dataResponse(res, data, 'New account has been created', 'Failed to create account'))
+        .catch((err) => helper.errResponse(res, err)); 
+};
