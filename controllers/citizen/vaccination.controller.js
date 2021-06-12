@@ -55,3 +55,52 @@ exports.getOneVaccRecord = (req, res) => {
         .then((data) => helper.dataResponse(res, data, 'A Vaccination Record has been identified', 'No Vaccination Record has been identified'))
         .catch((err) => helper.errResponse(res, err));
 }
+
+//Get All Vaccination Appoitments
+
+exports.getAllVaccAppointments = (req, res) => {
+
+    helper.checkAuthorization(req, res, 'Citizen');
+
+    db.Vaccination_Appointments
+        .findAll({
+            include: [{
+                model: db.Users,    
+                as: 'appointed_by',
+                where: {
+                    user_ID: req.user.user_ID
+                },
+                attributes: {
+                    exclude: [
+                        'sex',
+                        'birth_date',
+                        'civil_status',
+                        'address_ID',
+                        'user_type',
+                        'password',
+                        'added_by',
+                        'created_datetime',
+                        'updated_datetime'
+                    ]
+                }
+            }],
+        })
+        .then((data) => helper.dataResponse(res, data, 'Visiting Logs retrieved successfully', 'No visiting logs has been retrieved'))
+        .catch((err) => helper.errResponse(res, err)); 
+
+};
+
+// Cancel Vaccine Appointments
+
+exports.cancelVaccAppointment = (req, res) => {
+
+    helper.checkAuthorization(req, res, 'Citizen');
+
+    db.Vaccination_Appointments
+        .destroy({
+            where: req.params.vaccination_appointment_ID
+        })
+        .then((data) => helper.dataResponse(res, data, 'Record has been Successfully Deleted.', 'The Appointment cannot Deleted.'))
+        .catch((err) => helper.errResponse(res, err)); 
+
+};
