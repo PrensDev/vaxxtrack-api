@@ -68,6 +68,7 @@ exports.createAccount = (req, res) => {
     // Check Authorization first
     helper.checkAuthorization(req, res, 'Health Official');
 
+    req.body.user_ID = req.user.user_ID
     db.User_Accounts
         .create(req.body)
         .then((data) => helper.dataResponse(res, data, 'New account has been created', 'Failed to create account'))
