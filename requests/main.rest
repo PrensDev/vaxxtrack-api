@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
     "authDetails": "timothy.mcduffy@gmail.com",
-    "password": "MyPassword"
+    "password": "$P@ssw0rd;"
 }
 
 ### Register Representative
