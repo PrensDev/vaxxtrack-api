@@ -6,7 +6,10 @@ var router = require('express').Router();
 
 // Vaccination Controller
 var vaccCtlr = require('../controllers/health_official/vaccination.controller');
-router.get('/vaccinated-citizens', vaccCtlr.getAllUsersAndVaccRecords);
+router.get ('/vaccinated-citizens'                                                    , vaccCtlr.getAllUsersAndVaccRecords);
+router.get ('/vaccination-appointments'                                               , vaccCtlr.getAllVaccAppointments);
+router.post('/add-vaccination-record'                                                 , vaccCtlr.createVaccRecord);
+router.put ('/update-vaccination-record/:vaccination_record_ID'                       , vaccCtlr.updateVaccRecord);
 
 
 // User Information Controller
