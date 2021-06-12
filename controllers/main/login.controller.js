@@ -36,12 +36,12 @@ exports.login = (req, res) => {
     db.User_Accounts
         .findOne({
             where: { 
-                details     : req.body.authDetails,
-                verified    : 1,
+                details  : req.body.authDetails,
+                verified : 1,
             },
             include: {
-                model   : db.Users,
-                as      : 'user',
+                model : db.Users,
+                as    : 'user',
             },              
         })
         .then((data) => {

@@ -6,9 +6,7 @@
  
  
 // Import models
-const { checkAuthorization, errResponse, dataResponse } = require('../../helpers/controller.helper');
 const db = require('../../models');
-const Op = require('sequelize').Op;
 const helper = require("../../helpers/controller.helper");
  
 const dbVaccinationAppointmentsOp = (req) => {
@@ -37,7 +35,7 @@ const dbVaccinationAppointmentsOp = (req) => {
 exports.getAllUsersAndVaccRecords = (req, res) => {
  
     // Check Authorization first
-    checkAuthorization(req, res, 'Health Official');
+    helper.checkAuthorization(req, res, 'Health Official');
  
     db.Vaccination_Records
         .findAll({
@@ -64,8 +62,8 @@ exports.getAllUsersAndVaccRecords = (req, res) => {
                 }
             }
         })
-        .then((data) => dataResponse(res, data, 'Vaccinated users retrieved successfully', 'No user have been recorded as vaccinated'))
-        .catch((err) => errResponse(res, err));
+        .then((data) => helper.dataResponse(res, data, 'Vaccinated users retrieved successfully', 'No user have been recorded as vaccinated'))
+        .catch((err) => helper.errResponse(res, err));
 } 
  
  
@@ -78,25 +76,25 @@ exports.createVaccRecord = (req, res) => {
     db.Vaccination_Records
         .create(req.body)
         .then((data) => {
-            db.Visiting_Records
+            db.Vaccination_Records
                 .findByPk(data.vaccination_record_ID, {
                     include : [
                         {
                             model: db.Users,
-                            as : "user",
+                            as : "vaccinated_citizen",
                             include : [{
                                 model : db.Addresses,
                                 as : "address"
                             }]
                         }, {
                             model: db.Vaccines,
-                            as : "vaccine"
+                            as : "vaccine_used"
                         }
                     ]
                 })
         .then((data) => helper.dataResponse(res, data, 'New vaccination record has been successfully created', 'Failed to create a vaccination record'))
         .catch((err) => helper.errResponse(res, err)); 
-         })
+    })
     .catch((err) => helper.errResponse(res, err)); 
 };
 

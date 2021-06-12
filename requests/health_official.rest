@@ -1,3 +1,18 @@
 ### Get All Vaccinated Citizens
 GET http://localhost:3000/health-official/vaccinated-citizens
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2FjY291bnRfSUQiOiJhNGRmMmQ0Yy05NTRmLTRjZTMtYjAyZS1mN2M2ZmU2MzU4ODIiLCJ1c2VyX0lEIjoiZWJjYWQzMDItN2MxMi00MDgzLTgxOTgtNDk1M2UwYzgzNTZhIiwidXNlcl90eXBlIjoiSGVhbHRoIE9mZmljaWFsIiwiYWNjb3VudF9kZXRhaWxzIjoiam9obmRvZUBnbWFpbC5jb20iLCJpYXQiOjE2MjI3MzM2MjcsImV4cCI6MTYyMjczODQyN30.07IcJ3WL9ZuuCj5Od5OTaB2PbClZtLCQFqWt0WK2DCg
+
+
+### Create Vaccination Record
+POST http://localhost:3000/health-official/add-vaccination-record
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX0lEIjoiZWJjYWQzMDItN2MxMi00MDgzLTgxOTgtNDk1M2UwYzgzNTZhIiwidXNlcl90eXBlIjoiSGVhbHRoIE9mZmljaWFsIiwiaWF0IjoxNjIzNTE0MDQwLCJleHAiOjE2MjM1MTg4NDB9.OsovRYtA1TKqbsJGanGDFplUEdkuWr4xGL6o2e5nUcE
+Content-Type: application/json
+
+{
+    "citizen_ID": "220ff9d5-4de3-4d58-bf91-968bb129b2fa",
+    "vaccine_ID": "b603614e-250a-4598-aa62-5fee984eb0ba",
+    "vaccination_date": "2020-02-13",
+    "vaccinated_by": "Dr. SAMPLE TEST",
+    "vaccinated_in": "Philippine General Hospital",
+    "remarks": "This is a test create"
+}

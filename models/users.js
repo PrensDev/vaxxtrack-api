@@ -276,6 +276,12 @@ module.exports = (sequelize, DataTypes) => {
         // Encrypt user's password before record create 
         users.password = bcrypt.hashSync(users.password, 10);
       },
+
+      // beforeBulkCreate: (users, options) => {
+        
+      //   // Encrypt user's password before record create 
+      //   users.password = bcrypt.hashSync(users.password, 10);
+      // },
       
       afterCreate: () => {
         if(process.env.ENABLE_MODEL_LOGS === 'true') {
