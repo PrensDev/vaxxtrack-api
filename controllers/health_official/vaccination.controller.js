@@ -12,13 +12,17 @@ const helper = require("../../helpers/controller.helper");
  
 const dbVaccinationAppointmentsOp = (req) => {
     return {
+        attributes: {
+            exclude: [
+                'citizen_ID',
+                'created_datetime',
+                'updated_datetime'
+            ]
+        },
         include: [
             {
                 model: db.Users,
                 as: 'appointed_by',
-                where: {
-                    user_ID: req.user.user_ID
-                },
                 attributes: {
                     exclude: [
                         'sex',
@@ -73,7 +77,6 @@ exports.getAllUsersAndVaccRecords = (req, res) => {
         .then((data) => helper.dataResponse(res, data, 'Vaccinated users retrieved successfully', 'No user have been recorded as vaccinated'))
         .catch((err) => helper.errResponse(res, err));
 } 
- 
  
 // Create new vaccination record of a Citizen.
 exports.createVaccRecord = (req, res) => {
@@ -229,7 +232,6 @@ exports.updateVaccRecord = (req, res, next) => {
     .catch((err) => helper.errResponse(res, err));
 }
  
- 
 
 // Get All Vaccination Appointments
 exports.getAllVaccAppointments = (req, res) => {
@@ -237,6 +239,7 @@ exports.getAllVaccAppointments = (req, res) => {
     // Check Authorization first
     helper.checkAuthorization(req, res, 'Health Official');
  
+    // Find all vaccination appointments
     db.Vaccination_Appointments
         .findAll(dbVaccinationAppointmentsOp(req))
         .then((data) => helper.dataResponse(res, data, 'Vaccination Appointments retrieved successfully', 'No Vaccination Appointment has been recorded as vaccinated'))
