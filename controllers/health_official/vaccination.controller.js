@@ -245,3 +245,56 @@ exports.getAllVaccAppointments = (req, res) => {
         .then((data) => helper.dataResponse(res, data, 'Vaccination Appointments retrieved successfully', 'No Vaccination Appointment has been recorded as vaccinated'))
         .catch((err) => helper.errResponse(res, err));
 }
+
+//Update Vaccination Appointments
+
+exports.updateVaccAppointmentStatusApproval = (req, res) => {
+
+    // Check Authorization first
+    helper.checkAuthorization(req, res, 'Health Official');
+
+    const vaccination_appointment_ID = req.params.vaccination_appointment_ID;
+
+    if(vaccination_appointment_ID == null) return res.status(500).send({
+        error   : true,
+        message : 'Parameter [vaccination_appointment_ID] is required',
+    });
+
+    // Check if vaccination record ID exists in database
+    db.Vaccination_Appointments
+        .findByPk(vaccination_appointment_ID)
+        .then((result) => {
+
+            // If no result return empty response
+            if(result == null) helper.emptyDataResponse(res, 'No vaccination_appointment_ID has been identified');
+
+            // Update vaccination record
+            db.Vaccination_Appointments
+                .update(req.body, {
+                    where: {
+                        vaccination_appointment_ID: vaccination_appointment_ID
+                    }
+                })
+                .then((result) => {
+
+                    //Get Vaccination Appointments after update
+                    db.Vaccination_Appointments
+                        .findByPk( vaccination_appointment_ID, {
+                            attributes: {
+                                exclude: [
+                                    'vaccination_appointment_ID',
+                                    'preferred_vaccine',
+                                    'preferred_date',
+                                    'citizen_ID',
+                                    'created_datetime',
+                                    'updated_datetime'
+                                ]
+                            }
+                        })
+                        .then((data) => helper.dataResponse(res, data, 'A [Vaccination Appointments] has been successfully updated', 'No [Vaccination Appointments] has been identified'))
+                        .catch((err) => helper.errResponse(res, err));
+                })
+                .catch((err) => helper.errResponse(res, err));
+        })
+        .catch((err) => helper.errResponse(res, err));
+};

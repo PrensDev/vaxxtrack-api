@@ -10,6 +10,7 @@ router.get ('/vaccinated-citizens'                              , vaccCtlr.getAl
 router.get ('/vaccination-appointments'                         , vaccCtlr.getAllVaccAppointments);
 router.post('/add-vaccination-record'                           , vaccCtlr.createVaccRecord);
 router.put ('/update-vaccination-record/:vaccination_record_ID' , vaccCtlr.updateVaccRecord);
+router.put ('/vaccination-appointments/change-status-approval/:vaccination_appointment_ID', vaccCtlr.updateVaccAppointmentStatusApproval);
 
 
 // User Information Controller

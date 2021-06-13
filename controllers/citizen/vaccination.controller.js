@@ -96,27 +96,43 @@ exports.cancelVaccAppointment = (req, res) => {
 
     helper.checkAuthorization(req, res, 'Citizen');
 
-    db.Vaccination_Appointments
-        .destroy({
-            where: {
-                vaccination_appointment_ID: req.params.vaccination_appointment_ID,
-                status_approval: 'Pending'
-            }
-        })
-        .then((data) => {
-            if(data == 1) {
-                res.send({
-                    error: false,
-                    data: data,
-                    message: '[Vaccine Appointments] has been Successfully Deleted'
-                })
-            } else {
-                res.send({
-                    error: true,
-                    message: '[Vaccine Appointments] cannot been Deleted'
-                })
-            }
-        })
-        .catch((err) => helper.errResponse(res, err)); 
+    const vaccination_appointment_ID = req.params.vaccination_appointment_ID;
 
+    if(vaccination_appointment_ID == null) return res.status(500).send({
+        error   : true,
+        message : 'Parameter [vaccination_appointment_ID] is required',
+    });
+
+    // Check if vaccination record ID exists in database
+    db.Vaccination_Appointments
+        .findByPk(vaccination_appointment_ID)
+        .then((result) => {
+
+            if(result == null) helper.emptyDataResponse(res, 'No vaccination_appointment_ID has been identified');
+
+            //Delete Vaccine Appointments
+            db.Vaccination_Appointments
+                .destroy({
+                    where: {
+                        vaccination_appointment_ID: vaccination_appointment_ID,
+                        status_approval: 'Pending'
+                    }
+                })
+                .then((result) => {
+                    if(result == 1) {
+                        res.send({
+                            error : false,
+                            data: result,
+                            message : '[Vaccine Appointments] has been Successfully Deleted'
+                        })
+                    } else {
+                        res.send({
+                            error : true,
+                            message: '[Vaccine Appointments] cannot been Deleted'
+                        })
+                    }
+                })
+                .catch((err) => helper.errResponse(res, err));
+        })
+        .catch((err) => helper.errResponse(res, err));
 };
