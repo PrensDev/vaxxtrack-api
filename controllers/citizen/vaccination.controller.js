@@ -85,7 +85,7 @@ exports.getAllVaccAppointments = (req, res) => {
                 }
             }],
         })
-        .then((data) => helper.dataResponse(res, data, 'Visiting Logs retrieved successfully', 'No visiting logs has been retrieved'))
+        .then((data) => helper.dataResponse(res, data, '[Vaccine Appointments] retrieved successfully', 'No [Vaccine Appointments] has been retrieved'))
         .catch((err) => helper.errResponse(res, err)); 
 
 };
@@ -98,9 +98,25 @@ exports.cancelVaccAppointment = (req, res) => {
 
     db.Vaccination_Appointments
         .destroy({
-            where: req.params.vaccination_appointment_ID
+            where: {
+                vaccination_appointment_ID: req.params.vaccination_appointment_ID,
+                status_approval: 'Pending'
+            }
         })
-        .then((data) => helper.dataResponse(res, data, 'Record has been Successfully Deleted.', 'The Appointment cannot Deleted.'))
+        .then((data) => {
+            if(data == 1) {
+                res.send({
+                    error: false,
+                    data: data,
+                    message: '[Vaccine Appointments] has been Successfully Deleted'
+                })
+            } else {
+                res.send({
+                    error: true,
+                    message: '[Vaccine Appointments] cannot been Deleted'
+                })
+            }
+        })
         .catch((err) => helper.errResponse(res, err)); 
 
 };

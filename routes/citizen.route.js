@@ -29,7 +29,7 @@ var vaccCtlr = require('../controllers/citizen/vaccination.controller');
 router.get ("/vaccination-records"                          , vaccCtlr.getAllVaccRecord);
 router.get ("/vaccination-records/:vaccination_record_ID"  , vaccCtlr.getOneVaccRecord);
 router.get ("/vaccination-appointments"                     , vaccCtlr.getAllVaccAppointments);
-router.delete ("/cancel-vaccination-appointment/:vaccination_record_ID", vaccCtlr.cancelVaccAppointment);
+router.delete ("/cancel-vaccination-appointment/:vaccination_appointment_ID", vaccCtlr.cancelVaccAppointment);
 
 
 
