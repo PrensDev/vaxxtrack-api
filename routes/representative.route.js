@@ -32,7 +32,9 @@ router.put('/update-info' , infoController.updateInfo);
 // Account Controller
 var accountCtlr = require('../controllers/representative/account.controller');
 router.put('/update-password' ,  accountCtlr.updatePassword);
-
+router.get('/accounts'        ,  accountCtlr.getAllAccounts);
+router.post('/add-account'    ,  accountCtlr.createAccount);
+router.put('/verify-account/:user_account_ID',  accountCtlr.verifyAccount);
 
 // Export module
 module.exports = router;
