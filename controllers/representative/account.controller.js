@@ -38,7 +38,6 @@ exports.updatePassword = (req, res) =>  {
 };
 
 //get All Accounts
-
 exports.getAllAccounts = (req, res) => {
 
     //check authorization
