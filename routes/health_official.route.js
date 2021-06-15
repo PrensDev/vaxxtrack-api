@@ -1,7 +1,11 @@
+/**
+ * =====================================================================
+ * * HEALTH OFFICIAL ROUTES
+ * =====================================================================
+ */
+
+// Import Router from express
 var router = require('express').Router();
-
-
-/* Health Official Route */
 
 
 // Vaccination Controller
@@ -15,8 +19,8 @@ router.put ('/vaccination-appointments/change-status-approval/:vaccination_appoi
 
 // User Information Controller
 var infoController = require('../controllers/health_official/info.controller');
-router.get ('/info'        , infoController.getInfo);
-router.put ('/update-info' , infoController.updateInfo);
+router.get('/info'        , infoController.getInfo);
+router.put('/update-info' , infoController.updateInfo);
 
 
 // Account Controller

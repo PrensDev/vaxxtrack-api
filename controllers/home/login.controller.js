@@ -29,44 +29,46 @@ exports.login = (req, res) => {
     if (String(req.body.authDetails) === '' || String(req.body.password) === '') {
         return res.status(500).send({
             error   : true,
-            message : "Fields cannot be empty",
+            message : "Details and Password cannot be empty",
         });
     } 
     
     db.User_Accounts
         .findOne({
             where: { 
-                details  : req.body.authDetails,
+                details  : req.body.auth_details,
                 verified : 1,
             },
             include: {
-                model : db.Users,
-                as    : 'user',
+                model      : db.Users,
+                as         : 'user',
+                attributes : ['user_ID', 'user_type', 'password']
             },              
         })
         .then((data) => {
 
             // If no data then send empty response
-            if (data == null) emptyDataResponse(res, 'That user does not exist');
+            if (data == null) return emptyDataResponse(res, 'That user does not exist');
 
             // Else validate password
-            bcrypt.compare(req.body.password, data.user.password, (err, result) => {
-                if (result) {
-                    res.send({
-                        error   : false,
-                        data    : data,
-                        token   : generateToken({ 
-                            user_ID   : data.user.user_ID, 
-                            user_type : data.user.user_type, 
-                        }),
-                        message : "A user has been successfully identified",
-                    });
-                } else {
-                    res.send({
-                        error   : true,
-                        message : "Invalid details or password",
-                    });
-                }
+            bcrypt.compare(req.body.password, data.user.password, (err, hasResult) => {
+
+                // Display error if exists
+                if(err) console.log(err);
+                                
+                // If no result then send empty reponse
+                if(!hasResult) return emptyDataResponse(res, 'Invalid details or password');
+
+                // ELse send reponse with data
+                res.send({
+                    error   : false,
+                    data    : data,
+                    token   : generateToken({ 
+                        user_ID   : data.user.user_ID, 
+                        user_type : data.user.user_type, 
+                    }),
+                    message : "A user has been successfully identified",
+                });
             })
         })
         .catch((err) => errResponse(res, err));

@@ -143,16 +143,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isIn: {
-          args: [
-            [
-              'Asymptomatic',
-              'Mild',
-              'Severe',
-              'Critical',
-              'Died',
-              'Recovered'
-            ]
-          ],
+          args: [['Asymptomatic','Mild','Severe','Critical','Died','Recovered']],
           msg: '[case_information].[current_health_status] values must be `Asymptomatic`, `Mild`, `Severe`, `Critical`, `Died`, or `Recovered` only'
         },
         notNull: {

@@ -10,7 +10,6 @@ const db     = require('../../models');
 const helper = require('../../helpers/controller.helper');
 
 
-// TODO: include the properties and methods here
 // Return the information of the super_admin
 exports.getInfo = (req, res, next) => {
 

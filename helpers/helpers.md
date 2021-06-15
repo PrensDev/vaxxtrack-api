@@ -14,6 +14,19 @@ This are helpers made for controllers. To use it, just import this in your contr
 const helper = require('../../helpers/controller.helper')
 ```
 
+or 
+
+
+```
+const {
+    // Just declare the methods you want to use only and no need to use helper object
+    checkAuthorization,
+    dataResponse,
+    errResponse,
+    emptyDataResponse
+} = require('../../helpers/controller.helper')
+```
+
 ### Methods
 
 #### `.checkAuthorization(req, res, userTypes)`
@@ -146,7 +159,7 @@ db.Establishments
     .then((result) => {
 
         // Check if no result then return error response
-        if(result == null) helper.emptyDataResponse(res, 'No establishment has been identified');
+        if(result == null) return helper.emptyDataResponse(res, 'No establishment has been identified');
 
         // Update method
     })

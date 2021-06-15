@@ -1,13 +1,15 @@
 /**
- * ESTABLISHMENT CONTROLLER
- * 
+ * =====================================================================
+ * * ESTABLISHMENT CONTROLLER
+ * ---------------------------------------------------------------------
  * This controller is for establishment management of representatives
+ * =====================================================================
  */
 
 
 // Import required packages
-const db     = require("../../models");
-const helper = require("../../helpers/controller.helper");
+const db = require("../../models");
+const { checkAuthorization, dataResponse, errResponse, emptyDataResponse } = require("../../helpers/controller.helper");
 
 
 // db.Establishment options
@@ -36,13 +38,13 @@ const dbEstablishmentsOp = (req) => {
 exports.getAllEstablishments = (req, res) => {
     
     // Check authorization first
-    helper.checkAuthorization(req, res, 'Representative');
+    checkAuthorization(req, res, 'Representative');
 
     // Find all representative establishments
     db.Establishments
         .findAll(dbEstablishmentsOp(req))
-        .then((data) => helper.dataResponse(res, data, 'Establishments and its information retrieved successfully', 'No establishment has been identified'))
-        .catch((err) => helper.errResponse(res, err));
+        .then((data) => dataResponse(res, data, 'Establishments and its information retrieved successfully', 'No establishment has been identified'))
+        .catch((err) => errResponse(res, err));
 }
 
 
@@ -50,13 +52,13 @@ exports.getAllEstablishments = (req, res) => {
 exports.getOneEstablishment = (req, res) => {
     
     // Check authorization first
-    helper.checkAuthorization(req, res, 'Representative');
+    checkAuthorization(req, res, 'Representative');
 
     // Find establishment by its establishment_ID parameter
     db.Establishments
         .findByPk(req.params.establishment_ID, dbEstablishmentsOp(req))
-        .then((data) => helper.dataResponse(res, data, 'An establishments and its information has been identified', 'No establishment has been identified'))
-        .catch((err) => helper.errResponse(res, err));
+        .then((data) => dataResponse(res, data, 'An establishments and its information has been identified', 'No establishment has been identified'))
+        .catch((err) => errResponse(res, err));
 }
 
 
@@ -64,7 +66,7 @@ exports.getOneEstablishment = (req, res) => {
 exports.updateEstablishment = (req, res) => {
     
     // Check authorization first
-    helper.checkAuthorization(req, res, 'Representative');
+    checkAuthorization(req, res, 'Representative');
 
     // Get establishment_ID from parameter
     const establishment_ID = req.params.establishment_ID;
@@ -81,22 +83,18 @@ exports.updateEstablishment = (req, res) => {
             include: {
                 model: db.Users,
                 as: 'role_by',
-                where: {
-                    user_ID: req.user.user_ID
-                }
+                where: { user_ID: req.user.user_ID }
             }
         })
         .then((result) => {
 
             // If no result then return empty response
-            if(result == null) helper.emptyDataResponse(res, 'That establishment cannot found');
+            if(result == null) return emptyDataResponse(res, 'That establishment cannot found');
             
             // Else update establishment information
             db.Establishments
                 .update(req.body, {
-                    where: {
-                        establishment_ID: establishment_ID
-                    },
+                    where: { establishment_ID: establishment_ID },
                     include: [{
                         model: db.Addresses,
                         as: 'address'
@@ -105,8 +103,9 @@ exports.updateEstablishment = (req, res) => {
                 .then((result) => {
 
                     // If no result then return empty response
-                    if(result == null) helper.emptyDataResponse(res, 'That establishment cannot found');
+                    if(result == null) return emptyDataResponse(res, 'That establishment cannot found');
                     
+                    // Else find the updated record
                     db.Establishments
                         .findByPk(establishment_ID, {
                             include: {
@@ -114,10 +113,10 @@ exports.updateEstablishment = (req, res) => {
                                 as      : 'address'
                             }
                         })
-                        .then((data) => helper.dataResponse(res, data, 'An establishment has been successfully updated', 'No establishment was updated'))
-                        .catch((err) => helper.errResponse(res, err));
+                        .then((data) => dataResponse(res, data, 'An establishment has been successfully updated', 'No establishment was updated'))
+                        .catch((err) => errResponse(res, err));
                 })
-                .catch((err) => helper.errResponse(res, err));
+                .catch((err) => errResponse(res, err));
         })
-        .catch((err) => helper.errResponse(res, err));
+        .catch((err) => errResponse(res, err));
 }

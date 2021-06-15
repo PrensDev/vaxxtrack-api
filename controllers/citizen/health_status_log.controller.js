@@ -1,7 +1,9 @@
 /**
- * HEALTH STATUS LOG CONTROLLER
- * 
+ * =====================================================================
+ * * HEALTH STATUS LOG CONTROLLER
+ * ---------------------------------------------------------------------
  * This controller is for health status log activities of citizens
+ * =====================================================================
  */
 
 

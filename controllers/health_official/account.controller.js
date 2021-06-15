@@ -7,7 +7,7 @@
 
 // Import required packages
 const db     = require('../../models');
-const helper = require('../../helpers/controller.helper');
+const { checkAuthorization, dataResponse, errResponse, emptyDataResponse } = require('../../helpers/controller.helper');
 const bcrypt = require('bcrypt');
 
 
@@ -15,7 +15,7 @@ const bcrypt = require('bcrypt');
 exports.updatePassword = (req, res) =>  {
 
     // Check authorization first
-    helper.checkAuthorization(req, res, 'Health Official');
+    checkAuthorization(req, res, 'Health Official');
 
     // Get password from req.body
     const password = req.body.password;
@@ -31,9 +31,10 @@ exports.updatePassword = (req, res) =>  {
         .update({ password: bcrypt.hashSync(password, 10) }, {
             where: { user_ID: req.user.user_ID }
         })
-        .then(() => helper.emptyDataResponse(res, 'Password has been changed successfully'))
-        .catch((err) => helper.errResponse(res, err));
+        .then(() => emptyDataResponse(res, 'Password has been changed successfully'))
+        .catch((err) => errResponse(res, err));
 };
+
 
 // Get all accounts
 exports.getAllAccounts = (req, res, next) => {
@@ -62,12 +63,13 @@ exports.getAllAccounts = (req, res, next) => {
     }
 }
 
+
 // Create new account
 exports.createAccount = (req, res) => {
     
     // Check Authorization first
     helper.checkAuthorization(req, res, 'Health Official');
-
+    
     req.body.user_ID = req.user.user_ID
     db.User_Accounts
         .create(req.body)

@@ -1,7 +1,10 @@
 /**
- * VISITING LOG CONTROLLER
- * 
- * This controller is for visiting log activity of citizen (Representative)
+ * =====================================================================
+ * * VISITING LOG CONTROLLER
+ * ---------------------------------------------------------------------
+ * This controller is for managing visiting log activity of citizens 
+ * (Representative)
+ * =====================================================================
  */
 
 

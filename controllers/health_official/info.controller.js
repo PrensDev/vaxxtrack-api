@@ -10,8 +10,6 @@ const db     = require('../../models');
 
 
 
-// TODO: include the properties and methods here
-
 // Get Health official Info
 exports.getInfo = (req, res, next) => {
     if(req.user == null || req.user.user_type !== 'Health Official') {

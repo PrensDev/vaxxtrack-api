@@ -1,16 +1,16 @@
-/*
-|================================================================
-| APP CONFIGURATIONS
-|================================================================
+/**
+* ================================================================
+* * APP CONFIGURATIONS
+* ================================================================
 */
 
-// Import modules or packages
-const express   = require('express');
-const jwt       = require('jsonwebtoken');
-const cors      = require('cors');
+// Import required modules or packages
+const express = require('express');
+const jwt     = require('jsonwebtoken');
+const cors    = require('cors');
 
 
-// Reference to database
+// Reference to database models
 const db = require('./models');
 
 
@@ -22,11 +22,11 @@ const app = express();
 require('dotenv').config();
 
 
-// Configurations
+// Port Configuration
 const port = process.env.PORT || 3333;
 
 
-// Setups
+// Express Setups
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -34,9 +34,9 @@ app.use(express.json());
 // Middlewares
 app.use(cors());
 app.use((req, res, next) => {
-    if(process.env.ENABLE_REQUEST_LOGS === 'true' || false) {
-        console.log(`Request has been sent to ${ req.url }`);
-    }
+
+    // Log request messages (testing purposes)
+    if(process.env.ENABLE_REQUEST_LOGS === 'true') console.log(`Request has been sent to ${ req.url }`);
     next();
 });
 
@@ -66,14 +66,14 @@ const authenticateToken = (req, res, next) => {
 }
 
 
-/*
-|================================================================
-| ROUTES
-|================================================================
+/**
+* ================================================================
+* * ROUTES
+* ================================================================
 */
 
-// Main Routes
-app.use('/', require('./routes/main.route'));
+// Home Route
+app.use('/', require('./routes/home.route'));
 
 // Test Route (this will be removed before production)
 app.use('/test', require('./routes/test.route'));
@@ -82,13 +82,13 @@ app.use('/test', require('./routes/test.route'));
 app.use('/citizen'        , authenticateToken , require('./routes/citizen.route'));
 app.use('/representative' , authenticateToken , require('./routes/representative.route'));
 app.use('/health-official', authenticateToken , require('./routes/health_official.route'));
-app.use('/admin'          , authenticateToken , require('./routes/super_admin.route'));
+app.use('/super-admin'    , authenticateToken , require('./routes/super_admin.route'));
 
 
-/*
-|================================================================
-| DATABASE CONFIGURATIONS
-|================================================================
+/**
+* ================================================================
+* * DATABASE CONFIGURATIONS
+* ================================================================
 */
 
 
@@ -141,17 +141,20 @@ ${err}
 db.sequelize
     .authenticate()
     .then(() => {
+        
+        // Log the success connection message (testing purposes) 
         if(process.env.ENABLE_DB_CONN_LOGS === 'true' || false) console.log(connSuccessMsg)
+        
+        // Synchronize models and save changes to database
+        db.sequelize
+            .sync({
+                force: process.env.SEQUELIZE_FORCE_SYNC === 'true' || false,
+                alter: process.env.SEQUELIZE_ALTER_SYNC === 'true' || false,
+                sync:  process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
+            })
+            .then(() => app.listen(port, () => console.log(syncSuccessMsg)))
+            .catch((err) => console.log(syncFailedMsg(err)));
     })
     .catch((err) => console.log(connFailedMsg(err)));
 
     
-// Save changes to the database
-db.sequelize
-    .sync({
-        force: process.env.SEQUELIZE_FORCE_SYNC === 'true' || false,
-        alter: process.env.SEQUELIZE_ALTER_SYNC === 'true' || false,
-        sync:  process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
-    })
-    .then(() => app.listen(port, () => console.log(syncSuccessMsg)))
-    .catch((err) => console.log(syncFailedMsg(err)));

@@ -6,7 +6,7 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "authDetails": "timothy.mcduffy@gmail.com",
+    "auth_details": "johndoe@gmail.com",
     "password": "$P@ssw0rd;"
 }
 
@@ -46,4 +46,23 @@ Content-Type: application/json
     }
 }
 
-###
+### Create Citizen
+
+{
+    "first_name": "Juan",
+    "last_name": "Dela Cruz",
+    "sex": "Male",
+    "birth_date": "2000-01-01",
+    "civil_status": "Single",
+    "password": "Password",
+    "user_accounts": [
+        { "authDetails": "juandelacruz@gmail.com" }, 
+    ],
+    "address": {
+        "region": "",
+        "province": "",
+        "city": "",
+        "street": "",
+        "specific_location": "",
+    }
+}

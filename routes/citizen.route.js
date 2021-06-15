@@ -1,7 +1,11 @@
+/**
+ * =====================================================================
+ * * CITIZEN ROUTES
+ * =====================================================================
+ */
+
+// Import Router from express
 var router = require('express').Router();
-
-
-/* Citizen Controller */
 
 
 // Index Controller (for testing purpose yet)
@@ -29,22 +33,22 @@ var vaccCtlr = require('../controllers/citizen/vaccination.controller');
 router.get ("/vaccination-records"                          , vaccCtlr.getAllVaccRecord);
 router.get ("/vaccination-records/:vaccination_record_ID"  , vaccCtlr.getOneVaccRecord);
 router.get ("/vaccination-appointments"                     , vaccCtlr.getAllVaccAppointments);
-router.delete ("/cancel-vaccination-appointment/:vaccination_appointment_ID", vaccCtlr.cancelVaccAppointment);
+router.delete("/cancel-vaccination-appointment/:vaccination_appointment_ID", vaccCtlr.cancelVaccAppointment);
 
 
 
 // User Information Controller
 var infoController = require('../controllers/citizen/info.controller');
-router.get ('/info'        , infoController.getInfo);
-router.put ('/update-info' , infoController.updateInfo);
+router.get ('/info' , infoController.getInfo);
+router.put ('/info' , infoController.updateInfo);
 
 
 // Account Controller
 var accountCtlr = require('../controllers/citizen/account.controller');
-router.put('/update-password'                   , accountCtlr.updatePassword);
-router.get('/accounts'                          , accountCtlr.getAllAccounts);
-router.post('/add-account'                      , accountCtlr.createAccount);
-router.put('/verify-account/:user_account_ID'   , accountCtlr.verifyAccount);
+router.put ('/update-password'                 , accountCtlr.updatePassword);
+router.get ('/accounts'                        , accountCtlr.getAllAccounts);
+router.post('/add-account'                     , accountCtlr.createAccount);
+router.put ('/verify-account/:user_account_ID' , accountCtlr.verifyAccount);
 
 // Export module
 module.exports = router; 
