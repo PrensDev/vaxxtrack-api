@@ -60,18 +60,39 @@ exports.getAllAccounts = (req, res) => {
 //add accnt
 exports.createAccount = (req, res) => {
 
-    //check auth
+    //check authentication
     helper.checkAuthorization(req, res, 'Representative');
 
     //add accnt
     db.User_Accounts
+    
     .create({
         user_ID: req.user.user_ID,
         details: req.body.details,
-        type: req. body.type,
+        type: req.body.type, 
     })
-    
-    .then((data) => helper.dataResponse(res, data, 'Account successfully created', 'No Account has been created'))
+    .then((result) => {
+        db.Users
+            .findByPk(result.user_ID, {
+                include: [
+                    {
+                        model: db.User_Accounts,
+                        as: 'user_accounts',
+                        attributes: {
+                            exclude: [
+                                'user_account_ID',
+                                'user_ID',
+                                'verified',
+                                'created_datetime',
+                                'updated_datetime'
+                            ]
+                        }
+                    }
+                ],
+            })
+            .then((data) => helper.dataResponse(res, data, 'Account successfully created', 'No Account has been created'))
+            .catch((err) => helper.errResponse(res, err));
+    })
     .catch((err) => helper.errResponse(res, err));
 }
 
