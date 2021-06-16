@@ -51,13 +51,13 @@ const authenticateToken = (req, res, next) => {
     const token = authHeader && authHeader.split(" ")[1];
 
     // If token is null then send unauthorized response
-    if (token == null) return res.sendStatus(401);
+    if (token == null) return res.status(401).send('No access token is detected.');
     
     // Verify the token, if not verified then forbidden
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
 
         // If token is not verified then send forbidden response
-        if (err) return res.sendStatus(403);
+        if (err) return res.send(403).status('Invalid token');
 
         // Save token data to req.user
         req.user = user;

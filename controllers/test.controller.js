@@ -1,4 +1,3 @@
-const { errResponse } = require('../helpers/controller.helper');
 const db = require('../models');
 
 exports.test = (req, res, next) => {

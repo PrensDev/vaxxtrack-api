@@ -8,9 +8,9 @@ var router = require('express').Router();
 
 // Test Controller
 var testCtlr = require('../controllers/test.controller');
-router.get('/'          , testCtlr.test);
-router.get('/populate'  , testCtlr.populate);
-router.get('/populate2' , testCtlr.populate2);
+router.get('/'               , testCtlr.test);
+router.get('/populate'       , testCtlr.populate);
+router.get('/populate2'      , testCtlr.populate2);
 
 
 // Export module

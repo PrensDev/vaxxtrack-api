@@ -81,59 +81,59 @@ exports.createVaccRecord = (req, res) => {
     
     // Check Authorization first
     helper.checkAuthorization(req, res, 'Health Official');
- 
+
     db.Vaccination_Records
         .create(req.body)
         .then((data) => {
             db.Users
                 .findByPk(data.citizen_ID, {
                     attributes: {
-                    exclude: [
-                        'user_ID',
-                        'added_by',
-                        'user_type',
-                        'address_ID',
-                        'created_datetime',
-                        'updated_datetime'
-                    ]
-                },
-                include : [
-                    {
-                        model: db.Addresses,
-                        as : "address",
-                        attributes: {
-                            exclude: [
-                                'address_ID',
-                                'created_datetime',                                
-                                'updated_datetime'
-                            ]}
-                    }, {
-                        model: db.Vaccination_Records,
-                        as : "vaccination_records",
-                        attributes: {
-                            exclude: [                                    
-                                'citizen_ID',
-                                'vaccine_ID',                                
-                                'created_datetime',
-                                'updated_datetime'
-                            ]
-                        },
-                        include : [{
-                            model : db.Vaccines,
-                            as : "vaccine_used",                                
+                        exclude: [
+                            'user_ID',
+                            'added_by',
+                            'user_type',
+                            'address_ID',
+                            'created_datetime',
+                            'updated_datetime'
+                        ]
+                    },
+                    include: [
+                        {
+                            model: db.Addresses,
+                            as : "address",
                             attributes: {
                                 exclude: [
-                                    'vaccine_ID',
-                                    'shots_details',
-                                    'description',
+                                    'address_ID',
+                                    'created_datetime',                                
+                                    'updated_datetime'
+                                ]}
+                        }, {
+                            model: db.Vaccination_Records,
+                            as : "vaccination_records",
+                            attributes: {
+                                exclude: [                                    
+                                    'citizen_ID',
+                                    'vaccine_ID',                                
                                     'created_datetime',
                                     'updated_datetime'
-                                ]                                
-                            }
-                        }]
-                    }
-                ]
-            })
+                                ]
+                            },
+                            include : [{
+                                model : db.Vaccines,
+                                as : "vaccine_used",                                
+                                attributes: {
+                                    exclude: [
+                                        'vaccine_ID',
+                                        'shots_details',
+                                        'description',
+                                        'created_datetime',
+                                        'updated_datetime'
+                                    ]                                
+                                }
+                            }]
+                        }
+                    ]
+                })
         .then((data) => dataResponse(res, data, 'New vaccination record has been successfully created', 'Failed to create a vaccination record'))
         .catch((err) => errResponse(res, err)); 
     })
