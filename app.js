@@ -57,7 +57,7 @@ const authenticateToken = (req, res, next) => {
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
 
         // If token is not verified then send forbidden response
-        if (err) return res.send(403).status('Invalid token');
+        if (err) return res.sendStatus(403);
 
         // Save token data to req.user
         req.user = user;
@@ -72,17 +72,20 @@ const authenticateToken = (req, res, next) => {
 * ================================================================
 */
 
+// API Controller
+const API_CONTROLLER = '/c19ctavms/v1/';
+
 // Home Route
-app.use('/', require('./routes/home.route'));
+app.use(`${ API_CONTROLLER }`, require('./routes/home.route'));
 
 // Test Route (this will be removed before production)
-app.use('/test', require('./routes/test.route'));
+app.use(`${ API_CONTROLLER }test`, require('./routes/test.route'));
 
 // Authenticated Routes
-app.use('/citizen'        , authenticateToken , require('./routes/citizen.route'));
-app.use('/representative' , authenticateToken , require('./routes/representative.route'));
-app.use('/health-official', authenticateToken , require('./routes/health_official.route'));
-app.use('/super-admin'    , authenticateToken , require('./routes/super_admin.route'));
+app.use(`${ API_CONTROLLER }citizen`         , authenticateToken , require('./routes/citizen.route'));
+app.use(`${ API_CONTROLLER }representative`  , authenticateToken , require('./routes/representative.route'));
+app.use(`${ API_CONTROLLER }health-official` , authenticateToken , require('./routes/health_official.route'));
+app.use(`${ API_CONTROLLER }super-admin`     , authenticateToken , require('./routes/super_admin.route'));
 
 
 /**
