@@ -40,7 +40,7 @@ router.delete("/cancel-vaccination-appointment/:vaccination_appointment_ID", vac
 // User Information Controller
 var infoController = require('../controllers/citizen/info.controller');
 router.get ('/info' , infoController.getInfo);
-router.put ('/info' , infoController.updateInfo);
+router.put ('/edit_info' , infoController.updateInfo);
 
 
 // Account Controller

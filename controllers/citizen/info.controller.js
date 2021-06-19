@@ -9,7 +9,7 @@
 
 // Import models
 const db = require("../../models");
-
+const helper = require("../../helpers/controller.helper");
 
 // Get Citizen Info
 exports.getInfo = (req, res, next) => {
@@ -18,23 +18,8 @@ exports.getInfo = (req, res, next) => {
     } else {
         db.Users
             .findByPk(req.user.user_ID)
-            .then((data) => {
-                if(data) {
-                    res.send({
-                        error: false,
-                        data: data,
-                        message: 'A citizen has been identified'
-                    });
-                } else {
-                    res.send({
-                        error: true,
-                        message: 'No citizen has been identified'
-                    });
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+            .then((data) => helper.dataResponse(res, data, 'A Citizen has been identified', 'No Citizen has been identified'))
+            .catch((err) => errResponse(res, err));
     }
 }
 

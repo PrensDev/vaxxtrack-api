@@ -23,7 +23,7 @@ require('dotenv').config();
 
 
 // Port Configuration
-const port = process.env.PORT || 3333;
+const PORT = process.env.PORT || 3333;
 
 
 // Express Setups
@@ -126,7 +126,7 @@ const syncSuccessMsg = `
 =========================================================================
 Execution is successful!
 -------------------------------------------------------------------------
-Listening on http://localhost:${ port }
+Base URL: http://localhost:${ PORT }/c19ctavms/v1/
 =========================================================================
 `
 
@@ -155,9 +155,7 @@ db.sequelize
                 alter: process.env.SEQUELIZE_ALTER_SYNC === 'true' || false,
                 sync:  process.env.SEQUELIZE_ALLOW_SYNC === 'true' || false,
             })
-            .then(() => app.listen(port, () => console.log(syncSuccessMsg)))
+            .then(() => app.listen(PORT, () => console.log(syncSuccessMsg)))
             .catch((err) => console.log(syncFailedMsg(err)));
     })
     .catch((err) => console.log(connFailedMsg(err)));
-
-    
