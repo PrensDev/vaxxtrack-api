@@ -1,15 +1,19 @@
+### Base URL
+@base_url = http://localhost:3000/c19ctavms/v1/citizen/
+
+### AuthToken
+@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX0lEIjoiMjExYzlmN2YtMjg2Zi00LgjH2m5c8emE66pjdExmgep47BAdKTrCJ7Gicl90eXBlIjoiQ2l0aXplbiIsImlhdCI6MTYyNDMyNjY0NSwiZXhwIjoxNjI0MzM3NDQ1fQ.cA1ihohL-b8iY1liv7H9gXHvA8MwwHmJvQHtv6ud2Gk
+
 ### All Visiting Logs
-GET http://localhost:3000/c19ctavms/v1/citizen/visiting-logs
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX0lEIjoiMjIwZmY5ZDUtNGRlMy00ZDU4LgjH2m5c8emE66pjdExmgep47BAdKTrCJ790eXBlIjoiQ2l0aXnHiSgDznyvEWLRDTty2Ej8fUgrwm3Xjt1wIjoxNjI0MjU5MTk1fQ.OH0UUTdlgkWF6XA_6HkwZaJ4aIbWRJGsvC3KCrIJUiQ
-Content-Type: application/json
+GET {{base_url}}visiting-logs
+Authorization: {{authToken}}
 
 ### One Visiting Log
-GET http://localhost:3000/c19ctavms/v1/citizen/visiting-logs/47490e20-ea55-47df-8a8e-bd0c416965e1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX0lEIjoiMjIwZmY5ZDUtNGRlMy00ZDU4LgjH2m5c8emE66pjdExmgep47BAdKTrCJ790eXBlIjoiQ2l0aXnHiSgDznyvEWLRDTty2Ej8fUgrwm3Xjt1wIjoxNjI0MjU5MTk1fQ.OH0UUTdlgkWF6XA_6HkwZaJ4aIbWRJGsvC3KCrIJUiQ
-Content-Type: application/json
+GET {{base_url}}visiting-logs/47490e20-ea55-47df-8a8e-bd0c416965e1
+Authorization: {{authToken}}
 
 ### Add Visiting Log
-POST http://localhost:3000/c19ctavms/v1/citizen/visiting-logs/add
+POST {{base_url}}visiting-logs/add
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX0lEIjoiMjExYzlmN2YtMjg2Zi00MjAxLWI3YWMtMmNlNWUxM2RiZGE3IiwidXNlcl90eXBlIjoiQ2l0aXplbiIsImlhdCI6MTYyMzQ4MjQ2MywiZXhwIjoxNjIzNDg3MjYzfQ.xkWhFDUV3Obq3gwnGFZPLe8hpvLo0tbBkCJ5UO233CE
 Content-Type: application/json
 
@@ -21,5 +25,5 @@ Content-Type: application/json
 }
 
 ### User Info
-GET http://localhost:3000/c19ctavms/v1/citizen/info
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX0lEIjoiMjIwZmY5ZDUtNGRlMy00ZDU4LgjH2m5c8emE66pjdExmgep47BAdKTrCJ790eXBlIjoiQ2l0aXnHiSgDznyvEWLRDTty2Ej8fUgrwm3Xjt1wIjoxNjI0MjU5MTk1fQ.OH0UUTdlgkWF6XA_6HkwZaJ4aIbWRJGsvC3KCrIJUiQ
+GET {{base_url}}citizen/info
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX0lEIjoiMjIwZmY5ZDUtNGRlMy00ZDU4LgjH2m5c8emE66pjdExmgep47BAdKTrCJ790eXBlIjoiQ2l0aXnHiSgDznyvEWLRDTty2Ej8fUgrwm3Xjt1wIjoxNjI0MzM3MjkxfQ.0DcI4RHwaHgdo-LsSta_LAP10rl4JGg-pjB9W9CvoA0

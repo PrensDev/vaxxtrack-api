@@ -6,9 +6,9 @@
 
 
 // Import Required Modules/Packages
-const bcrypt    = require('bcrypt');
-const jwt       = require('jsonwebtoken');
-const db        = require("../../models");
+const bcrypt = require('bcrypt');
+const jwt    = require('jsonwebtoken');
+const db     = require("../../models");
 const { errResponse, emptyDataResponse } = require('../../helpers/controller.helper');
 
 
@@ -18,7 +18,7 @@ require('dotenv').config();
 
 // Generate token
 const generateToken = (data) => { 
-    return jwt.sign(data, process.env.TOKEN_SECRET, { expiresIn: '4800s' }); 
+    return jwt.sign(data, process.env.TOKEN_SECRET, { expiresIn: '3h' }); 
 }
 
 
@@ -61,17 +61,20 @@ exports.login = (req, res) => {
                 if(!hasResult) return emptyDataResponse(res, 'Invalid details or password');
                 
                 // ELse send reponse with data
+                const user_ID = data.user.user_ID;
+                const user_type = data.user.user_type;
+                
                 res.send({
-                    error : false,
-                    data  : {
-                        user_ID: data.user.user_ID,
-                        user_type: data.user.user_type,
+                    error: false,
+                    data: {
+                        user_ID: user_ID,
+                        user_type: user_type,
                         token: generateToken({ 
-                            user_ID   : data.user.user_ID, 
-                            user_type : data.user.user_type, 
+                            user_ID   : user_ID, 
+                            user_type : user_type, 
                         }),
                     },
-                    message : "A user has been successfully identified",
+                    message: "A user has been successfully identified",
                 });
             })
         })

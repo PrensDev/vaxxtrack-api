@@ -1,16 +1,25 @@
-@base_url = http://localhost:3000/c19ctavms/v1/super-admin/
-@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX0lEIjoiMDk3MWE1MGEtZGU5Mi00NjGV9Jm2u7rmsCe65wKzPTw5jtS38n2tVEGicl90eXBlIjoiU1GV9Jm2u7rmsCe65wKzPTw5jtS38n2tVEGiMzUsImV4cCI6MTYyNDI1NzYzNX0.QRFi3dgfSVKpc1B9idTEuN3cBScszNHP9sEGiNnBwfQ
+#####################################################################
+### VARIABLES
+#####################################################################
 
+### Base Url
+@base_url = http://localhost:3000/c19ctavms/v1/super-admin/
+
+### Auth Token
+
+@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX0lEIjoiMDk3MWE1MGEtZGU5Mi00NjGV9Jm2u7rmsCe65wKzPTw5jtS38n2tVEGicl90eXBlIjoiU1GV9Jm2u7rmsCe65wKzPTw5jtS38n2tVEGiMjEsImV4cCI6MTYyNDMzNDMyMX0.3Oc0RJtZDib7D7LGOHArpZkSJmtPxJhhENg5m74SVzY
+
+#####################################################################
+### REQUEST
+#####################################################################
 
 ### Get All Vaccines
 GET {{base_url}}vaccines
 Authorization: {{authToken}}
 
-
 ### Get One Vaccines
 GET {{base_url}}vaccines/77b4f71d-5546-4511-a568-900114ab9797
 Authorization: {{authToken}}
-
 
 ### Update Vaccine
 PUT {{base_url}}update-vaccine/77b4f71d-5546-4511-a568-900114ab9797
@@ -21,16 +30,13 @@ Content-Type: application/json
     "description": "This is J&J Vaccine"
 }
 
-
 ### Get all users
 GET {{base_url}}users
 Authorization: {{authToken}}
 
-
 ### Get Users Count
 GET {{base_url}}users-count
 Authorization: {{authToken}}
-
 
 ### Get User Info
 GET {{base_url}}info

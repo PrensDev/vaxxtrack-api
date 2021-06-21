@@ -1,9 +1,17 @@
+#####################################################################
+### VARIABLES
+#####################################################################
+
+### Base URL
+
 @base_url = http://localhost:3000/c19ctavms/v1/
 
+#####################################################################
+### REQUESTS
+#####################################################################
 
 ### Main Index
 GET {{base_url}}
-
 
 ### Login
 POST {{base_url}}login
@@ -13,7 +21,6 @@ Content-Type: application/json
     "auth_details": "juandelacruz@gmail.com",
     "password": "$P@ssw0rd;"
 }
-
 
 ### Register Representative
 POST {{base_url}}register/representative

@@ -1,10 +1,17 @@
+### Base URL
+@base_url = http://localhost:3000/c19ctavms/v1/representative/
+
+### AuthToken
+
+@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX0lEIjoiYzA3NjJjNjktNzhlOS00NjU2LgjH2m5c8emE66pjdExmgep47BAdKTrCJ790eXBlIjoiUmVwcmVzZW50YXRpdmUiLgjH2m5c8emE66pjdExmgep47BAdKTrCJ7YyNDI2OTA3OX0.L-OSnqPvRsiHMVwU5Z6cwHD9lGqqDTzT_zp3WMT58Zs
+
 ### Representative
-GET http://localhost:3000/representative
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2FjY291bnRfSUQiOiIzMjJmYTAxMS01MDE3LTRlZGYtODViYy1mOWJiMWU0M2U5MTAiLCJ1c2VyX0lEIjoiYzA3NjJjNjktNzhlOS00NjU2LThiNzktMWE2YmViZDAzNThhIiwidXNlcl90eXBlIjoiUmVwcmVzZW50YXRpdmUiLCJhY2NvdW50X2RldGFpbHMiOiJ0aW1vdGh5Lm1jZHVmZnlAZ21haWwuY29tIiwiaWF0IjoxNjIyMTkzODkzLCJleHAiOjE2MjIxOTg2OTN9.f7xaapSgyvqA8ASRYFgNa5RIs_eX4al9iTnTn__o0rY
+GET {{base_url}}
+Authorization: {{authToken}}
 
 ### Get All Establishments
-GET http://localhost:3000/representative/establishments
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2FjY291bnRfSUQiOiIzMjJmYTAxMS01MDE3LTRlZGYtODViYy1mOWJiMWU0M2U5MTAiLCJ1c2VyX0lEIjoiYzA3NjJjNjktNzhlOS00NjU2LThiNzktMWE2YmViZDAzNThhIiwidXNlcl90eXBlIjoiUmVwcmVzZW50YXRpdmUiLCJhY2NvdW50X2RldGFpbHMiOiJ0aW1vdGh5Lm1jZHVmZnlAZ21haWwuY29tIiwiaWF0IjoxNjIyNTcxMzIwLCJleHAiOjE2MjI1NzYxMjB9.mNYQyw1bZclDtChTpsi0KEuNFAYWF5_QkvUxdH7pqDg
+GET {{base_url}}establishments
+Authorization: {{authToken}}
 
 ### Find Specific Establishment
 GET http://localhost:3000/representative/establishments/73cedc92-5152-4535-9f24-4f3160e2e358

@@ -43,12 +43,13 @@ app.use((req, res, next) => {
 
 // Generate Secret Token (testing purposes)
 // secret_token = require('crypto').randomBytes(64).toString("hex");
+// console.log(secret_token);
 
 
 // Authenticate token
 const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(" ")[1];
+    const authHeader = req.headers.authorization
+    const token = authHeader && authHeader.split(' ')[1];
 
     // If token is null then send unauthorized response
     if (token == null) return res.status(401).send('No access token is detected.');
@@ -58,12 +59,13 @@ const authenticateToken = (req, res, next) => {
 
         // If token is not verified then send forbidden response
         if (err) {
-            console.log(err);
+            console.log(`${err}\n`);
             return res.sendStatus(403);
         }
-
+        
         // Save token data to req.user
         req.user = user;
+        console.log('Access Granted\n')
         next();
     });
 }
