@@ -57,7 +57,10 @@ const authenticateToken = (req, res, next) => {
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
 
         // If token is not verified then send forbidden response
-        if (err) return res.sendStatus(403);
+        if (err) {
+            console.log(err);
+            return res.sendStatus(403);
+        }
 
         // Save token data to req.user
         req.user = user;

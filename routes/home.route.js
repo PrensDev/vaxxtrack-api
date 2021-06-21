@@ -26,5 +26,21 @@ router.post('/register/super_admin'     , registerCtlr.super_admin);
 router.post('/register/health_official' , registerCtlr.health_official);
 
 
+/**
+ * =====================================================================
+ * * FOR METHODS THAT CAN BE REQUESTED WITHOUT AUTHORIZATION
+ * =====================================================================
+ */
+
+// COVID-19 Cases Status
+var casesStatusCtlr = require('../controllers/all/cases_status.controller');
+router.get('/covid-cases-status' , casesStatusCtlr.getCasesStatus);
+
+// Vaccination Status
+var vaccStatusCtlr = require('../controllers/all/vaccination_status.controller');
+router.get('/vaccination-records-status', vaccStatusCtlr.getVaccRecordsStatus);
+router.get('/vaccination-appointments-status', vaccStatusCtlr.getVaccAppointmentsStatus);
+
+
 // Export module
 module.exports = router;

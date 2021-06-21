@@ -1,17 +1,22 @@
+@base_url = http://localhost:3000/c19ctavms/v1/
+
+
 ### Main Index
-GET http://localhost:3000/c19ctavms/v1
+GET {{base_url}}
+
 
 ### Login
-POST http://localhost:3000/login
+POST {{base_url}}login
 Content-Type: application/json
 
 {
-    "auth_details": "johndoe@gmail.com",
+    "auth_details": "juandelacruz@gmail.com",
     "password": "$P@ssw0rd;"
 }
 
+
 ### Register Representative
-POST http://localhost:3000/register/representative
+POST {{base_url}}register/representative
 Content-Type: application/json
 
 {
@@ -43,26 +48,5 @@ Content-Type: application/json
             "role": "Manager",
             "isAdmin": true
         }
-    }
-}
-
-### Create Citizen
-
-{
-    "first_name": "Juan",
-    "last_name": "Dela Cruz",
-    "sex": "Male",
-    "birth_date": "2000-01-01",
-    "civil_status": "Single",
-    "password": "Password",
-    "user_accounts": [
-        { "authDetails": "juandelacruz@gmail.com" }, 
-    ],
-    "address": {
-        "region": "",
-        "province": "",
-        "city": "",
-        "street": "",
-        "specific_location": "",
     }
 }

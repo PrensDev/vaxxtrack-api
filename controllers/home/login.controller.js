@@ -39,6 +39,7 @@ exports.login = (req, res) => {
                 details  : req.body.auth_details,
                 verified : 1,
             },
+            attributes: [],
             include: {
                 model      : db.Users,
                 as         : 'user',
@@ -58,15 +59,18 @@ exports.login = (req, res) => {
                                 
                 // If no result then send empty reponse
                 if(!hasResult) return emptyDataResponse(res, 'Invalid details or password');
-
+                
                 // ELse send reponse with data
                 res.send({
-                    error   : false,
-                    data    : data,
-                    token   : generateToken({ 
-                        user_ID   : data.user.user_ID, 
-                        user_type : data.user.user_type, 
-                    }),
+                    error : false,
+                    data  : {
+                        user_ID: data.user.user_ID,
+                        user_type: data.user.user_type,
+                        token: generateToken({ 
+                            user_ID   : data.user.user_ID, 
+                            user_type : data.user.user_type, 
+                        }),
+                    },
                     message : "A user has been successfully identified",
                 });
             })

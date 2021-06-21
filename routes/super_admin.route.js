@@ -36,5 +36,10 @@ router.get('/accounts'        , accountCtlr.getAllAccounts);
 router.post('/add-account'    , accountCtlr.createAccount);
 
 
+// User Management Controller
+var userCtlr = require('../controllers/super_admin/users.controller');
+router.get('/users-count' , userCtlr.getUsersCount);
+
+
 // Export module
 module.exports = router;
