@@ -1,5 +1,0 @@
-### Populate Data
-GET http://localhost:3000/test/populate
-
-### Populate Data 2
-GET http://localhost:3000/test/populate2
