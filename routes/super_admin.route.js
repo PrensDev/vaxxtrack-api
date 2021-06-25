@@ -8,7 +8,7 @@
 var router = require('express').Router();
 
 
-// Admin Controller
+// Administration Controller
 var adminCtlr = require('../controllers/super_admin/admin.controller');
 router.get('/users'                            , adminCtlr.getAllUsers);
 router.get('/users/:user_ID'                   , adminCtlr.getOneUser);
@@ -16,11 +16,19 @@ router.get('/establishments'                   , adminCtlr.getAllEstablishments)
 router.get('/establishments/:establishment_ID' , adminCtlr.getAllEstablishments);
 
 
-// Vaccine Controller
-var vaccineCtlr = require('../controllers/super_admin/vaccine.controller');
-router.get('/vaccines'             , vaccineCtlr.getAllVaccines);
-router.get('/vaccines/:vaccine_ID' , vaccineCtlr.getOneVaccine);
-router.put('/vaccines/:vaccine_ID' , vaccineCtlr.updateVaccine);
+// COVID-19 Cases Controller
+var casesCtlr = require('../controllers/super_admin/covid_cases.controller');
+router.get('/covid19-cases', casesCtlr.getAllCovidCases);
+
+
+// Vaccination Controller
+var vaccCtlr = require('../controllers/super_admin/vaccination.controller');
+// Vaccine Managament
+router.get('/vaccines'             , vaccCtlr.getAllVaccines);
+router.get('/vaccines/:vaccine_ID' , vaccCtlr.getOneVaccine);
+router.put('/vaccines/:vaccine_ID' , vaccCtlr.updateVaccine);
+// Vaccination Records Management
+router.get('/vaccination-records', vaccCtlr.getAllVaccRecords);
 
 
 // User Information Controller
@@ -31,7 +39,7 @@ router.put('/info' , infoController.updateInfo);
 
 // Account Controller
 var accountCtlr = require('../controllers/super_admin/account.controller');
-router.put ('/password'    ,  accountCtlr.updatePassword);
+router.put ('/password'    , accountCtlr.updatePassword);
 router.get ('/accounts'    , accountCtlr.getAllAccounts);
 router.post('/add-account' , accountCtlr.createAccount);
 

@@ -59,13 +59,13 @@ const authenticateToken = (req, res, next) => {
 
         // If token is not verified then send forbidden response
         if (err) {
-            console.log(`${err}\n`);
+            if(process.env.ENABLE_ACCESS_TOKEN_LOG === 'true') console.log(`${err}\n`);
             return res.sendStatus(403);
         }
         
         // Save token data to req.user
         req.user = user;
-        console.log('Access Granted\n')
+        if(process.env.ENABLE_ACCESS_TOKEN_LOG === 'true') console.log('Access Granted\n')
         next();
     });
 }
