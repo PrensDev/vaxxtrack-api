@@ -3,8 +3,8 @@
  * 
  * This controller is for properties related to vaccination
  */
- 
- 
+
+
 // Import models
 const db = require('../../models');
 const Op = require('sequelize').Op;
@@ -41,14 +41,14 @@ const dbVaccinationAppointmentsOp = () => {
         order: [['created_datetime','DESC']]
     }
 }
- 
+
 
 // Get All Users including their vaccination records
 exports.getAllUsersAndVaccRecords = (req, res) => {
- 
+
     // Check Authorization first
     checkAuthorization(req, res, 'Health Official');
- 
+
     db.Users
         .findAll({
             attributes: {
@@ -75,7 +75,7 @@ exports.getAllUsersAndVaccRecords = (req, res) => {
         .then((data) => dataResponse(res, data, 'Vaccinated users retrieved successfully', 'No user have been recorded as vaccinated'))
         .catch((err) => errResponse(res, err));
 } 
- 
+
 // Create new vaccination record of a Citizen.
 exports.createVaccRecord = (req, res) => {
     
@@ -141,10 +141,31 @@ exports.createVaccRecord = (req, res) => {
 };
 
 
+// Get Vaccination Records
+exports.getVaccRecords = (req, res, next) => {
+    
+    // Check authorization first
+    checkAuthorization(req, res, 'Health Official');
+
+    db.Vaccination_Records
+        .findAll({
+            include: [
+                {
+                    model: db.Users,
+                    as: 'vaccinated_citizen'
+                }, {
+                    model: db.Vaccines,
+                    as: 'vaccine_used'
+                }]
+        })
+        .then((data) => dataResponse(res, data, 'Vaccination Records are retrieved successfully', 'No vaccination records have been retrieved'))
+        .catch((err) => errResponse(res, err))
+}
+
 
 // Update vaccination record of a citizen.
 exports.updateVaccRecord = (req, res, next) => {
- 
+
     // Check authorization first
     checkAuthorization(req, res, 'Health Official');
 
@@ -156,12 +177,12 @@ exports.updateVaccRecord = (req, res, next) => {
         error   : true,
         message : 'Parameter [vaccination_record_ID] is required',
     });
- 
+
     // Check if vaccination record ID exists in database
     db.Vaccination_Records
         .findByPk(vaccination_record_ID)
         .then((result) => {
- 
+
             // If no result return empty response
             if(result == null) return emptyDataResponse(res, 'No vaccination record has been identified');
             
@@ -171,7 +192,7 @@ exports.updateVaccRecord = (req, res, next) => {
                     where: { vaccination_record_ID: vaccination_record_ID }
                 })
                 .then(() => {
- 
+
                     // Get vaccination record after update
                     db.Vaccination_Records
                         .findByPk(vaccination_record_ID, {
