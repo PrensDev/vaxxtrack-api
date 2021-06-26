@@ -9,6 +9,7 @@
 const db     = require('../../models');
 const { checkAuthorization, dataResponse, errResponse, emptyDataResponse } = require('../../helpers/controller.helper');
 const bcrypt = require('bcrypt');
+const helper = require('../../helpers/controller.helper');
 
 
 // Update Password
