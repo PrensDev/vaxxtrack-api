@@ -7,40 +7,7 @@
 
 // Import models
 const db = require('../../models');
-const Op = require('sequelize').Op;
 const { checkAuthorization, dataResponse, errResponse, emptyDataResponse } = require("../../helpers/controller.helper");
-
-
-// Vaccination Appointments Options
-const dbVaccinationAppointmentsOp = () => {
-    return {
-        attributes: {
-            exclude: [
-                'citizen_ID',
-                'created_datetime',
-                'updated_datetime'
-            ]
-        },
-        include: [{
-            model: db.Users,
-            as: 'appointed_by',
-            attributes: {
-                exclude: [
-                    'sex',
-                    'birth_date',
-                    'civil_status',
-                    'address_ID',
-                    'user_type',
-                    'password',
-                    'added_by',
-                    'created_datetime',
-                    'updated_datetime'
-                ]
-            }
-        }],
-        order: [['created_datetime','DESC']]
-    }
-}
 
 
 // Get All Users including their vaccination records
@@ -80,7 +47,7 @@ exports.getAllUsersAndVaccRecords = (req, res) => {
 exports.createVaccRecord = (req, res) => {
     
     // Check Authorization first
-    helper.checkAuthorization(req, res, 'Health Official');
+    checkAuthorization(req, res, 'Health Official');
 
     db.Vaccination_Records
         .create(req.body)
@@ -260,11 +227,28 @@ exports.getAllVaccAppointments = (req, res) => {
  
     // Find all vaccination appointments
     db.Vaccination_Appointments
-        .findAll(dbVaccinationAppointmentsOp)
-        .then((data) => helper.dataResponse(res, data, 'Vaccination Appointments retrieved successfully', 'No Vaccination Appointment has been recorded as vaccinated'))
-        .catch((err) => helper.errResponse(res, err));
+        .findAll({
+            include: [{
+                model: db.Users,    
+                as: 'appointed_by',
+                attributes: {
+                    exclude: [
+                        'sex',
+                        'birth_date',
+                        'civil_status',
+                        'address_ID',
+                        'user_type',
+                        'password',
+                        'added_by',
+                        'created_datetime',
+                        'updated_datetime'
+                    ]
+                }
+            }],
+        })
+        .then((data) => dataResponse(res, data, 'Vaccination Appointments retrieved successfully', 'No Vaccination Appointment has been recorded as vaccinated'))
+        .catch((err) => errResponse(res, err));
 }
-
 
 //Update Vaccination Appointments
 exports.updateVaccAppointmentStatusApproval = (req, res) => {
