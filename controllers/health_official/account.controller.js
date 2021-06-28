@@ -69,11 +69,11 @@ exports.getAllAccounts = (req, res, next) => {
 exports.createAccount = (req, res) => {
     
     // Check Authorization first
-    helper.checkAuthorization(req, res, 'Health Official');
+    checkAuthorization(req, res, 'Health Official');
     
     req.body.user_ID = req.user.user_ID
     db.User_Accounts
         .create(req.body)
-        .then((data) => helper.dataResponse(res, data, 'New account has been created', 'Failed to create account'))
-        .catch((err) => helper.errResponse(res, err)); 
+        .then((data) => dataResponse(res, data, 'New account has been created', 'Failed to create account'))
+        .catch((err) => errResponse(res, err)); 
 };

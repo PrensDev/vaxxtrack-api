@@ -34,7 +34,7 @@ router.get('/vaccination-records', vaccCtlr.getAllVaccRecords);
 // User Information Controller
 var infoController = require('../controllers/super_admin/info.controller');
 router.get('/info' , infoController.getInfo);
-router.put('/info' , infoController.updateInfo);
+router.put('/update-info' , infoController.updateInfo);
 
 
 // Account Controller

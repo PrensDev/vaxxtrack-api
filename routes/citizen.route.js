@@ -40,12 +40,12 @@ router.delete("/vaccination-appointments/:vaccination_appointment_ID" , vaccCtlr
 // User Information Controller
 var infoController = require('../controllers/citizen/info.controller');
 router.get ('/info' , infoController.getInfo);
-router.put ('/info' , infoController.updateInfo);
+router.put ('/edit_info' , infoController.updateInfo);
 
 
 // Account Controller
 var accountCtlr = require('../controllers/citizen/account.controller');
-router.put ('/password'                        , accountCtlr.updatePassword);
+router.put ('/update_password'                        , accountCtlr.updatePassword);
 router.get ('/accounts'                        , accountCtlr.getAllAccounts);
 router.post('/add-account'                     , accountCtlr.createAccount);
 router.put ('/verify-account/:user_account_ID' , accountCtlr.verifyAccount);

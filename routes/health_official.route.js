@@ -29,7 +29,7 @@ router.put ('/vaccination-appointments/:vaccination_appointment_ID' , vaccCtlr.u
 // User Information Controller
 var infoController = require('../controllers/health_official/info.controller');
 router.get('/info' , infoController.getInfo);
-router.put('/info' , infoController.updateInfo);
+router.put('/update-info' , infoController.updateInfo);
 
 
 // Account Controller

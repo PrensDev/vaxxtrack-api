@@ -38,7 +38,7 @@ const dbVaccinationRecordsOp = (req) => {
 exports.getAllVaccRecord = (req, res) => {
 
     // Check authorization 
-    helper.checkAuthorization(req, res, 'Citizen');
+    checkAuthorization(req, res, 'Citizen');
 
     // Find all vaccination record of citizens
     db.Vaccination_Records
