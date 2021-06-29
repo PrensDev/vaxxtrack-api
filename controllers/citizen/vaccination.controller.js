@@ -27,18 +27,25 @@ const dbVaccinationRecordsOp = (req) => {
                     'shots_details',
                     'description'
                 ]
-            }, {
-                model: db.Users,
-                as: 'vaccinated_citizen',
-                attributes: [
-                    'user_ID',
-                    'first_name',
-                    'middle_name',
-                    'last_name',
-                    'birth_date'
-                ]
             }
         ],
+        order: [['created_datetime','DESC']]
+    }
+}
+
+const dbVaccinationCardOp = (req) => {
+    return {
+        where: {
+            user_ID: req.user.user_ID
+        },
+        include: {
+            model: db.Vaccination_Records,
+            as: 'vaccination_records',
+            include: {
+                model: db.Vaccines,
+                as: 'vaccine_used'
+            }
+        },
         order: [['created_datetime','DESC']]
     }
 }
@@ -51,8 +58,8 @@ exports.getAllVaccRecord = (req, res) => {
     checkAuthorization(req, res, 'Citizen');
 
     // Find all vaccination record of citizens
-    db.Vaccination_Records
-        .findAll(dbVaccinationRecordsOp(req))
+    db.Users
+        .findAll(dbVaccinationCardOp(req))
         .then((data) => dataResponse(res, data, 'Vaccination Records retrieved successfully', 'No Vaccination Record has been identified'))
         .catch((err) => errResponse(res, err));
 }
