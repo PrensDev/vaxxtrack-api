@@ -27,6 +27,16 @@ const dbVaccinationRecordsOp = (req) => {
                     'shots_details',
                     'description'
                 ]
+            }, {
+                model: db.Users,
+                as: 'vaccinated_citizen',
+                attributes: [
+                    'user_ID',
+                    'first_name',
+                    'middle_name',
+                    'last_name',
+                    'birth_date'
+                ]
             }
         ],
         order: [['created_datetime','DESC']]
