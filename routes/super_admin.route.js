@@ -34,7 +34,7 @@ router.get('/vaccination-records', vaccCtlr.getAllVaccRecords);
 // User Information Controller
 var infoController = require('../controllers/super_admin/info.controller');
 router.get('/info' , infoController.getInfo);
-router.put('/update-info' , infoController.updateInfo);
+router.put('/info' , infoController.updateInfo);
 
 
 // Account Controller
@@ -46,7 +46,8 @@ router.post('/add-account' , accountCtlr.createAccount);
 
 // User Management Controller
 var userCtlr = require('../controllers/super_admin/users.controller');
-router.get('/users-count' , userCtlr.getUsersCount);
+router.get('/users-count'    , userCtlr.getUsersCount);
+router.get('/users/citizens' , userCtlr.getAllCitizens);
 
 
 // Export module

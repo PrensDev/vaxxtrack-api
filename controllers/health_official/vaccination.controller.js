@@ -8,7 +8,7 @@
 // Import models
 const db = require('../../models');
 const { checkAuthorization, dataResponse, errResponse, emptyDataResponse } = require("../../helpers/controller.helper");
-
+const { Op } = require('sequelize');
 
 // Get All Users including their vaccination records
 exports.getAllUsersAndVaccRecords = (req, res) => {
@@ -41,7 +41,41 @@ exports.getAllUsersAndVaccRecords = (req, res) => {
         })
         .then((data) => dataResponse(res, data, 'Vaccinated users retrieved successfully', 'No user have been recorded as vaccinated'))
         .catch((err) => errResponse(res, err));
-} 
+}
+
+
+// Get All Users including their vaccination records
+exports.getOneUserAndVaccRecords = (req, res) => {
+
+    // Check Authorization first
+    checkAuthorization(req, res, 'Health Official');
+
+    db.Users
+        .findByPk(req.params.user_ID, {
+            attributes: {
+                exclude: [
+                    'added_by',
+                    'password',
+                    'created_datetime',
+                    'updated_datetime'
+                ]
+            },
+            where: { user_type: 'Citizen' },
+            include: {
+                model: db.Vaccination_Records,
+                as: 'vaccination_records',
+                where: {
+                    vaccination_record_ID: { [Op.not]: null }
+                },
+                include: {
+                    model: db.Vaccines,
+                    as: 'vaccine_used'
+                }
+            }
+        })
+        .then((data) => dataResponse(res, data, 'Vaccinated users retrieved successfully', 'No user have been recorded as vaccinated'))
+        .catch((err) => errResponse(res, err));
+}
 
 // Create new vaccination record of a Citizen.
 exports.createVaccRecord = (req, res) => {
@@ -109,13 +143,35 @@ exports.createVaccRecord = (req, res) => {
 
 
 // Get Vaccination Records
-exports.getVaccRecords = (req, res, next) => {
+exports.getAllVaccRecords = (req, res, next) => {
     
     // Check authorization first
     checkAuthorization(req, res, 'Health Official');
 
     db.Vaccination_Records
         .findAll({
+            include: [
+                {
+                    model: db.Users,
+                    as: 'vaccinated_citizen'
+                }, {
+                    model: db.Vaccines,
+                    as: 'vaccine_used'
+                }]
+        })
+        .then((data) => dataResponse(res, data, 'Vaccination Records are retrieved successfully', 'No vaccination records have been retrieved'))
+        .catch((err) => errResponse(res, err))
+}
+
+
+// Get Vaccination Records
+exports.getOneVaccRecord = (req, res, next) => {
+    
+    // Check authorization first
+    checkAuthorization(req, res, 'Health Official');
+
+    db.Vaccination_Records
+        .findByPk(req.params.vaccination_record_ID, {
             include: [
                 {
                     model: db.Users,
@@ -217,14 +273,14 @@ exports.updateVaccRecord = (req, res, next) => {
     })
     .catch((err) => errResponse(res, err));
 }
- 
+
 
 // Get All Vaccination Appointments
 exports.getAllVaccAppointments = (req, res) => {
- 
+
     // Check Authorization first
     checkAuthorization(req, res, 'Health Official');
- 
+
     // Find all vaccination appointments
     db.Vaccination_Appointments
         .findAll({
@@ -301,3 +357,50 @@ exports.updateVaccAppointmentStatusApproval = (req, res) => {
         })
         .catch((err) => errResponse(res, err));
 };
+
+
+// Add Vaccine
+exports.addVaccine = (req, res) => {
+    
+    // Check authorization first
+    checkAuthorization(req, res, 'Health Official')
+
+    db.Vaccines
+        .create(req.body)
+        .then(data => dataResponse(res, data, 'A vaccine record is successfully added', 'There was an error in adding a vaccine record'))
+        .catch(err => errResponse(res, err))
+}
+
+
+// Update Vaccine
+exports.updateVaccine = (req, res) => {
+
+    // Check Authorization First
+    checkAuthorization(req, res, 'Health Official')
+
+    db.Vaccines
+        .update(req.body, {
+            where: {
+                vaccine_ID: req.params.vaccine_ID
+            }
+        })
+        .then(data => dataResponse(res, data, 'A vaccine has been updated', 'No vaccine has been updated'))
+        .catch(err => errResponse(res, err))
+}
+
+
+// Delete Vaccine
+exports.deleteVaccine = (req, res) => {
+
+    // Check Authorization First
+    checkAuthorization(req, res, 'Health Official');
+
+    db.Vaccines
+        .destroy({
+            where: {
+                vaccine_ID: req.params.vaccine_ID
+            }
+        })
+        .then(data => dataResponse(res, data, 'A vaccine has been updated', 'No vaccine has been updated'))
+        .catch(err => errResponse(res, err))
+}

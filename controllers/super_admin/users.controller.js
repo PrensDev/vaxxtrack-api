@@ -1,4 +1,4 @@
-const { errResponse, checkAuthorization } = require('../../helpers/controller.helper');
+const { errResponse, checkAuthorization, dataResponse } = require('../../helpers/controller.helper');
 const db = require('../../models');
 
 
@@ -45,4 +45,20 @@ exports.getUsersCount = (req, res) => {
             res.send({ users_count: usersCount });
         })
         .catch(err => errResponse(res, err));
+}
+
+// Get All Citizens
+exports.getAllCitizens = (req, res) => {
+
+    // Check authorization first
+    checkAuthorization(req, res, 'Super Admin');
+    
+    db.Users
+        .findAll({
+            where: {
+                user_type: 'Citizen'
+            }
+        })
+        .then(data => dataResponse(res, data, 'Citizens are retrieved successfully', 'No citizen has been retrieved'))
+        .catch(err => errResponse(res, err))
 }

@@ -41,6 +41,11 @@ var vaccStatusCtlr = require('../controllers/all/vaccination_status.controller')
 router.get('/vaccination-records-status', vaccStatusCtlr.getVaccRecordsStatus);
 router.get('/vaccination-appointments-status', vaccStatusCtlr.getVaccAppointmentsStatus);
 
+// Vaccines
+var vaccCtlr = require('../controllers/all/vaccines.controller');
+router.get('/vaccines'              , vaccCtlr.getAllVaccines);
+router.get('/vaccines/:vaccine_ID'  , vaccCtlr.getOneVaccine);
+
 
 // Export module
 module.exports = router;
