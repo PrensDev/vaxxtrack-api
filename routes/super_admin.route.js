@@ -25,9 +25,9 @@ router.get('/covid19-cases', casesCtlr.getAllCovidCases);
 var vaccCtlr = require('../controllers/super_admin/vaccination.controller');
 
 // Vaccine Managament
-router.get('/vaccines'             , vaccCtlr.getAllVaccines);
-router.get('/vaccines/:vaccine_ID' , vaccCtlr.getOneVaccine);
-router.put('/vaccines/:vaccine_ID' , vaccCtlr.updateVaccine);
+router.post  ('/add-vaccine'          , vaccCtlr.addVaccine);
+router.put   ('/vaccines/:vaccine_ID' , vaccCtlr.updateVaccine);
+router.delete('/vaccines/:vaccine_ID' , vaccCtlr.deleteVaccine);
 
 // Vaccination Records Management
 router.get('/vaccination-records', vaccCtlr.getAllVaccRecords);

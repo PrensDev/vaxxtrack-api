@@ -1,7 +1,9 @@
 /**
- * VACCINATION CONTROLLER
- * 
+ * ==================================================================
+ * * VACCINATION CONTROLLER
+ * ------------------------------------------------------------------
  * This controller is for properties related to vaccination
+ * ==================================================================
  */
 
 
@@ -9,6 +11,67 @@
 const db = require('../../models');
 const { checkAuthorization, dataResponse, errResponse, emptyDataResponse } = require("../../helpers/controller.helper");
 const { Op } = require('sequelize');
+
+
+/**
+ * ==================================================================
+ * * VACCINES
+ * ==================================================================
+ */
+
+// Add Vaccine
+exports.addVaccine = (req, res) => {
+    
+    // Check authorization first
+    checkAuthorization(req, res, 'Health Official')
+
+    db.Vaccines
+        .create(req.body)
+        .then(data => dataResponse(res, data, 'A vaccine record is successfully added', 'There was an error in adding a vaccine record'))
+        .catch(err => errResponse(res, err))
+}
+
+
+// Update Vaccine
+exports.updateVaccine = (req, res) => {
+
+    // Check Authorization First
+    checkAuthorization(req, res, 'Health Official')
+
+    db.Vaccines
+        .update(req.body, {
+            where: {
+                vaccine_ID: req.params.vaccine_ID
+            }
+        })
+        .then(data => dataResponse(res, data, 'A vaccine has been updated', 'No vaccine has been updated'))
+        .catch(err => errResponse(res, err))
+}
+
+
+// Delete Vaccine
+exports.deleteVaccine = (req, res) => {
+
+    // Check Authorization First
+    checkAuthorization(req, res, 'Health Official');
+
+    db.Vaccines
+        .destroy({
+            where: {
+                vaccine_ID: req.params.vaccine_ID
+            }
+        })
+        .then(data => dataResponse(res, data, 'A vaccine has been updated', 'No vaccine has been updated'))
+        .catch(err => errResponse(res, err))
+}
+
+
+/**
+ * ==================================================================
+ * * VACCINATED USERS AND THEIR RECORDS
+ * ==================================================================
+ */
+
 
 // Get All Users including their vaccination records
 exports.getAllUsersAndVaccRecords = (req, res) => {
@@ -77,6 +140,14 @@ exports.getOneUserAndVaccRecords = (req, res) => {
         .catch((err) => errResponse(res, err));
 }
 
+
+/**
+ * ==================================================================
+ * * VACCINATION RECORDS
+ * ==================================================================
+ */
+
+
 // Create new vaccination record of a Citizen.
 exports.createVaccRecord = (req, res) => {
     
@@ -142,7 +213,7 @@ exports.createVaccRecord = (req, res) => {
 };
 
 
-// Get Vaccination Records
+// Get All Vaccination Records
 exports.getAllVaccRecords = (req, res, next) => {
     
     // Check authorization first
@@ -164,7 +235,7 @@ exports.getAllVaccRecords = (req, res, next) => {
 }
 
 
-// Get Vaccination Records
+// Get One Vaccination Record
 exports.getOneVaccRecord = (req, res, next) => {
     
     // Check authorization first
@@ -275,6 +346,13 @@ exports.updateVaccRecord = (req, res, next) => {
 }
 
 
+/**
+ * ==================================================================
+ * * VACCINATION APPOINTMENTS
+ * ==================================================================
+ */
+
+
 // Get All Vaccination Appointments
 exports.getAllVaccAppointments = (req, res) => {
 
@@ -306,7 +384,8 @@ exports.getAllVaccAppointments = (req, res) => {
         .catch((err) => errResponse(res, err));
 }
 
-//Update Vaccination Appointments
+
+// Update Vaccination Appointments
 exports.updateVaccAppointmentStatusApproval = (req, res) => {
 
     // Check Authorization first
@@ -357,50 +436,3 @@ exports.updateVaccAppointmentStatusApproval = (req, res) => {
         })
         .catch((err) => errResponse(res, err));
 };
-
-
-// Add Vaccine
-exports.addVaccine = (req, res) => {
-    
-    // Check authorization first
-    checkAuthorization(req, res, 'Health Official')
-
-    db.Vaccines
-        .create(req.body)
-        .then(data => dataResponse(res, data, 'A vaccine record is successfully added', 'There was an error in adding a vaccine record'))
-        .catch(err => errResponse(res, err))
-}
-
-
-// Update Vaccine
-exports.updateVaccine = (req, res) => {
-
-    // Check Authorization First
-    checkAuthorization(req, res, 'Health Official')
-
-    db.Vaccines
-        .update(req.body, {
-            where: {
-                vaccine_ID: req.params.vaccine_ID
-            }
-        })
-        .then(data => dataResponse(res, data, 'A vaccine has been updated', 'No vaccine has been updated'))
-        .catch(err => errResponse(res, err))
-}
-
-
-// Delete Vaccine
-exports.deleteVaccine = (req, res) => {
-
-    // Check Authorization First
-    checkAuthorization(req, res, 'Health Official');
-
-    db.Vaccines
-        .destroy({
-            where: {
-                vaccine_ID: req.params.vaccine_ID
-            }
-        })
-        .then(data => dataResponse(res, data, 'A vaccine has been updated', 'No vaccine has been updated'))
-        .catch(err => errResponse(res, err))
-}

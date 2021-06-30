@@ -36,10 +36,12 @@ router.post('/register/health_official' , registerCtlr.health_official);
 var casesStatusCtlr = require('../controllers/all/cases_status.controller');
 router.get('/covid-cases-status' , casesStatusCtlr.getCasesStatus);
 
+
 // Vaccination Status
 var vaccStatusCtlr = require('../controllers/all/vaccination_status.controller');
 router.get('/vaccination-records-status', vaccStatusCtlr.getVaccRecordsStatus);
 router.get('/vaccination-appointments-status', vaccStatusCtlr.getVaccAppointmentsStatus);
+
 
 // Vaccines
 var vaccCtlr = require('../controllers/all/vaccines.controller');
