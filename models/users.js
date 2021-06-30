@@ -71,7 +71,7 @@ module.exports = (sequelize, DataTypes) => {
       // Health officials added by Super Admins
       this.hasMany(models.Users, {
         foreignKey : 'added_by',
-        as         : 'health_officials',
+        as         : 'added_health_officials',
         onDelete   : 'RESTRICT'
       });
 
@@ -79,7 +79,23 @@ module.exports = (sequelize, DataTypes) => {
       // Super Admin adding Health Officials
       this.belongsTo(models.Users, {
         foreignKey : 'added_by',
-        as         : 'super_admin',
+        as         : 'ho_added_by',
+        onDelete   : 'RESTRICT'
+      });
+
+      // 1:M [users]:[users]
+      // Super Admins added by Super Admins
+      this.hasMany(models.Users, {
+        foreignKey : 'added_by',
+        as         : 'added_super_admins',
+        onDelete   : 'RESTRICT'
+      });
+
+      // M:1 [users]:[users]
+      // Super Admin adding Super Adnubs
+      this.belongsTo(models.Users, {
+        foreignKey : 'added_by',
+        as         : 'sa_added_by',
         onDelete   : 'RESTRICT'
       });
 
