@@ -30,7 +30,7 @@ router.post("/add-visiting-log"               , visitingLogCtlr.createVisitingLo
 
 // Vaccination Controller
 var vaccCtlr = require('../controllers/citizen/vaccination.controller');
-router.get   ("/vaccination-records"                                  , vaccCtlr.getAllVaccRecord);
+router.get   ("/vaccination-records/:user_ID"                         , vaccCtlr.getOneUserAndAllVaccRecord);
 router.get   ("/vaccination-records/:vaccination_record_ID"           , vaccCtlr.getOneVaccRecord);
 router.get   ("/vaccination-appointments"                             , vaccCtlr.getAllVaccAppointments);
 router.delete("/vaccination-appointments/:vaccination_appointment_ID" , vaccCtlr.cancelVaccAppointment);

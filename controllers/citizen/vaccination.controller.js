@@ -10,7 +10,7 @@
 // Import models and bcrypt for this controller
 const db = require("../../models");
 const { checkAuthorization, dataResponse, errResponse, emptyDataResponse } = require('../../helpers/controller.helper');
-
+const { Op } = require('sequelize');
 
 // db.Vaccination_Records Options
 const dbVaccinationRecordsOp = (req) => {
@@ -33,7 +33,7 @@ const dbVaccinationRecordsOp = (req) => {
     }
 }
 
-const dbVaccinationCardOp = (req) => {
+const dbVaccinationRecOp = (req) => {
     return {
         where: {
             user_ID: req.user.user_ID
@@ -51,15 +51,15 @@ const dbVaccinationCardOp = (req) => {
 }
 
 
-// Get All Vaccination Records
-exports.getAllVaccRecord = (req, res) => {
+// Get All Vaccination Records of a citizen
+exports.getOneUserAndAllVaccRecord = (req, res) => {
 
     // Check authorization 
     checkAuthorization(req, res, 'Citizen');
 
     // Find all vaccination record of citizens
     db.Users
-        .findAll(dbVaccinationCardOp(req))
+        .findByPk(req.user.user_ID, dbVaccinationRecOp(req))
         .then((data) => dataResponse(res, data, 'Vaccination Records retrieved successfully', 'No Vaccination Record has been identified'))
         .catch((err) => errResponse(res, err));
 }
