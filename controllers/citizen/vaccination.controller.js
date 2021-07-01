@@ -79,6 +79,44 @@ exports.getOneVaccRecord = (req, res) => {
 }
 
 
+/**
+ * ==================================================================
+ * * VACCINATION APPOINTMENTS
+ * ==================================================================
+ */
+
+// Create Vaccintaion Appointments
+
+exports.createVaccAppointments = (req, res) => {
+
+    checkAuthorization(req, res, 'Citizen');
+
+    db.Vaccination_Appointments
+        .create({
+            preferred_vaccine: req.body.preferred_vaccine,
+            preferred_date: req.body.preferred_date,
+            citizen_ID: req.user.user_ID,
+            status_approval: req.body.status_approval,
+            approved_by: req.body.approved_by,
+            approved_datetime: req.body.approved_datetime
+        })
+        .then((data) => {
+            db.Vaccination_Appointments
+                .findByPk(data.vaccination_appointment_ID, {
+                    attributes: {
+                        exclude: [
+                            "created_datetime",
+                            "updated_datetime"
+                        ]
+                    },
+                })
+                .then((result) => dataResponse(res, result, 'New vaccination appointment has been successfully created', 'Failed to create a vaccination appointments'))
+                .catch((err) => errResponse(res, err));
+        })
+        .catch((err) => errResponse(res, err));
+}
+
+
 // Get all Vaccination Appointments
 exports.getAllVaccAppointments = (req, res) => {
 
@@ -87,23 +125,21 @@ exports.getAllVaccAppointments = (req, res) => {
 
     db.Vaccination_Appointments
         .findAll({
+            attributes: {
+                exclude: [
+                    "preferred_vaccine",
+                    "created_datetime",
+                    "updated_datetime",
+                ]
+            },
             include: [{
-                model: db.Users,    
-                as: 'appointed_by',
-                where: {
-                    user_ID: req.user.user_ID
-                },
+                model: db.Vaccines,    
+                as: 'vaccine_preferrence',
                 attributes: {
                     exclude: [
-                        'sex',
-                        'birth_date',
-                        'civil_status',
-                        'address_ID',
-                        'user_type',
-                        'password',
-                        'added_by',
-                        'created_datetime',
-                        'updated_datetime'
+                        "vaccine_ID",
+                        "created_datetime",
+                        "updated_datetime"
                     ]
                 }
             }],
