@@ -36,6 +36,7 @@ router.get   ("/vaccination-records/:vaccination_record_ID"           , vaccCtlr
 router.get   ("/vaccination-appointments"                             , vaccCtlr.getAllVaccAppointments);
 router.delete("/vaccination-appointments/:vaccination_appointment_ID" , vaccCtlr.cancelVaccAppointment);
 router.post ("/add-vaccination-appointments"                          , vaccCtlr.createVaccAppointments);
+router.get ("/getone-vaccination-appointments/:vaccination_appointment_ID" , vaccCtlr.getOneVaccinationAppointment);
 
 
 

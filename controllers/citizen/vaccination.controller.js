@@ -150,6 +150,38 @@ exports.getAllVaccAppointments = (req, res) => {
 
 };
 
+//get one vaccine appointments
+exports.getOneVaccinationAppointment = (req, res) => {
+
+    // Check authorization first
+    checkAuthorization(req, res, 'Citizen');
+
+    db.Vaccination_Appointments
+        .findByPk(req.params.vaccination_appointment_ID, {
+            attributes: {
+                exclude: [
+                    "preferred_vaccine",
+                    "updated_datetime",
+                ]
+            },
+            include: [{
+                model: db.Vaccines,    
+                as: 'vaccine_preferrence',
+                attributes: {
+                    exclude: [
+                        "vaccine_ID",
+                        "updated_datetime"
+                    ]
+                }
+            }],
+            where: {
+                citizen_ID: req.user.user_ID
+            }
+        })
+        .then((data) => dataResponse(res, data, 'A Visiting Log has been identified', 'A Visiting Log cannot identified'))
+        .catch((err) => errResponse(res, err)); 
+}
+
 
 // Cancel Vaccine Appointments
 exports.cancelVaccAppointment = (req, res) => {
