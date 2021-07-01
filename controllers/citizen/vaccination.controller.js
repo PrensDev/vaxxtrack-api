@@ -128,7 +128,6 @@ exports.getAllVaccAppointments = (req, res) => {
             attributes: {
                 exclude: [
                     "preferred_vaccine",
-                    "created_datetime",
                     "updated_datetime",
                 ]
             },
@@ -138,11 +137,13 @@ exports.getAllVaccAppointments = (req, res) => {
                 attributes: {
                     exclude: [
                         "vaccine_ID",
-                        "created_datetime",
                         "updated_datetime"
                     ]
                 }
             }],
+            where: {
+                citizen_ID: req.user.user_ID
+            }
         })
         .then((data) => dataResponse(res, data, '[Vaccine Appointments] retrieved successfully', 'No [Vaccine Appointments] has been retrieved'))
         .catch((err) => errResponse(res, err)); 
