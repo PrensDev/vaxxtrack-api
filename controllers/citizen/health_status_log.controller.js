@@ -10,6 +10,29 @@
 // Import models
 const db = require("../../models");
 const helper = require("../../helpers/controller.helper");
+const { Op } = require('sequelize');
+const TODAY_START = new Date().setHours(0, 0, 0, 0);
+const NOW = new Date();
+
+
+// Check todays Health Status Log
+exports.checkTodaysHealthStatus = (req, res) => {
+    
+    // Check authorization first
+    helper.checkAuthorization(req, res, 'Citizen');
+
+    db.Health_Status_Logs
+        .findOne({
+            where: {
+                created_datetime: {
+                    [Op.gt]: TODAY_START,
+                    [Op.lt]: NOW
+                }
+            }
+        })
+        .then(data => helper.dataResponse(res, data, 'Health Status Log for today is Retrieved', 'No health status log for today is retrieved'))
+        .catch(err => helper.errResponse(res, err));
+}
 
 
 // Create New Health Status Log

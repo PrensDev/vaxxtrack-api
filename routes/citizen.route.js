@@ -15,10 +15,11 @@ router.get('/', indexCtlr.render);
 
 // Health Status Log Controller
 var healthStatusLogCtlr = require('../controllers/citizen/health_status_log.controller');
-router.get ("/health-status-logs"                               , healthStatusLogCtlr.getAllHealthStatusLogs);
-router.get ("/health-status-logs/:health_status_log_ID"         , healthStatusLogCtlr.getOneHealthStatusLog);
-router.put ("/health-status-logs/:health_status_log_ID"   , healthStatusLogCtlr.updateHealthStatusLog);
-router.post("/add-health-status-log"                            , healthStatusLogCtlr.createHealthStatusLog);
+router.get ("/health-status-logs"                       , healthStatusLogCtlr.getAllHealthStatusLogs);
+router.get ("/health-status-logs/today"                 , healthStatusLogCtlr.checkTodaysHealthStatus);
+router.get ("/health-status-logs/:health_status_log_ID" , healthStatusLogCtlr.getOneHealthStatusLog);
+router.put ("/health-status-logs/:health_status_log_ID" , healthStatusLogCtlr.updateHealthStatusLog);
+router.post("/add-health-status-log"                    , healthStatusLogCtlr.createHealthStatusLog);
 
 
 // Visiting Log Controller
