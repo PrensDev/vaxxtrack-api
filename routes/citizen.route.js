@@ -37,8 +37,8 @@ router.get   ("/vaccination-records/:vaccination_record_ID"           , vaccCtlr
 // Vaccination Appointmets
 router.get   ("/vaccination-appointments"                             , vaccCtlr.getAllVaccAppointments);
 router.delete("/vaccination-appointments/:vaccination_appointment_ID" , vaccCtlr.cancelVaccAppointment);
-router.post ("/add-vaccination-appointments"                          , vaccCtlr.createVaccAppointments);
-router.get ("/vaccination-appointments/:vaccination_appointment_ID"   , vaccCtlr.getOneVaccinationAppointment);
+router.post  ("/add-vaccination-appointments"                         , vaccCtlr.createVaccAppointments);
+router.get   ("/vaccination-appointments/:vaccination_appointment_ID" , vaccCtlr.getOneVaccinationAppointment);
 
 
 
@@ -50,7 +50,7 @@ router.put ('/info' , infoController.updateInfo);
 
 // Account Controller
 var accountCtlr = require('../controllers/citizen/account.controller');
-router.put ('/update_password'                        , accountCtlr.updatePassword);
+router.put ('/update_password'                 , accountCtlr.updatePassword);
 router.get ('/accounts'                        , accountCtlr.getAllAccounts);
 router.post('/add-account'                     , accountCtlr.createAccount);
 router.put ('/verify-account/:user_account_ID' , accountCtlr.verifyAccount);

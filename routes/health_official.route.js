@@ -18,7 +18,7 @@ router.get('/covid19-cases/:case_ID' , casesCtlr.getOneCovidCase);
 var vaccCtlr = require('../controllers/health_official/vaccination.controller');
 
 // Vaccinated Citizens 
-router.get ('/vaccinated-citizens'         , vaccCtlr.getAllUsersAndVaccRecords);
+router.get ('/vaccinated-citizens'          , vaccCtlr.getAllUsersAndVaccRecords);
 router.get ('/vaccinated-citizens/:user_ID' , vaccCtlr.getOneUserAndVaccRecords);
 
 // Vaccination Records
@@ -29,6 +29,7 @@ router.post('/add-vaccination-record'                     , vaccCtlr.createVaccR
 
 // Vaccination Appointments
 router.get ('/vaccination-appointments'                             , vaccCtlr.getAllVaccAppointments);
+router.get ('/vaccination-appointments/:vaccination_appointment_ID' , vaccCtlr.getOneVaccAppointment);
 router.put ('/vaccination-appointments/:vaccination_appointment_ID' , vaccCtlr.updateVaccAppointmentStatusApproval);
 
 // Vaccines
@@ -39,7 +40,7 @@ router.delete('/vaccines/:vaccine_ID' , vaccCtlr.deleteVaccine);
 
 // User Information Controller
 var infoController = require('../controllers/health_official/info.controller');
-router.get('/info' , infoController.getInfo);
+router.get('/info'        , infoController.getInfo);
 router.put('/update-info' , infoController.updateInfo);
 
 

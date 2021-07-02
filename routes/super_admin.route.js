@@ -24,13 +24,17 @@ router.get('/covid19-cases', casesCtlr.getAllCovidCases);
 // Vaccination Controller
 var vaccCtlr = require('../controllers/super_admin/vaccination.controller');
 
-// Vaccine Managament
+// Vaccines
 router.post  ('/add-vaccine'          , vaccCtlr.addVaccine);
 router.put   ('/vaccines/:vaccine_ID' , vaccCtlr.updateVaccine);
 router.delete('/vaccines/:vaccine_ID' , vaccCtlr.deleteVaccine);
 
 // Vaccination Records Management
 router.get('/vaccination-records', vaccCtlr.getAllVaccRecords);
+
+// Vaccination Appointments
+router.get ('/vaccination-appointments'                             , vaccCtlr.getAllVaccAppointments);
+router.get ('/vaccination-appointments/:vaccination_appointment_ID' , vaccCtlr.getOneVaccAppointment);
 
 
 // User Information Controller

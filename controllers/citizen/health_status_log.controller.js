@@ -11,8 +11,6 @@
 const db = require("../../models");
 const helper = require("../../helpers/controller.helper");
 const { Op } = require('sequelize');
-const TODAY_START = new Date().setHours(0, 0, 0, 0);
-const NOW = new Date();
 
 
 // Check todays Health Status Log
@@ -22,11 +20,12 @@ exports.checkTodaysHealthStatus = (req, res) => {
     helper.checkAuthorization(req, res, 'Citizen');
 
     db.Health_Status_Logs
-        .findOne({
+        .findAll({
             where: {
+                citizen_ID: req.user.user_ID,
                 created_datetime: {
-                    [Op.gt]: TODAY_START,
-                    [Op.lt]: NOW
+                    [Op.gt]: new Date().setHours(0, 0, 0, 0),
+                    [Op.lt]: new Date()
                 }
             }
         })
@@ -40,6 +39,8 @@ exports.createHealthStatusLog = (req, res) => {
     
     // Check Authorization first
     helper.checkAuthorization(req, res, 'Citizen');
+
+    req.body.citizen_ID = req.user.user_ID;
 
     db.Health_Status_Logs
         .create(req.body)
