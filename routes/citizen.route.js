@@ -33,10 +33,12 @@ router.post("/add-visiting-log"               , visitingLogCtlr.createVisitingLo
 var vaccCtlr = require('../controllers/citizen/vaccination.controller');
 router.get   ("/vaccination-records/:user_ID"                         , vaccCtlr.getOneUserAndAllVaccRecord);
 router.get   ("/vaccination-records/:vaccination_record_ID"           , vaccCtlr.getOneVaccRecord);
+
+// Vaccination Appointmets
 router.get   ("/vaccination-appointments"                             , vaccCtlr.getAllVaccAppointments);
 router.delete("/vaccination-appointments/:vaccination_appointment_ID" , vaccCtlr.cancelVaccAppointment);
 router.post ("/add-vaccination-appointments"                          , vaccCtlr.createVaccAppointments);
-router.get ("/getone-vaccination-appointments/:vaccination_appointment_ID" , vaccCtlr.getOneVaccinationAppointment);
+router.get ("/vaccination-appointments/:vaccination_appointment_ID"   , vaccCtlr.getOneVaccinationAppointment);
 
 
 
