@@ -60,6 +60,13 @@ module.exports = (sequelize, DataTypes) => {
         onDelete   : 'RESTRICT'
       });
 
+      // 1:M [users]:[vaccination_appointments]
+      this.hasOne(models.Vaccination_Appointments, {
+        foreignKey : 'approved_by',
+        as         : 'approved_appointments',
+        onDelete   : 'RESTRICT'
+      });
+
       // 1:M [users]:[vaccination_records]
       this.hasMany(models.Vaccination_Records, {
         foreignKey : 'citizen_ID',

@@ -25,6 +25,8 @@ router.post('/register/citizen'         , registerCtlr.citizen);
 router.post('/register/super_admin'     , registerCtlr.super_admin);
 router.post('/register/health_official' , registerCtlr.health_official);
 
+// Check Account
+router.post('/check-account', registerCtlr.checkAccount);
 
 /**
  * =====================================================================

@@ -42,11 +42,40 @@ exports.createHealthStatusLog = (req, res) => {
 
     req.body.citizen_ID = req.user.user_ID;
 
+    // If temperature is 37.5 above, fever is always set true
+    // Regardless if user unchecked the fever
+    if(req.body.temperature >= 37.5) req.body.fever = true
+
     db.Health_Status_Logs
         .create(req.body)
         .then((data) => helper.dataResponse(res, data, 'Health Status has been logged successfully', 'Failed to logged a health status'))
         .catch((err) => helper.errResponse(res, err)); 
 };
+
+
+// Health Status Log Options
+const healthStatusLogOp = (req) => {
+    return {
+        include: {
+            model: db.Users,
+            as: "citizen",
+            where: { user_ID: req.user.user_ID },
+            attributes: {
+                exclude: [
+                    'sex',
+                    'birth_date',
+                    'civil_status',
+                    'address_ID',
+                    'user_type',
+                    'password',
+                    'added_by',
+                    'created_datetime',
+                    'updated_datetime'
+                ]
+            }
+        }
+    }
+}
 
 
 // Get All Health Status Logs
@@ -56,26 +85,7 @@ exports.getAllHealthStatusLogs = (req, res) => {
     helper.checkAuthorization(req, res, 'Citizen');
 
     db.Health_Status_Logs
-        .findAll({
-            include:{
-                model: db.Users,
-                as: "citizen",
-                where: { user_ID: req.user.user_ID },
-                attributes: {
-                    exclude: [
-                        'sex',
-                        'birth_date',
-                        'civil_status',
-                        'address_ID',
-                        'user_type',
-                        'password',
-                        'added_by',
-                        'created_datetime',
-                        'updated_datetime'
-                    ]
-                }
-            }
-        })
+        .findAll(healthStatusLogOp(req))
         .then((data) => helper.dataResponse(res, data, 'Health Status Logs retrieved successfully', 'No Health Status Logs have been retrieved'))
         .catch((err) => helper.errResponse(res, err)); 
 };
@@ -88,29 +98,9 @@ exports.getOneHealthStatusLog = (req, res) => {
     helper.checkAuthorization(req, res, 'Citizen');
 
     db.Health_Status_Logs
-        .findByPk(req.params.health_status_log_ID, {
-            include: [{
-                model: db.Users,
-                as: 'citizen',
-                where: { user_ID: req.user.user_ID },
-                attributes: {
-                    exclude: [
-                        'sex',
-                        'birth_date',
-                        'civil_status',
-                        'address_ID',
-                        'user_type',
-                        'password',
-                        'added_by',
-                        'created_datetime',
-                        'updated_datetime'
-                    ]
-                },
-            }],
-        }
-    )
-    .then((data) => helper.dataResponse(res, data, 'A health status log has been identified', 'A health status log has been not identified'))
-    .catch((err) => helper.errResponse(res, err));
+        .findByPk(req.params.health_status_log_ID, healthStatusLogOp(req))
+        .then((data) => helper.dataResponse(res, data, 'A health status log has been identified', 'A health status log has been not identified'))
+        .catch((err) => helper.errResponse(res, err));
 };
 
 

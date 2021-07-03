@@ -1,13 +1,24 @@
 /**
- * REGISTER CONTROLLER
- * 
+ * =====================================================================
+ * * REGISTER CONTROLLER
+ * =====================================================================
  * This controller is for user registration
+ * =====================================================================
  */
 
 
 // Import models
 const db     = require("../../models");
 const helper = require('../../helpers/controller.helper');
+
+
+// Check Account
+exports.checkAccount = (req, res) => {
+    db.User_Accounts
+        .findAll({ where: { details: req.body.details }})
+        .then(data => helper.dataResponse(res, data, 'This account is already used', 'This account is available'))
+        .catch(err => helper.errResponse(res, err));
+}
 
 
 // Register a representative including its establishment
@@ -45,6 +56,7 @@ exports.representative = (req, res) => {
         })
         .catch((err) => helper.errResponse(res, err));
 }
+
 
 // Register a citizen
 exports.citizen = (req, res) => {

@@ -374,6 +374,9 @@ const vaccAppointmentsOp = {
         }, {
             model: db.Vaccines,
             as: 'vaccine_preferrence'
+        }, {
+            model: db.Users,
+            as: 'approved_person'
         }
     ],
 }
@@ -408,7 +411,7 @@ exports.getOneVaccAppointment = (req, res) => {
 
 
 // Update Vaccination Appointments
-exports.updateVaccAppointmentStatusApproval = (req, res) => {
+exports.updateVaccAppointment = (req, res) => {
 
     // Check Authorization first
     checkAuthorization(req, res, 'Health Official');
@@ -429,6 +432,15 @@ exports.updateVaccAppointmentStatusApproval = (req, res) => {
 
             // If no result return empty response
             if(result == null) return emptyDataResponse(res, 'No vaccination_appointment_ID has been identified');
+            
+            // Attach the ID of Health Official
+            req.body.approved_by = req.user.user_ID;
+
+            // If status is Pending, reset approved_by and approved_datetime
+            if(req.body.status_approval === 'Pending') {
+                req.body.approved_by = null;
+                req.body.approved_datetime = null;
+            }
 
             // Update vaccination record
             db.Vaccination_Appointments

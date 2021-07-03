@@ -8,11 +8,6 @@
 var router = require('express').Router();
 
 
-// Index Controller (for testing purpose yet)
-var indexCtlr = require('../controllers/citizen/index.controller');
-router.get('/', indexCtlr.render);
-
-
 // Health Status Log Controller
 var healthStatusLogCtlr = require('../controllers/citizen/health_status_log.controller');
 router.get ("/health-status-logs"                       , healthStatusLogCtlr.getAllHealthStatusLogs);

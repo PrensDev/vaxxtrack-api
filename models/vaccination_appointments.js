@@ -26,6 +26,13 @@ module.exports = (sequelize, DataTypes) => {
         scope      : { user_type: 'Citizen' },
         onDelete   : 'RESTRICT'
       });
+
+      // 1:1 with [users] (for appointments)
+      this.belongsTo(models.Users, {
+        foreignKey : 'approved_by',
+        as         : 'approved_person',
+        onDelete   : 'RESTRICT'
+      });
     }
   };
 
@@ -96,7 +103,7 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     approved_by: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       allowNull: true,
       comment: 'this contains the information on who approved the vaccination date for the patient'
     },

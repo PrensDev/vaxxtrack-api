@@ -30,7 +30,7 @@ router.post('/add-vaccination-record'                     , vaccCtlr.createVaccR
 // Vaccination Appointments
 router.get ('/vaccination-appointments'                             , vaccCtlr.getAllVaccAppointments);
 router.get ('/vaccination-appointments/:vaccination_appointment_ID' , vaccCtlr.getOneVaccAppointment);
-router.put ('/vaccination-appointments/:vaccination_appointment_ID' , vaccCtlr.updateVaccAppointmentStatusApproval);
+router.put ('/vaccination-appointments/:vaccination_appointment_ID' , vaccCtlr.updateVaccAppointment);
 
 // Vaccines
 router.post  ('/add-vaccine'          , vaccCtlr.addVaccine);
