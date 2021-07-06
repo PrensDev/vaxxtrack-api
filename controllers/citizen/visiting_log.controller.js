@@ -17,35 +17,45 @@ exports.createVisitingLog = (req, res) => {
     // Check authorization first
     helper.checkAuthorization(req, res, 'Citizen');
 
-    db.Visiting_Logs
-        .create({
-            citizen_ID: req.user.user_ID,
-            establishment_ID: req.body.establishment_ID,
-            temperature: req.body.temperature,
-            health_status_log_ID: req.body.health_status_log_ID,
-            purpose: req.body.purpose
-        })
-        .then((data) => {
+    const establishmentID = req.body.establishment_ID;
+
+    db.Establishments
+        .findByPk(establishmentID)
+        .then(result => {
+            if(result == null) return helper.errResponse(res, err);
+            
             db.Visiting_Logs
-                .findByPk(data.visiting_log_ID, {
-                    include : [
-                        {
-                            model: db.Establishments,
-                            as : "visiting_log_for",
-                            include : [{
-                                model : db.Addresses,
-                                as : "address"
-                            }]
-                        }, {
-                            model: db.Health_Status_Logs,
-                            as : "health_status_log"
-                        }
-                    ]
+                .create({
+                    citizen_ID: req.user.user_ID,
+                    establishment_ID: establishmentID,
+                    temperature: req.body.temperature,
+                    health_status_log_ID: req.body.health_status_log_ID,
+                    purpose: req.body.purpose
                 })
-                .then((result) => helper.dataResponse(res, result, 'A new Visiting Logs has been created!', 'Error occured when creating a visiting log'))
-                .catch((err) => helper.errResponse(res, err));
+                .then((data) => {
+                    db.Visiting_Logs
+                        .findByPk(data.visiting_log_ID, {
+                            include : [
+                                {
+                                    model: db.Establishments,
+                                    as : "visiting_log_for",
+                                    include : [{
+                                        model : db.Addresses,
+                                        as : "address"
+                                    }]
+                                }, {
+                                    model: db.Health_Status_Logs,
+                                    as : "health_status_log"
+                                }
+                            ]
+                        })
+                        .then((result) => helper.dataResponse(res, result, 'A new Visiting Logs has been created!', 'Error occured when creating a visiting log'))
+                        .catch((err) => helper.errResponse(res, err));
+                })
+                .catch((err) => helper.errResponse(res, err));  
         })
-        .catch((err) => helper.errResponse(res, err));  
+        .catch(err => helper.errResponse(res, err));
+
 };
 
 

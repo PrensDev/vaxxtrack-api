@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: '[] cannot be null'
+          msg: '[roles].[representative_ID] cannot be null'
         }
       },
       references: {
