@@ -140,6 +140,9 @@ exports.getAllVaccAppointments = (req, res) => {
                         "updated_datetime"
                     ]
                 }
+            },{
+                model: db.Users,
+                as: 'approved_person'
             }],
             where: {
                 citizen_ID: req.user.user_ID
@@ -172,7 +175,10 @@ exports.getOneVaccinationAppointment = (req, res) => {
                         "vaccine_ID",
                         "updated_datetime"
                     ]
-                }
+                }, 
+            }, {
+                model: db.Users,
+                as: 'approved_person'
             }],
             where: {
                 citizen_ID: req.user.user_ID

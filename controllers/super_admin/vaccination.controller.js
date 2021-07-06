@@ -118,6 +118,9 @@ const vaccAppointmentsOp = {
         }, {
             model: db.Vaccines,
             as: 'vaccine_preferrence'
+        }, {
+            model: db.Users,
+            as: 'approved_person'
         }
     ],
 }
