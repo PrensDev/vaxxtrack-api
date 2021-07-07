@@ -78,11 +78,8 @@ module.exports = (sequelize, DataTypes) => {
 
     temperature: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: true,
       validate: {
-        notNull: {
-          msg: '[visiting_logs].[temperature] cannot be null'
-        },
         isNumeric: {
           msg: '[visiting_logs].[temperature] can only accepts numeric value'
         }
@@ -92,15 +89,12 @@ module.exports = (sequelize, DataTypes) => {
 
     health_status_log_ID: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       validate: {
         isUUID: {
           args: 4,
           msg: '[visiting_logs].[health_status_log_ID] value must be a UIUDV4 type'
         },
-        notNull: {
-          msg: '[visiting_logs].[health_status_log_ID] cannot be null',
-        }
       },
       comment: 'This links the health status log for the visiting logs'
     },

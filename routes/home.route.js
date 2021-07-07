@@ -24,6 +24,8 @@ router.post('/register/representative'  , registerCtlr.representative);
 router.post('/register/citizen'         , registerCtlr.citizen);
 router.post('/register/super_admin'     , registerCtlr.super_admin);
 router.post('/register/health_official' , registerCtlr.health_official);
+router.post('/send-verification'        , registerCtlr.sendVerification);
+router.post('/verify-otp'               , registerCtlr.verifyOTP);
 
 // Check Account
 router.post('/check-account', registerCtlr.checkAccount);

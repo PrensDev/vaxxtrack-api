@@ -66,7 +66,7 @@ exports.errResponse = (res, err) => {
 exports.dataResponse = (res, data, withDataMsg, nullDataMsg) => {
     
     // If no data return empty response
-    if (data.length === 0) return res.send({
+    if(data.length === 0 || data == null) return res.send({
         error: false,
         data: [],
         message: nullDataMsg

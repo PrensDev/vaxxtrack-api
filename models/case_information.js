@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey : 'lab_report_ID',
         as         : 'lab_report',
         onDelete   : 'RESTRICT'
-      })
+      });
 
       // 1:M with [contacts]
       this.hasMany(models.Contacts, {
