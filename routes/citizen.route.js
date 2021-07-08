@@ -31,9 +31,10 @@ router.get   ("/vaccination-records/:vaccination_record_ID"           , vaccCtlr
 
 // Vaccination Appointmets
 router.get   ("/vaccination-appointments"                             , vaccCtlr.getAllVaccAppointments);
-router.delete("/vaccination-appointments/:vaccination_appointment_ID" , vaccCtlr.cancelVaccAppointment);
 router.post  ("/add-vaccination-appointments"                         , vaccCtlr.createVaccAppointments);
 router.get   ("/vaccination-appointments/:vaccination_appointment_ID" , vaccCtlr.getOneVaccinationAppointment);
+router.put   ("/vaccination-appointments/:vaccination_appointment_ID" , vaccCtlr.updateVaccAppointment);
+router.delete("/vaccination-appointments/:vaccination_appointment_ID" , vaccCtlr.cancelVaccAppointment);
 
 
 

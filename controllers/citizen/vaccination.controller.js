@@ -2,7 +2,8 @@
  * =====================================================================
  * * VACCINATION CONTROLLER
  * ---------------------------------------------------------------------
- * This controller is for managing vaccination records and appointment 
+ * This controller is for managing vaccination records and appointment
+ *  
  * of citizen
  * =====================================================================
  */
@@ -10,7 +11,13 @@
 // Import models and bcrypt for this controller
 const db = require("../../models");
 const { checkAuthorization, dataResponse, errResponse, emptyDataResponse } = require('../../helpers/controller.helper');
-const { Op } = require('sequelize');
+
+
+/**
+ * ==================================================================
+ * * VACCINATION RECORDS
+ * ==================================================================
+ */
 
 // db.Vaccination_Records Options
 const dbVaccinationRecordsOp = (req) => {
@@ -86,7 +93,6 @@ exports.getOneVaccRecord = (req, res) => {
  */
 
 // Create Vaccintaion Appointments
-
 exports.createVaccAppointments = (req, res) => {
 
     checkAuthorization(req, res, 'Citizen');
@@ -95,10 +101,7 @@ exports.createVaccAppointments = (req, res) => {
         .create({
             preferred_vaccine: req.body.preferred_vaccine,
             preferred_date: req.body.preferred_date,
-            citizen_ID: req.user.user_ID,
-            status_approval: req.body.status_approval,
-            approved_by: req.body.approved_by,
-            approved_datetime: req.body.approved_datetime
+            citizen_ID: req.user.user_ID
         })
         .then((data) => {
             db.Vaccination_Appointments
@@ -117,6 +120,38 @@ exports.createVaccAppointments = (req, res) => {
 }
 
 
+// Vaccination Appointments Options
+dbVaccAppointmentOp = (user_ID) => {
+    return {
+        attributes: {
+            exclude: [
+                "preferred_vaccine",
+                "updated_datetime",
+            ]
+        },
+        include: [{
+            model: db.Vaccines,    
+            as: 'vaccine_preferrence',
+            attributes: {
+                exclude: [
+                    "updated_datetime"
+                ]
+            }
+        },{
+            model: db.Users,
+            as: 'approved_person'
+        }],
+        where: {
+            citizen_ID: user_ID
+        },
+        order: [
+            ['created_datetime', 'desc'],
+            ['preferred_date', 'desc'],
+        ]
+    }
+}
+
+
 // Get all Vaccination Appointments
 exports.getAllVaccAppointments = (req, res) => {
 
@@ -124,68 +159,66 @@ exports.getAllVaccAppointments = (req, res) => {
     checkAuthorization(req, res, 'Citizen');
 
     db.Vaccination_Appointments
-        .findAll({
-            attributes: {
-                exclude: [
-                    "preferred_vaccine",
-                    "updated_datetime",
-                ]
-            },
-            include: [{
-                model: db.Vaccines,    
-                as: 'vaccine_preferrence',
-                attributes: {
-                    exclude: [
-                        "vaccine_ID",
-                        "updated_datetime"
-                    ]
-                }
-            },{
-                model: db.Users,
-                as: 'approved_person'
-            }],
-            where: {
-                citizen_ID: req.user.user_ID
-            }
-        })
+        .findAll(dbVaccAppointmentOp(req.user.user_ID))
         .then((data) => dataResponse(res, data, '[Vaccine Appointments] retrieved successfully', 'No [Vaccine Appointments] has been retrieved'))
         .catch((err) => errResponse(res, err)); 
 
 };
 
-//get one vaccine appointments
+
+// Get one vaccination appointments
 exports.getOneVaccinationAppointment = (req, res) => {
 
     // Check authorization first
     checkAuthorization(req, res, 'Citizen');
 
     db.Vaccination_Appointments
-        .findByPk(req.params.vaccination_appointment_ID, {
-            attributes: {
-                exclude: [
-                    "preferred_vaccine",
-                    "updated_datetime",
-                ]
-            },
-            include: [{
-                model: db.Vaccines,    
-                as: 'vaccine_preferrence',
-                attributes: {
-                    exclude: [
-                        "vaccine_ID",
-                        "updated_datetime"
-                    ]
-                }, 
-            }, {
-                model: db.Users,
-                as: 'approved_person'
-            }],
-            where: {
-                citizen_ID: req.user.user_ID
-            }
-        })
+        .findByPk(req.params.vaccination_appointment_ID, dbVaccAppointmentOp(req.user.user_ID))
         .then((data) => dataResponse(res, data, 'A Visiting Log has been identified', 'A Visiting Log cannot identified'))
         .catch((err) => errResponse(res, err)); 
+}
+
+
+// Update vaccination appointment
+exports.updateVaccAppointment = (req, res) => {
+
+    // Check authorization first
+    checkAuthorization(req, res, 'Citizen');
+
+    const vaccination_appointment_ID = req.params.vaccination_appointment_ID;
+    
+    db.Vaccination_Appointments
+        .update(req.body, {
+            where: {
+                vaccination_appointment_ID: vaccination_appointment_ID,
+                citizen_ID: req.user.user_ID,
+                status_approval: 'Pending',
+            },
+            attributes: {
+                exclude: [
+                    'vaccination_appointment_ID',
+                    'citizen_ID',
+                    'status_approval',
+                    'created_datetime'
+                ]
+            }
+        })
+        .then((data) => {
+            if(data) {
+                db.Vaccination_Appointments
+                    .findByPk(vaccination_appointment_ID, {
+                        attributes: {
+                            exclude: [
+                                "created_datetime",
+                                "updated_datetime"
+                            ]
+                        },
+                    })
+                    .then((result) => dataResponse(res, result, 'New vaccination appointment has been successfully created', 'Failed to create a vaccination appointments'))
+                    .catch((err) => errResponse(res, err));
+            }
+        })
+        .catch((err) => errResponse(res, err));
 }
 
 
