@@ -7,8 +7,8 @@
  */
 
 // Import Required Packages
-const db     = require("../../models");
-const helper = require("../../helpers/controller.helper");
+const db = require("../../models");
+const { checkAuthorization, dataResponse, errResponse } = require("../../helpers/controller.helper");
 
 
 // Create New Visiting Log
@@ -59,20 +59,14 @@ exports.createVisitingLog = (req, res) => {
 };
 
 
-// Find All Visiting Logs
-exports.getAllVisitingLogs = (req, res) => {
-
-    // Check authorization first
-    helper.checkAuthorization(req, res, 'Citizen');
-
-    db.Visiting_Logs
-        .findAll({
-            include: [{
+// Visiting Logs Options
+const dbVisitingLogsOp = (user_ID) => {
+    return {
+        include: [
+            {
                 model: db.Users,    
                 as: 'visiting_log_by',
-                where: {
-                    user_ID: req.user.user_ID
-                },
+                where: { user_ID: user_ID },
                 attributes: {
                     exclude: [
                         'sex',
@@ -85,11 +79,34 @@ exports.getAllVisitingLogs = (req, res) => {
                         'created_datetime',
                         'updated_datetime'
                     ]
-                }
-            }],
-        })
-        .then((data) => helper.dataResponse(res, data, 'Visiting Logs retrieved successfully', 'No visiting logs has been retrieved'))
-        .catch((err) => helper.errResponse(res, err)); 
+                },
+                include: [{
+                    model: db.Health_Status_Logs,
+                    as: 'health_status_logs'
+                }]
+            }, {
+                model: db.Establishments,
+                as: 'visiting_log_for',
+                include: [{
+                    model: db.Addresses,
+                    as: 'address'
+                }]
+            }
+        ],
+    }
+}
+
+
+// Find All Visiting Logs
+exports.getAllVisitingLogs = (req, res) => {
+
+    // Check authorization first
+    checkAuthorization(req, res, 'Citizen');
+
+    db.Visiting_Logs
+        .findAll(dbVisitingLogsOp(req.user.user_ID))
+        .then(data => dataResponse(res, data, 'Visiting Logs retrieved successfully', 'No visiting logs has been retrieved'))
+        .catch(err => errResponse(res, err)); 
 };
 
 
@@ -97,29 +114,10 @@ exports.getAllVisitingLogs = (req, res) => {
 exports.getOneVisitingLog = (req, res) => {
 
     // Check authorization first
-    helper.checkAuthorization(req, res, 'Citizen');
+    checkAuthorization(req, res, 'Citizen');
 
     db.Visiting_Logs
-        .findByPk(req.params.visiting_log_ID, {
-            include : [{
-                model: db.Users,
-                as: 'visiting_log_by',
-                where: { user_ID : req.user.user_ID },
-                attributes: {
-                    exclude: [
-                        'sex',
-                        'birth_date',
-                        'civil_status',
-                        'address_ID',
-                        'user_type',
-                        'password',
-                        'added_by',
-                        'created_datetime',
-                        'updated_datetime'
-                    ]
-                },
-            }],
-        })
-        .then((data) => helper.dataResponse(res, data, 'A Visiting Log has been identified', 'A Visiting Log cannot identified'))
-        .catch((err) => helper.errResponse(res, err)); 
+        .findByPk(req.params.visiting_log_ID, dbVisitingLogsOp(req.user.user_ID))
+        .then(data => dataResponse(res, data, 'A Visiting Log has been identified', 'A Visiting Log cannot identified'))
+        .catch(err => errResponse(res, err)); 
 };

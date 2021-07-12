@@ -53,8 +53,8 @@ exports.sendVerification = async (req, res) => {
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
-            user: email, // generated ethereal user
-            pass: password, // generated ethereal password
+            user: 'kelly.hamill77@ethereal.email', // generated ethereal user
+            pass: 'kjseTyScuv6MWdb1b5', // generated ethereal password
         },
     });
 
