@@ -35,9 +35,9 @@ router.put('/info' , infoController.updateInfo);
 
 // Account Controller
 var accountCtlr = require('../controllers/representative/account.controller');
-router.put ('/password' , accountCtlr.updatePassword);
-router.get ('/accounts' , accountCtlr.getAllAccounts);
-router.post('/add-account', accountCtlr.createAccount);
+router.post('/add-account'     , accountCtlr.createAccount);
+router.get ('/accounts'        , accountCtlr.getAllAccounts);
+router.put ('/change-password' , accountCtlr.updatePassword);
 router.put ('/verify-account/:user_account_ID', accountCtlr.verifyAccount);
 
 

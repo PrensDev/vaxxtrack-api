@@ -1,15 +1,15 @@
 /**
- * =====================================================================
+ * ==================================================================
  * * ACCOUNT CONTROLLER
- * ---------------------------------------------------------------------
- * This controller is for managing account settings of representatives
- * =====================================================================
+ * ------------------------------------------------------------------
+ * This controller is for managing user accounts
+ * ==================================================================
  */
 
 
-// Import models and bcrypt for this controller
-const db     = require("../../models");
-const helper = require("../../helpers/controller.helper");
+// Import required packages
+const db = require('../../models');
+const { dataResponse, emptyDataResponse, checkAuthorization } = require('../../helpers/controller.helper');
 const bcrypt = require('bcrypt');
 
 
@@ -17,93 +17,78 @@ const bcrypt = require('bcrypt');
 exports.updatePassword = (req, res) =>  {
 
     // Check authorization first
-    helper.checkAuthorization(req, res, 'Representative');
+    checkAuthorization(req, res, 'Representative');
 
     // Get password from req.body
-    const password = req.body.password;
+    const new_password = bcrypt.hashSync(req.body.new_password, 10) ;
 
-    // Check if password is null
-    if (password == null || password == '') return res.status(500).send({
-        error: true,
-        message: 'Password is required'
-    });
-        
-    // Update user password
+    // Find user and check password
     db.Users
-        .update({ password: bcrypt.hashSync(password, 10) }, {
-            where: { user_ID: req.user.user_ID }
+        .findByPk(req.user.user_ID, { attributes: ['user_ID', 'password'] })
+        .then(result => {
+            console.log(req.body);
+            if(result) {
+                bcrypt.compare(req.body.current_password, result.password, (err, hasResult) => {
+
+                    // Display error if exists
+                    if(err) console.log(err);
+                    
+                    // If no result then send empty reponse
+                    if(!hasResult) return emptyDataResponse(res, 'Invalid details or password');
+                    
+                    // Else update user password
+                    db.Users
+                        .update({ password: new_password }, { where: { user_ID: req.user.user_ID }})
+                        .then(data => dataResponse(res, data, 'Password has been changed successfully', 'Password has been changed successfully'))
+                        .catch(err => errResponse(res, err));
+                });
+            }
         })
-        .then(() => helper.emptyDataResponse(res, 'Password has been changed successfully'))
-        .catch((err) => helper.errResponse(res, err));
+        .catch(err => errResponse(res, err));
 };
 
-//get All Accounts
-exports.getAllAccounts = (req, res) => {
-
-    //check authorization
-    helper.checkAuthorization(req, res, 'Representative');
-
-    //findAll Accnts of representatives
-    db.User_Accounts
-    .findAll({
-        attributes: {
-            exclude: [
-                'verified'
-            ]
-        }
-    })
-    .then((data) => helper.dataResponse(res, data, 'Accounts successfully retrieved', 'No Account has been retrieved'))
-    .catch((err) => helper.errResponse(res, err));
-}
-
-
-//add accnt
-exports.createAccount = (req, res) => {
-
-    //check authentication
-    helper.checkAuthorization(req, res, 'Representative');
-
-    //add accnt
-    db.User_Accounts
+// Get all accounts
+exports.getAllAccounts = (req, res, next) => {
     
-    .create({
-        user_ID: req.user.user_ID,
-        details: req.body.details,
-        type: req.body.type, 
-    })
-    .then((result) => {
-        db.Users
-            .findByPk(result.user_ID, {
-                include: [
-                    {
-                        model: db.User_Accounts,
-                        as: 'user_accounts',
-                        attributes: {
-                            exclude: [
-                                'user_account_ID',
-                                'user_ID',
-                                'verified',
-                                'created_datetime',
-                                'updated_datetime'
-                            ]
-                        }
-                    }
-                ],
-            })
-            .then((data) => helper.dataResponse(res, data, 'Account successfully created', 'No Account has been created'))
-            .catch((err) => helper.errResponse(res, err));
-    })
-    .catch((err) => helper.errResponse(res, err));
+    // Check authorization first
+    checkAuthorization(req, res, 'Representative')
+
+    db.User_Accounts
+        .findAll({ where: { user_ID: req.user.user_ID }})
+        .then(data => dataResponse(res, data, 'User accounts are retrieved successfully', 'No user account has been retrieved'))
+        .catch(err => errResponse(res, err));
 }
 
+// Create new account
+exports.createAccount = (req, res) => {
+    
+    // Check Authorization first
+    checkAuthorization(req, res, 'Representative');
+
+    db.User_Accounts
+        .findOne({ where: { details: req.body.details }})
+        .then(result => {
+            if(result) emptyDataResponse(res, 'Account already exist')
+            else {
+                
+                // Set user ID
+                req.body.user_ID = req.user.user_ID
+                
+                // Create Account
+                db.User_Accounts
+                    .create(req.body)
+                    .then((data) => dataResponse(res, data, 'New account has been created', 'Failed to create account'))
+                    .catch((err) => errResponse(res, err)); 
+            }
+        })
+        .catch(err => errResponse(res, err));
+};
 
 //verify
 exports.verifyAccount = (req, res) =>{
-    
-    
-    //check
+        
+    // 
     helper.checkAuthorization(req, res, 'Representative');
-
 
     const user_account_ID = req.params.user_account_ID;
 
@@ -146,4 +131,4 @@ exports.verifyAccount = (req, res) =>{
         } )
         .catch((err) => helper.errResponse(res, err));
 
-    }
+}

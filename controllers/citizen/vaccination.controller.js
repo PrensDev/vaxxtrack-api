@@ -40,6 +40,8 @@ const dbVaccinationRecordsOp = (req) => {
     }
 }
 
+
+// Vaccination Record Options
 const dbVaccinationRecOp = (req) => {
     return {
         where: {
@@ -271,3 +273,41 @@ exports.cancelVaccAppointment = (req, res) => {
         })
         .catch((err) => errResponse(res, err));
 };
+
+
+// Get Vaccination Records Count
+exports.vaccAppointmentCount = (req, res) => {
+
+    // Check authorization first
+    checkAuthorization(req, res, 'Citizen');
+
+    db.Vaccination_Appointments
+        .count({
+            where: {
+                citizen_ID: req.user.user_ID
+            },
+            col: 'status_approval',
+            group: ['status_approval']
+        })
+        .then(result => {
+
+            // Status Approval Data Object
+            statusApprovalData = {
+                all: 0,
+                pending: 0,
+                approved: 0,
+                rejected: 0
+            }
+
+            result.forEach(el => {
+                statusApprovalData.all += el.count;
+                if(el.status_approval === 'Pending') statusApprovalData.pending += el.count;
+                if(el.status_approval === 'Approved') statusApprovalData.approved += el.count;
+                if(el.status_approval === 'Rejected') statusApprovalData.rejected += el.count;
+            });
+
+            // Respond statusApprovalData object
+            res.send({ status_approval_count: statusApprovalData });
+        })
+        .catch(err => errResponse(res, err));
+}

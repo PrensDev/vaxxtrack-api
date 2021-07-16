@@ -31,6 +31,7 @@ router.delete('/vaccines/:vaccine_ID' , vaccCtlr.deleteVaccine);
 
 // Vaccination Records Management
 router.get('/vaccination-records', vaccCtlr.getAllVaccRecords);
+router.get('/vaccination-records/:vaccination_record_ID', vaccCtlr.getOneVaccRecord);
 
 // Vaccination Appointments
 router.get ('/vaccination-appointments'                             , vaccCtlr.getAllVaccAppointments);
@@ -45,9 +46,9 @@ router.put('/info' , infoController.updateInfo);
 
 // Account Controller
 var accountCtlr = require('../controllers/super_admin/account.controller');
-router.put ('/password'    , accountCtlr.updatePassword);
-router.get ('/accounts'    , accountCtlr.getAllAccounts);
-router.post('/add-account' , accountCtlr.createAccount);
+router.post('/add-account'     , accountCtlr.createAccount);
+router.get ('/accounts'        , accountCtlr.getAllAccounts);
+router.put ('/change-password' , accountCtlr.updatePassword);
 
 
 // User Management Controller

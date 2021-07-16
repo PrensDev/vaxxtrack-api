@@ -15,14 +15,14 @@ const { checkAuthorization, dataResponse, errResponse } = require("../../helpers
 exports.createVisitingLog = (req, res) => {
 
     // Check authorization first
-    helper.checkAuthorization(req, res, 'Citizen');
+    checkAuthorization(req, res, 'Citizen');
 
     const establishmentID = req.body.establishment_ID;
 
     db.Establishments
         .findByPk(establishmentID)
         .then(result => {
-            if(result == null) return helper.errResponse(res, err);
+            if(result == null) return errResponse(res, err);
             
             db.Visiting_Logs
                 .create({
@@ -49,12 +49,12 @@ exports.createVisitingLog = (req, res) => {
                                 }
                             ]
                         })
-                        .then((result) => helper.dataResponse(res, result, 'A new Visiting Logs has been created!', 'Error occured when creating a visiting log'))
-                        .catch((err) => helper.errResponse(res, err));
+                        .then((result) => dataResponse(res, result, 'A new Visiting Logs has been created!', 'Error occured when creating a visiting log'))
+                        .catch((err) => errResponse(res, err));
                 })
-                .catch((err) => helper.errResponse(res, err));  
+                .catch((err) => errResponse(res, err));  
         })
-        .catch(err => helper.errResponse(res, err));
+        .catch(err => errResponse(res, err));
 
 };
 

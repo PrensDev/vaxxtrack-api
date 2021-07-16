@@ -1,7 +1,9 @@
 /**
- * ACCOUNT CONTROLLER
- * 
- * This controller is for managing account settings of health officials
+ * ==================================================================
+ * * ACCOUNT CONTROLLER
+ * ------------------------------------------------------------------
+ * This controller is for managing user accounts
+ * ==================================================================
  */
 
 
@@ -9,7 +11,6 @@
 const db     = require('../../models');
 const { checkAuthorization, dataResponse, errResponse, emptyDataResponse } = require('../../helpers/controller.helper');
 const bcrypt = require('bcrypt');
-const helper = require('../../helpers/controller.helper');
 
 
 // Update Password
@@ -19,49 +20,44 @@ exports.updatePassword = (req, res) =>  {
     checkAuthorization(req, res, 'Health Official');
 
     // Get password from req.body
-    const password = req.body.password;
+    const new_password = bcrypt.hashSync(req.body.new_password, 10) ;
 
-    // Check if password is null
-    if (password == null || password == '') return res.status(500).send({
-        error: true,
-        message: 'Password is required'
-    });
-        
-    // Update user password
+    // Find user and check password
     db.Users
-        .update({ password: bcrypt.hashSync(password, 10) }, {
-            where: { user_ID: req.user.user_ID }
+        .findByPk(req.user.user_ID, { attributes: ['user_ID', 'password'] })
+        .then(result => {
+            console.log(req.body);
+            if(result) {
+                bcrypt.compare(req.body.current_password, result.password, (err, hasResult) => {
+
+                    // Display error if exists
+                    if(err) console.log(err);
+                    
+                    // If no result then send empty reponse
+                    if(!hasResult) return emptyDataResponse(res, 'Invalid details or password');
+                    
+                    // Else update user password
+                    db.Users
+                        .update({ password: new_password }, { where: { user_ID: req.user.user_ID }})
+                        .then(data => dataResponse(res, data, 'Password has been changed successfully', 'Password has been changed successfully'))
+                        .catch(err => errResponse(res, err));
+                });
+            }
         })
-        .then(() => emptyDataResponse(res, 'Password has been changed successfully'))
-        .catch((err) => errResponse(res, err));
+        .catch(err => errResponse(res, err));
 };
 
 
 // Get all accounts
 exports.getAllAccounts = (req, res, next) => {
-    if(req.user == null || req.user.user_type !== 'Health Official') {
-        res.sendStatus(403);
-    } else {
-        db.User_Accounts
-            .findAll()
-            .then((data) => {
-                if(data) {
-                    res.send({
-                        error: false,
-                        data: data,
-                        message: 'A user has been identified'
-                    });
-                } else {
-                    res.send({
-                        error: true,
-                        message: 'No user has been identified'
-                    });
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
+    
+    // Check authorization first
+    checkAuthorization(req, res, 'Health Official')
+
+    db.User_Accounts
+        .findAll({ where: { user_ID: req.user.user_ID }})
+        .then(data => dataResponse(res, data, 'User accounts are retrieved successfully', 'No user account has been retrieved'))
+        .catch(err => errResponse(res, err));
 }
 
 
@@ -70,10 +66,22 @@ exports.createAccount = (req, res) => {
     
     // Check Authorization first
     checkAuthorization(req, res, 'Health Official');
-    
-    req.body.user_ID = req.user.user_ID
+
     db.User_Accounts
-        .create(req.body)
-        .then((data) => dataResponse(res, data, 'New account has been created', 'Failed to create account'))
-        .catch((err) => errResponse(res, err)); 
+        .findOne({ where: { details: req.body.details }})
+        .then(result => {
+            if(result) emptyDataResponse(res, 'Account already exist')
+            else {
+                
+                // Set user ID
+                req.body.user_ID = req.user.user_ID
+                
+                // Create Account
+                db.User_Accounts
+                    .create(req.body)
+                    .then((data) => dataResponse(res, data, 'New account has been created', 'Failed to create account'))
+                    .catch((err) => errResponse(res, err)); 
+            }
+        })
+        .catch(err => errResponse(res, err));
 };

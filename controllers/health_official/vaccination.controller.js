@@ -56,11 +56,7 @@ exports.deleteVaccine = (req, res) => {
     checkAuthorization(req, res, 'Health Official');
 
     db.Vaccines
-        .destroy({
-            where: {
-                vaccine_ID: req.params.vaccine_ID
-            }
-        })
+        .destroy({ where: { vaccine_ID: req.params.vaccine_ID }})
         .then(data => dataResponse(res, data, 'A vaccine has been updated', 'No vaccine has been updated'))
         .catch(err => errResponse(res, err))
 }
@@ -133,7 +129,8 @@ exports.getOneUserAndVaccRecords = (req, res) => {
                 include: {
                     model: db.Vaccines,
                     as: 'vaccine_used'
-                }
+                },
+                order: [['vaccination_date', 'asc']]
             }
         })
         .then((data) => dataResponse(res, data, 'Vaccinated users retrieved successfully', 'No user have been recorded as vaccinated'))
@@ -213,6 +210,43 @@ exports.createVaccRecord = (req, res) => {
 };
 
 
+// Vaccination Record Options
+const dbVaccRecordOp = {
+    include: [
+        {
+            model: db.Users,
+            as: 'vaccinated_citizen',
+            attributes: {
+                exclude: [
+                    'password',
+                    'added_by',
+                    'created_datetime',
+                    'updated_datetime'
+                ]
+            },
+            include: [{
+                model: db.Addresses,
+                as: 'address',
+                attributes: {
+                    exclude: [
+                        'created_datetime',
+                        'updated_datetime'
+                    ]
+                }
+            }]
+        }, {
+            model: db.Vaccines,
+            as: 'vaccine_used',
+            attributes: {
+                exclude: [
+                    'created_datetime',
+                    'updated_datetime'
+                ]
+            }
+        }]
+}
+
+
 // Get All Vaccination Records
 exports.getAllVaccRecords = (req, res, next) => {
     
@@ -220,16 +254,7 @@ exports.getAllVaccRecords = (req, res, next) => {
     checkAuthorization(req, res, 'Health Official');
 
     db.Vaccination_Records
-        .findAll({
-            include: [
-                {
-                    model: db.Users,
-                    as: 'vaccinated_citizen'
-                }, {
-                    model: db.Vaccines,
-                    as: 'vaccine_used'
-                }]
-        })
+        .findAll(dbVaccRecordOp)
         .then((data) => dataResponse(res, data, 'Vaccination Records are retrieved successfully', 'No vaccination records have been retrieved'))
         .catch((err) => errResponse(res, err))
 }
@@ -242,16 +267,7 @@ exports.getOneVaccRecord = (req, res, next) => {
     checkAuthorization(req, res, 'Health Official');
 
     db.Vaccination_Records
-        .findByPk(req.params.vaccination_record_ID, {
-            include: [
-                {
-                    model: db.Users,
-                    as: 'vaccinated_citizen'
-                }, {
-                    model: db.Vaccines,
-                    as: 'vaccine_used'
-                }]
-        })
+        .findByPk(req.params.vaccination_record_ID, dbVaccRecordOp)
         .then((data) => dataResponse(res, data, 'Vaccination Records are retrieved successfully', 'No vaccination records have been retrieved'))
         .catch((err) => errResponse(res, err))
 }
@@ -343,6 +359,20 @@ exports.updateVaccRecord = (req, res, next) => {
             .catch((err) => errResponse(res, err));
     })
     .catch((err) => errResponse(res, err));
+}
+
+
+// Delete Vaccination Record
+exports.deleteVaccRecord = (req, res, next) => {
+
+    // Check authorization first
+    checkAuthorization(req, res, 'Health Official');
+
+    // Delete a Vaccination Record by ID
+    db.Vaccination_Records
+        .destroy({ where: { vaccination_record_ID: req.params.vaccination_record_ID }})
+        .then(data => dataResponse(res, data, 'A vaccination record is successfully deleted', 'No vaccination record has been deleted'))
+        .catch(err => errResponse(res, err));
 }
 
 
@@ -470,3 +500,59 @@ exports.updateVaccAppointment = (req, res) => {
         })
         .catch((err) => errResponse(res, err));
 };
+
+
+/**
+ * ==================================================================
+ * * PATIENT CONTROLLERS (For vaccination record & case record)
+ * ==================================================================
+ */
+
+// Get all citizens (or probable patients)
+exports.getAllProbablePatients = (req, res) => {
+
+    // Check Authorization first
+    checkAuthorization(req, res, 'Health Official');
+
+    db.Users
+        .findAll({
+            where: { user_type: 'Citizen' },
+            attributes: {
+                exclude: ['added_by']
+            },
+            include: [
+                {
+                    model: db.Addresses,
+                    as: 'address'
+                }
+            ]
+        })
+        .then(data => dataResponse(res, data, 'Citizens are retrieved sucessfully', 'No citizen has been retrieved'))
+        .catch(err => errResponse(res, err));
+}
+
+// Get one citizen (or probable patient)
+exports.getOneProbablePatient = (req, res) => {
+
+    // Check Authorization first
+    checkAuthorization(req, res, 'Health Official');
+
+    db.Users
+        .findOne({
+            where: { 
+                user_ID: req.params.user_ID,
+                user_type: 'Citizen' 
+            },
+            attributes: {
+                exclude: ['added_by']
+            },
+            include: [
+                {
+                    model: db.Addresses,
+                    as: 'address'
+                }
+            ]
+        })
+        .then(data => dataResponse(res, data, 'Citizens are retrieved sucessfully', 'No citizen has been retrieved'))
+        .catch(err => errResponse(res, err));
+}

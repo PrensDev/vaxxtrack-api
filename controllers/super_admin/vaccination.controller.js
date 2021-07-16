@@ -8,8 +8,8 @@
 
 
 // Import necessary packages
-const db     = require('../../models');
-const { checkAuthorization, dataResponse, errResponse, emptyDataResponse } = require('../../helpers/controller.helper');
+const db = require('../../models');
+const { checkAuthorization, dataResponse, errResponse } = require('../../helpers/controller.helper');
 
 
 /**
@@ -69,6 +69,42 @@ exports.deleteVaccine = (req, res) => {
  * ============================================================================
  */
 
+// Vaccination Record Options
+const dbVaccRecordOp = {
+    include: [
+        {
+            model: db.Users,
+            as: 'vaccinated_citizen',
+            attributes: {
+                exclude: [
+                    'password',
+                    'added_by',
+                    'created_datetime',
+                    'updated_datetime'
+                ]
+            },
+            include: [{
+                model: db.Addresses,
+                as: 'address',
+                attributes: {
+                    exclude: [
+                        'created_datetime',
+                        'updated_datetime'
+                    ]
+                }
+            }]
+        }, {
+            model: db.Vaccines,
+            as: 'vaccine_used',
+            attributes: {
+                exclude: [
+                    'created_datetime',
+                    'updated_datetime'
+                ]
+            }
+        }]
+}
+
 // Get All Vaccination Records
 exports.getAllVaccRecords = (req, res) => {
 
@@ -76,18 +112,23 @@ exports.getAllVaccRecords = (req, res) => {
     checkAuthorization(req, res, 'Super Admin');
 
     db.Vaccination_Records
-        .findAll({
-            include: [{
-                model: db.Users,
-                as: 'vaccinated_citizen'
-            }, {
-                model: db.Vaccines,
-                as: 'vaccine_used'
-            }]
-        })
+        .findAll(dbVaccRecordOp)
         .then(data => dataResponse(res, data, 'Vaccination Records are retrieved successfully', 'No vaccination records are retrieved'))
         .catch(err => errResponse(res, err))
 }
+
+// Get One Vaccination Record
+exports.getOneVaccRecord = (req, res, next) => {
+    
+    // Check authorization first
+    checkAuthorization(req, res, 'Super Admin');
+
+    db.Vaccination_Records
+        .findByPk(req.params.vaccination_record_ID, dbVaccRecordOp)
+        .then((data) => dataResponse(res, data, 'Vaccination Records are retrieved successfully', 'No vaccination records have been retrieved'))
+        .catch((err) => errResponse(res, err))
+}
+
 
 /**
  * ============================================================================ 

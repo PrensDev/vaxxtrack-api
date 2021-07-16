@@ -22,10 +22,11 @@ router.get ('/vaccinated-citizens'          , vaccCtlr.getAllUsersAndVaccRecords
 router.get ('/vaccinated-citizens/:user_ID' , vaccCtlr.getOneUserAndVaccRecords);
 
 // Vaccination Records
-router.get ('/vaccination-records'                        , vaccCtlr.getAllVaccRecords);
-router.get ('/vaccination-records/:vaccination_record_ID' , vaccCtlr.getOneVaccRecord);
-router.put ('/vaccination-records/:vaccination_record_ID' , vaccCtlr.updateVaccRecord);
-router.post('/add-vaccination-record'                     , vaccCtlr.createVaccRecord);
+router.post  ('/add-vaccination-record'                     , vaccCtlr.createVaccRecord);
+router.get   ('/vaccination-records'                        , vaccCtlr.getAllVaccRecords);
+router.get   ('/vaccination-records/:vaccination_record_ID' , vaccCtlr.getOneVaccRecord);
+router.put   ('/vaccination-records/:vaccination_record_ID' , vaccCtlr.updateVaccRecord);
+router.delete('/vaccination-records/:vaccination_record_ID' , vaccCtlr.deleteVaccRecord);
 
 // Vaccination Appointments
 router.get ('/vaccination-appointments'                             , vaccCtlr.getAllVaccAppointments);
@@ -37,6 +38,10 @@ router.post  ('/add-vaccine'          , vaccCtlr.addVaccine);
 router.put   ('/vaccines/:vaccine_ID' , vaccCtlr.updateVaccine);
 router.delete('/vaccines/:vaccine_ID' , vaccCtlr.deleteVaccine);
 
+// Patient
+router.get('/probable-patients'          , vaccCtlr.getAllProbablePatients);
+router.get('/probable-patients/:user_ID' , vaccCtlr.getOneProbablePatient);
+
 
 // User Information Controller
 var infoController = require('../controllers/health_official/info.controller');
@@ -46,9 +51,9 @@ router.put('/update-info' , infoController.updateInfo);
 
 // Account Controller
 var accountCtlr = require('../controllers/health_official/account.controller');
-router.put ('/password'    , accountCtlr.updatePassword);
-router.get ('/accounts'    , accountCtlr.getAllAccounts);
-router.post('/add-account' , accountCtlr.createAccount);
+router.post('/add-account'     , accountCtlr.createAccount);
+router.get ('/accounts'        , accountCtlr.getAllAccounts);
+router.put ('/change-password' , accountCtlr.updatePassword);
 
 
 

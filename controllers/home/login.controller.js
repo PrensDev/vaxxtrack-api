@@ -20,7 +20,7 @@ require('dotenv').config();
 
 // Generate token
 const generateToken = (data) => { 
-    return jwt.sign(data, process.env.TOKEN_SECRET, { expiresIn: '3h' }); 
+    return jwt.sign(data, process.env.TOKEN_SECRET, { expiresIn: '12h' }); 
 }
 
 
@@ -58,11 +58,11 @@ exports.login = (req, res) => {
 
                 // Display error if exists
                 if(err) console.log(err);
-                                
+                
                 // If no result then send empty reponse
                 if(!hasResult) return emptyDataResponse(res, 'Invalid details or password');
                 
-                // ELse send reponse with data
+                // Else send reponse with data
                 const user_ID = data.user.user_ID;
                 const user_type = data.user.user_type;
                 
