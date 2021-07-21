@@ -93,3 +93,60 @@ exports.getOneEstablishment = (req, res, next) => {
         .then((data) => helper.dataResponse(res, data, 'An establishment and its information has been identified', 'No establishment has been identified'))
         .catch((err) => helper.errResponse(res, err));
 }
+
+// Create new account
+exports.RegisterHealthOfficials = (req, res) => {
+
+    helper.checkAuthorization(req, res, 'Super Admin');
+
+    req.body.added_by = req.user.user_ID 
+
+    db.Users
+        .create(req.body, {
+            include: [{
+                model: db.User_Accounts,
+                as: 'user_accounts'
+            }]
+        })
+        .then((result) => {
+            db.Users
+                .findByPk(result.user_ID, {
+                    include: [{
+                        model: db.User_Accounts,
+                        as: 'user_accounts'
+                    }]
+                })
+                .then(data => helper.dataResponse(res, data, 'A new Health Official has been registered', 'Health Official was not registered'))
+                .catch(err => helper.errResponse(res, err));
+        })
+        .catch(err => helper.errResponse(res, err));
+}
+
+// Register a super admin
+exports.RegisterSuperAdmin = (req, res) => {
+
+    helper.checkAuthorization(req, res, 'Super Admin');
+
+    req.body.added_by = req.user.user_ID 
+
+    db.Users
+        .create(req.body, {
+            include: [{
+                model: db.User_Accounts,
+                as: 'user_accounts'
+            }]
+        })
+        .then((result) => {
+            db.Users
+                .findByPk(result.user_ID, {
+                    include: [{
+                        model: db.User_Accounts,
+                        as: 'user_accounts'
+                    }]
+                })
+                .then(data => helper.dataResponse(res, data, 'A new Super Admin has been registered', 'Super Admin was not registered'))
+                .catch(err => helper.errResponse(res, err));
+        })
+        .catch(err => helper.errResponse(res, err));
+}
+

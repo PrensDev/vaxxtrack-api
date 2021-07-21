@@ -10,7 +10,9 @@ var router = require('express').Router();
 
 // Administration Controller
 var adminCtlr = require('../controllers/super_admin/admin.controller');
-router.get('/users'                            , adminCtlr.getAllUsers);
+router.get('/users'                             , adminCtlr.getAllUsers);
+router.post('/add-account-health-officials'     , adminCtlr.RegisterHealthOfficials);
+router.post('/add-account-super-admin'          , adminCtlr.RegisterSuperAdmin);
 // router.get('/users/:user_ID'                   , adminCtlr.getOneUser);
 router.get('/establishments'                   , adminCtlr.getAllEstablishments);
 router.get('/establishments/:establishment_ID' , adminCtlr.getAllEstablishments);
