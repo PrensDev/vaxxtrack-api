@@ -10,8 +10,9 @@ var router = require('express').Router();
 
 // COVID-19 Cases Controller
 var casesCtlr = require('../controllers/health_official/covid_cases.controller');
-router.get('/covid19-cases'          , casesCtlr.getAllCovidCases);
-router.get('/covid19-cases/:case_ID' , casesCtlr.getOneCovidCase);
+router.post('/add-covid19-case'       , casesCtlr.addCase);
+router.get ('/covid19-cases'          , casesCtlr.getAllCovidCases);
+router.get ('/covid19-cases/:case_ID' , casesCtlr.getOneCovidCase);
 
 
 // Vaccination Controller
@@ -35,12 +36,23 @@ router.put ('/vaccination-appointments/:vaccination_appointment_ID' , vaccCtlr.u
 
 // Vaccines
 router.post  ('/add-vaccine'          , vaccCtlr.addVaccine);
+router.get   ('/vaccines/'            , vaccCtlr.getAllVaccines);
+router.get   ('/vaccines/:vaccine_ID' , vaccCtlr.getOneVaccine);
 router.put   ('/vaccines/:vaccine_ID' , vaccCtlr.updateVaccine);
 router.delete('/vaccines/:vaccine_ID' , vaccCtlr.deleteVaccine);
 
 // Patient
 router.get('/probable-patients'          , vaccCtlr.getAllProbablePatients);
 router.get('/probable-patients/:user_ID' , vaccCtlr.getOneProbablePatient);
+
+
+
+// Contacts
+var probCtrl = require('../controllers/health_official/contacts.controller');
+router.get ('/probable-contacts' , probCtrl.getAllProbableContacts);
+router.post('/add-contact'       , probCtrl.addContact);
+router.get ('/contacts'          , probCtrl.getAllContacts);
+
 
 
 // User Information Controller
@@ -51,9 +63,10 @@ router.put('/update-info' , infoController.updateInfo);
 
 // Account Controller
 var accountCtlr = require('../controllers/health_official/account.controller');
-router.post('/add-account'     , accountCtlr.createAccount);
-router.get ('/accounts'        , accountCtlr.getAllAccounts);
-router.put ('/change-password' , accountCtlr.updatePassword);
+router.post  ('/add-account'               , accountCtlr.createAccount);
+router.get   ('/accounts'                  , accountCtlr.getAllAccounts);
+router.delete('/accounts/:user_account_ID' , accountCtlr.deleteAccount);
+router.put   ('/change-password'           , accountCtlr.updatePassword);
 
 
 

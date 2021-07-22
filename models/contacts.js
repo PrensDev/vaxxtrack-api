@@ -18,6 +18,13 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'RESTRICT'
       });
 
+      // M:1 with [users]
+      this.belongsTo(models.Users, {
+        foreignKey: 'citizen_ID',
+        as: 'probable_contact',
+        onDelete: 'RESTRICT'
+      });
+
       // 1:1 with [quarantine_information]
       this.hasOne(models.Quarantine_Information, {
         foreignKey: 'contact_ID',

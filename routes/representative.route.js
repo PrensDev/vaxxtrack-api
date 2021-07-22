@@ -22,9 +22,10 @@ router.put('/establishments/:establishment_ID' , establishmentCtlr.updateEstabli
 
 // Visiting Log Controller
 var visitingLogCtlr = require('../controllers/representative/visiting_log.controller');
-router.get ("/visiting-logs/:establishment_ID"                  , visitingLogCtlr.getAllVisitingLogs);
-router.get ("/visiting-logs/:establishment_ID/:visiting_log_ID" , visitingLogCtlr.getOneVisitingLog);
-router.post("/add-visiting-log"                                 , visitingLogCtlr.createVisitingLog);
+router.post  ("/add-visiting-log"                                 , visitingLogCtlr.createVisitingLog);
+router.get   ("/visiting-logs/:establishment_ID"                  , visitingLogCtlr.getAllVisitingLogs);
+router.get   ("/visiting-logs/:establishment_ID/:visiting_log_ID" , visitingLogCtlr.getOneVisitingLog);
+router.delete("/visiting-logs/:establishment_ID/:visiting_log_ID" , visitingLogCtlr.deleteVisitingLog);
 
 
 // User Information Controller
@@ -35,10 +36,11 @@ router.put('/info' , infoController.updateInfo);
 
 // Account Controller
 var accountCtlr = require('../controllers/representative/account.controller');
-router.post('/add-account'     , accountCtlr.createAccount);
-router.get ('/accounts'        , accountCtlr.getAllAccounts);
-router.put ('/change-password' , accountCtlr.updatePassword);
-router.put ('/verify-account/:user_account_ID', accountCtlr.verifyAccount);
+router.post  ('/add-account'                     , accountCtlr.createAccount);
+router.get   ('/accounts'                        , accountCtlr.getAllAccounts);
+router.delete('/accounts/:user_account_ID'       , accountCtlr.deleteAccount);
+router.put   ('/change-password'                 , accountCtlr.updatePassword);
+router.put   ('/verify-account/:user_account_ID' , accountCtlr.verifyAccount);
 
 
 // Export module

@@ -118,9 +118,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       validate: {
         isIn: {
-          args: [
-            ['Recovered', 'Died']
-          ],
+          args: [[null, 'Recovered', 'Died']],
           msg: '[case_information].[removal_type] values must be `Recovered` or `Died` only'
         }
       },
@@ -130,11 +128,6 @@ module.exports = (sequelize, DataTypes) => {
     removal_date: {
       type: DataTypes.DATEONLY,
       allowNull: true,
-      validate: {
-        isDate: {
-          msg: '[case_information].[removal_date] must be a valid date'
-        }
-      },
       comment: 'This contains the date when the patient had been removed from being active case'
     },
 

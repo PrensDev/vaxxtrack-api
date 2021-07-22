@@ -26,7 +26,6 @@ exports.updatePassword = (req, res) =>  {
     db.Users
         .findByPk(req.user.user_ID, { attributes: ['user_ID', 'password'] })
         .then(result => {
-            console.log(req.body);
             if(result) {
                 bcrypt.compare(req.body.current_password, result.password, (err, hasResult) => {
 
@@ -47,6 +46,7 @@ exports.updatePassword = (req, res) =>  {
         .catch(err => errResponse(res, err));
 };
 
+
 // Get all accounts
 exports.getAllAccounts = (req, res, next) => {
     
@@ -58,6 +58,7 @@ exports.getAllAccounts = (req, res, next) => {
         .then(data => dataResponse(res, data, 'User accounts are retrieved successfully', 'No user account has been retrieved'))
         .catch(err => errResponse(res, err));
 }
+
 
 // Create new account
 exports.createAccount = (req, res) => {
@@ -85,13 +86,26 @@ exports.createAccount = (req, res) => {
 };
 
 
+// Delete Account
+exports.deleteAccount = (req, res) => {
+
+    // Check authorization first
+    checkAuthorization(req, res, 'Citizen');
+
+    db.User_Accounts
+        .destroy({ where: { user_account_ID: req.params.user_account_ID }})
+        .then(result => {
+            if(result) emptyDataResponse(res, 'An account is successfully deleted')
+        })
+        .catch(err => errResponse(res, err));
+}
+
+
 //verify
 exports.verifyAccount = (req, res) =>{
     
-    
     //check
-    helper.checkAuthorization(req, res, 'Citizen');
-
+    checkAuthorization(req, res, 'Citizen');
 
     const user_account_ID = req.params.user_account_ID;
 
@@ -104,7 +118,7 @@ exports.verifyAccount = (req, res) =>{
         .findByPk(user_account_ID)
         .then((result) =>{
             // If no result return empty response
-            if(result == null) helper.emptyDataResponse(res, 'No user_account_ID has been identified');
+            if(result == null) emptyDataResponse(res, 'No user_account_ID has been identified');
 
             //update
             db.User_Accounts
@@ -130,9 +144,9 @@ exports.verifyAccount = (req, res) =>{
                             })
                         }
                     })
-                .catch((err) => helper.errResponse(res, err));
+                .catch(err => errResponse(res, err));
         } )
-        .catch((err) => helper.errResponse(res, err));
+        .catch(err => errResponse(res, err));
 
-    }
+}
 

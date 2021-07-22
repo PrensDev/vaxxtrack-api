@@ -28,6 +28,8 @@ var vaccCtlr = require('../controllers/super_admin/vaccination.controller');
 
 // Vaccines
 router.post  ('/add-vaccine'          , vaccCtlr.addVaccine);
+router.get   ('/vaccines/'            , vaccCtlr.getAllVaccines);
+router.get   ('/vaccines/:vaccine_ID' , vaccCtlr.getOneVaccine);
 router.put   ('/vaccines/:vaccine_ID' , vaccCtlr.updateVaccine);
 router.delete('/vaccines/:vaccine_ID' , vaccCtlr.deleteVaccine);
 
@@ -48,9 +50,10 @@ router.put('/info' , infoController.updateInfo);
 
 // Account Controller
 var accountCtlr = require('../controllers/super_admin/account.controller');
-router.post('/add-account'     , accountCtlr.createAccount);
-router.get ('/accounts'        , accountCtlr.getAllAccounts);
-router.put ('/change-password' , accountCtlr.updatePassword);
+router.post  ('/add-account'               , accountCtlr.createAccount);
+router.get   ('/accounts'                  , accountCtlr.getAllAccounts);
+router.delete('/accounts/:user_account_ID' , accountCtlr.deleteAccount);
+router.put   ('/change-password'           , accountCtlr.updatePassword);
 
 
 // User Management Controller

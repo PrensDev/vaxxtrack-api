@@ -10,7 +10,7 @@
 
 // Import required packages
 const db     = require('../../models');
-const helper = require('../../helpers/controller.helper');
+const { dataResponse, checkAuthorization, errResponse, emptyDataResponse } = require('../../helpers/controller.helper');
 const { Op } = require('sequelize')
 
 
@@ -47,7 +47,7 @@ const dbVisitingLogOp = (req) => {
 exports.createVisitingLog = (req, res) => {
 
     // Check authorization 
-    helper.checkAuthorization(req, res, 'Representative');
+    checkAuthorization(req, res, 'Representative');
 
     const citizen_ID = req.body.citizen_ID;
 
@@ -81,11 +81,11 @@ exports.createVisitingLog = (req, res) => {
                         }
                     });
             } else {
-                helper.errResponse(res, 'User cannot identified');
+                errResponse(res, 'User cannot identified');
             } 
         
         })
-        .catch(err => helper.errResponse(res, err));
+        .catch(err => errResponse(res, err));
 
     // Create Visiting Log record
     const createVisitingLog = (health_status_data) => {
@@ -120,10 +120,10 @@ exports.createVisitingLog = (req, res) => {
                                 as : "health_status_log"
                             }],
                     })
-                    .then((data) => helper.dataResponse(res, data, 'A new visiting log has been created','Error occured in creating a visiting log'))
-                    .catch((err) => helper.errResponse(res, err));
+                    .then(data => dataResponse(res, data, 'A new visiting log has been created','Error occured in creating a visiting log'))
+                    .catch(err => errResponse(res, err));
             })
-            .catch((err) => helper.errResponse(res, err));      
+            .catch(err => errResponse(res, err));      
     }
 } 
 
@@ -132,13 +132,13 @@ exports.createVisitingLog = (req, res) => {
 exports.getAllVisitingLogs = (req, res) => {
 
     // Check authorization 
-    helper.checkAuthorization(req, res, 'Representative');
+    checkAuthorization(req, res, 'Representative');
 
     // Find all visiting logs in an establishment establishments
     db.Visiting_Logs
         .findAll(dbVisitingLogOp(req))
-        .then((data) => helper.dataResponse(res, data, 'Visiting Log Records retrieved successfully', 'No Visiting Log Record has been identified'))
-        .catch((err) => helper.errResponse(res, err));
+        .then(data => dataResponse(res, data, 'Visiting Log Records retrieved successfully', 'No Visiting Log Record has been identified'))
+        .catch(err => errResponse(res, err));
 }
 
 
@@ -146,11 +146,41 @@ exports.getAllVisitingLogs = (req, res) => {
 exports.getOneVisitingLog = (req, res) => {
 
     // Check authorization 
-    helper.checkAuthorization(req, res, 'Representative');
+    checkAuthorization(req, res, 'Representative');
 
     // Find one visiting log in an establishment establishments
     db.Visiting_Logs
         .findByPk(req.params.visiting_log_ID, dbVisitingLogOp(req))
-        .then((data) => helper.dataResponse(res, data, 'A Visiting Log has been identified', 'No Visiting Log has been identified'))
-        .catch((err) => helper.errResponse(res, err));
+        .then(data => dataResponse(res, data, 'A Visiting Log has been identified', 'No Visiting Log has been identified'))
+        .catch(err => errResponse(res, err));
+}
+
+
+// Delete a Visiting Log
+exports.deleteVisitingLog = (req, res) => {
+
+    // Check authorization first
+    checkAuthorization(req, res, 'Representative');
+
+    const visiting_log_ID = req.params.visiting_log_ID;
+
+    db.Visiting_Logs
+        .findByPk(visiting_log_ID)
+        .then(data => {
+            if(data) {
+                if(data.establishment_ID === req.params.establishment_ID) {
+                    db.Visiting_Logs
+                        .destroy({
+                            where: { visiting_log_ID: visiting_log_ID }
+                        })
+                        .then(result => {
+                            if(result) emptyDataResponse(res, 'A visiting log is successfully deleted')
+                        })
+                        .catch(err => errResponse(res, err))
+                } else {
+                    errResponse(res, 'Invalid establishment')
+                }
+            }
+        })
+        .catch(err => errResponse(res. err));
 }

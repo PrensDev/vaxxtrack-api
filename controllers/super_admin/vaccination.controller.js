@@ -18,6 +18,45 @@ const { checkAuthorization, dataResponse, errResponse } = require('../../helpers
  * ============================================================================
  */
 
+// Vaccines Options
+const dbVaccinesOp = {
+    include: [
+        {
+            model: db.Vaccination_Records,
+            as: 'vaccination_records',
+            attributes: ['vaccination_record_ID']
+        }, {
+            model: db.Vaccination_Appointments,
+            as: 'vaccination_appointments',
+            attributes: ['vaccination_appointment_ID']
+        }
+    ]
+}
+
+// Get All Vaccines
+exports.getAllVaccines = (req, res) => {
+    
+    // Check authorization first
+    checkAuthorization(req, res, 'Super Admin');
+
+    db.Vaccines
+        .findAll(dbVaccinesOp)
+        .then(data => dataResponse(res, data, 'Vaccines are retrieved successfully', 'No vaccines has been retrieved'))
+        .catch(err => errResponse(res, err))
+}
+
+// Get One Vaccine
+exports.getOneVaccine = (req, res) => {
+
+    // Check authorization first
+    checkAuthorization(req, res, 'Super Admin');
+    
+    db.Vaccines
+        .findByPk(req.params.vaccine_ID, dbVaccinesOp)
+        .then(data => dataResponse(res, data, 'A vaccine has been identified', 'No vaccine has been identified'))
+        .catch(err => errResponse(res, err))
+}
+
 // Add Vaccine
 exports.addVaccine = (req, res) => {
     

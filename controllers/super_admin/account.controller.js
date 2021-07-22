@@ -9,7 +9,7 @@
 
 // Import required packages
 const db = require('../../models');
-const { dataResponse, emptyDataResponse, checkAuthorization } = require('../../helpers/controller.helper');
+const { dataResponse, emptyDataResponse, checkAuthorization, errResponse } = require('../../helpers/controller.helper');
 const bcrypt = require('bcrypt');
 
 
@@ -47,6 +47,7 @@ exports.updatePassword = (req, res) =>  {
         .catch(err => errResponse(res, err));
 };
 
+
 // Get all accounts
 exports.getAllAccounts = (req, res, next) => {
     
@@ -58,6 +59,7 @@ exports.getAllAccounts = (req, res, next) => {
         .then(data => dataResponse(res, data, 'User accounts are retrieved successfully', 'No user account has been retrieved'))
         .catch(err => errResponse(res, err));
 }
+
 
 // Create new account
 exports.createAccount = (req, res) => {
@@ -83,3 +85,18 @@ exports.createAccount = (req, res) => {
         })
         .catch(err => errResponse(res, err));
 };
+
+
+// Delete Account
+exports.deleteAccount = (req, res) => {
+
+    // Check authorization first
+    checkAuthorization(req, res, 'Super Admin');
+
+    db.User_Accounts
+        .destroy({ where: { user_account_ID: req.params.user_account_ID }})
+        .then(result => {
+            if(result) emptyDataResponse(res, 'An account is successfully deleted')
+        })
+        .catch(err => errResponse(res, err));
+}

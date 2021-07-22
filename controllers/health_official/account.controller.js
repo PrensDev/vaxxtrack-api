@@ -85,3 +85,18 @@ exports.createAccount = (req, res) => {
         })
         .catch(err => errResponse(res, err));
 };
+
+
+// Delete Account
+exports.deleteAccount = (req, res) => {
+
+    // Check authorization first
+    checkAuthorization(req, res, 'Health Official');
+
+    db.User_Accounts
+        .destroy({ where: { user_account_ID: req.params.user_account_ID }})
+        .then(result => {
+            if(result) emptyDataResponse(res, 'An account is successfully deleted')
+        })
+        .catch(err => errResponse(res, err));
+}

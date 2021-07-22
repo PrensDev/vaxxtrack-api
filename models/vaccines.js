@@ -123,6 +123,16 @@ module.exports = (sequelize, DataTypes) => {
       comment: 'In this column tells the description of the vaccine'
     },
 
+    is_available: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+      validate: {
+        notNull: '[vaccines].[is_available] cannot be null'
+      },
+      comment: 'This column indicates if the vaccine is available or not'
+    }
+
   }, {
 
     // Model options

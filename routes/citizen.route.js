@@ -12,9 +12,10 @@ var router = require('express').Router();
 var healthStatusLogCtlr = require('../controllers/citizen/health_status_log.controller');
 router.post("/add-health-status-log"                    , healthStatusLogCtlr.createHealthStatusLog);
 router.get ("/health-status-logs"                       , healthStatusLogCtlr.getAllHealthStatusLogs);
-router.get ("/health-status-logs/today"                 , healthStatusLogCtlr.checkTodaysHealthStatus);
+router.get ("/health-status-logs/check-today"           , healthStatusLogCtlr.checkTodaysHealthStatus);
+router.get ("/health-status-logs/today"                 , healthStatusLogCtlr.getHealthStatusLogToday);
+router.put ("/health-status-logs/today"                 , healthStatusLogCtlr.updateHealthStatusLogForToday);
 router.get ("/health-status-logs/:health_status_log_ID" , healthStatusLogCtlr.getOneHealthStatusLog);
-router.put ("/health-status-logs/:health_status_log_ID" , healthStatusLogCtlr.updateHealthStatusLog);
 
 
 // Visiting Log Controller
@@ -47,10 +48,11 @@ router.put ('/info' , infoController.updateInfo);
 
 // Account Controller
 var accountCtlr = require('../controllers/citizen/account.controller');
-router.post('/add-account'     , accountCtlr.createAccount);
-router.get ('/accounts'        , accountCtlr.getAllAccounts);
-router.put ('/change-password' , accountCtlr.updatePassword);
-router.put ('/verify-account/:user_account_ID' , accountCtlr.verifyAccount);
+router.post  ('/add-account'                     , accountCtlr.createAccount);
+router.get   ('/accounts'                        , accountCtlr.getAllAccounts);
+router.delete('/accounts/:user_account_ID'       , accountCtlr.deleteAccount);
+router.put   ('/change-password'                 , accountCtlr.updatePassword);
+router.put   ('/verify-account/:user_account_ID' , accountCtlr.verifyAccount);
 
 
 // Export module

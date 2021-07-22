@@ -106,6 +106,13 @@ module.exports = (sequelize, DataTypes) => {
         onDelete   : 'RESTRICT'
       });
 
+      // 1:M [users]:[contacts]
+      this.hasMany(models.Contacts, {
+        foreignKey : 'citizen_ID',
+        as         : 'contact_cases',
+        onDelete   : 'RESTRICT'
+      })
+
 
       // M:M [users]:[establishments] through [roles]
       this.belongsToMany(models.Establishments, {
