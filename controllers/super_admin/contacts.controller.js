@@ -12,33 +12,10 @@ const db = require('../../models');
 const { checkAuthorization, dataResponse, errResponse, emptyDataResponse } = require('../../helpers/controller.helper');
 
 
-// Get All Probable Contacts
-exports.getAllProbableContacts = (req, res) => {
-    checkAuthorization(req, res, 'Health Official');
-
-    db.Users
-        .findAll({
-            where: { user_type: 'Citizen' },
-            include: [{
-                model: db.Addresses,
-                as: 'address'
-            }]
-        })
-        .then(data => dataResponse(res, data, 'Probable Contacts are retreived successfully', 'No probable contacts are retrieved'))
-        .catch(err => errResponse(res, err));
-}
-
-
-// Add Contact
-exports.addContact = (req, res) => {
-    checkAuthorization(req, res, 'Health Official');
-    db.Contacts.create(req.body);
-}
-
 
 // Get All Contacts
 exports.getAllContacts = (req, res) => {
-    checkAuthorization(req, res, 'Health Official');
+    checkAuthorization(req, res, 'Super Admin');
     db.Contacts
         .findAll({
             include: [
@@ -67,7 +44,7 @@ exports.getAllContacts = (req, res) => {
 
 // Get Contact Information
 exports.getContactInfo = (req, res) => {
-    checkAuthorization(req, res, 'Health Official');
+    checkAuthorization(req, res, 'Super Admin');
     
     db.Contacts
         .findByPk(req.params.contact_ID, {

@@ -10,9 +10,18 @@ var router = require('express').Router();
 
 // COVID-19 Cases Controller
 var casesCtlr = require('../controllers/health_official/covid_cases.controller');
-router.post('/add-covid19-case'       , casesCtlr.addCase);
-router.get ('/covid19-cases'          , casesCtlr.getAllCovidCases);
-router.get ('/covid19-cases/:case_ID' , casesCtlr.getOneCovidCase);
+router.post  ('/add-covid19-case'           , casesCtlr.addCovidCase);
+router.get   ('/covid19-cases'              , casesCtlr.getAllCovidCases);
+router.get   ('/covid19-cases/heatmap-data' , casesCtlr.getCasesCoordinates);
+router.get   ('/covid19-cases/:case_ID'     , casesCtlr.getOneCovidCase);
+router.put   ('/covid19-cases/:case_ID'     , casesCtlr.updateCovidCase);
+router.delete('/covid19-cases/:case_ID'     , casesCtlr.deleteCovidCase);
+
+
+// Lab Report Controller
+var labReportCtlr = require('../controllers/health_official/lab_report.controller');
+router.get ('/lab-reports/:lab_report_ID' , labReportCtlr.getLabReport);
+router.post('/attach-lab-report/:case_ID' , labReportCtlr.attachLabReport);
 
 
 // Vaccination Controller
@@ -49,9 +58,10 @@ router.get('/probable-patients/:user_ID' , vaccCtlr.getOneProbablePatient);
 
 // Contacts
 var probCtrl = require('../controllers/health_official/contacts.controller');
-router.get ('/probable-contacts' , probCtrl.getAllProbableContacts);
-router.post('/add-contact'       , probCtrl.addContact);
-router.get ('/contacts'          , probCtrl.getAllContacts);
+router.get ('/probable-contacts'    , probCtrl.getAllProbableContacts);
+router.post('/add-contact'          , probCtrl.addContact);
+router.get ('/contacts'             , probCtrl.getAllContacts);
+router.get ('/contacts/:contact_ID' , probCtrl.getContactInfo);
 
 
 

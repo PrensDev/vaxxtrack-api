@@ -170,9 +170,7 @@ exports.deleteVisitingLog = (req, res) => {
             if(data) {
                 if(data.establishment_ID === req.params.establishment_ID) {
                     db.Visiting_Logs
-                        .destroy({
-                            where: { visiting_log_ID: visiting_log_ID }
-                        })
+                        .destroy({ where: { visiting_log_ID: visiting_log_ID }})
                         .then(result => {
                             if(result) emptyDataResponse(res, 'A visiting log is successfully deleted')
                         })

@@ -20,7 +20,21 @@ router.get('/establishments/:establishment_ID' , adminCtlr.getAllEstablishments)
 
 // COVID-19 Cases Controller
 var casesCtlr = require('../controllers/super_admin/covid_cases.controller');
-router.get('/covid19-cases', casesCtlr.getAllCovidCases);
+router.get('/covid19-cases'              , casesCtlr.getAllCovidCases);
+router.get('/covid19-cases/heatmap-data' , casesCtlr.getCasesCoordinates);
+router.get('/covid19-cases/:case_ID'      , casesCtlr.getOneCovidCase);
+
+
+// Lab Report Controller
+var labReportCtlr = require('../controllers/super_admin/lab_report.controller');
+router.get ('/lab-reports/:lab_report_ID' , labReportCtlr.getLabReport);
+
+
+// Contacts
+var probCtrl = require('../controllers/super_admin/contacts.controller');
+router.get ('/contacts'             , probCtrl.getAllContacts);
+router.get ('/contacts/:contact_ID' , probCtrl.getContactInfo);
+
 
 
 // Vaccination Controller
