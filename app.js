@@ -78,7 +78,7 @@ const authenticateToken = (req, res, next) => {
 */
 
 // API Controller
-const API_CONTROLLER = '/c19ctavms/v1/';
+const API_CONTROLLER = '/vaxxtrack/v1/';
 
 // Home Route
 app.use(`${ API_CONTROLLER }`, require('./routes/home.route'));
@@ -131,7 +131,7 @@ const syncSuccessMsg = `
 =========================================================================
 Execution is successful!
 -------------------------------------------------------------------------
-Base URL: http://localhost:${ PORT }/c19ctavms/v1/
+Base URL: http://localhost:${ PORT }/vaxxtrack/v1/
 =========================================================================
 `
 
