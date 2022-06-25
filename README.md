@@ -1,6 +1,6 @@
 # VaxxTrack (API)
 
-API for [COVID-19 Contact Tracing App and Vaccine Monitoring System](https://github.com/PrensDev/vaxxtrack)
+API for [Vaxxtrack - COVID-19 Contact Tracing App and Vaccine Monitoring System](https://github.com/PrensDev/vaxxtrack)
 
 ## Project Details
 
